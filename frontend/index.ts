@@ -1,16 +1,63 @@
-import { onboardOrSwitchNetwork } from "./web3";
+import { createNewTicketedEvent, FANTOMTESTNETCONTRACTADDRESS, fetchAbi, getContract, getWeb3Provider, NewTicketedEventCreated, onboardOrSwitchNetwork } from "./web3";
+import { handleError, appURL } from "./utils";
 
-const createEventButton = document.getElementById("CreateEventButton");
+(async () => {
+    //@ts-ignore
+    await loadBigCirclesPreset(tsParticles); // this is required only if you are not using the bundle script
+    //@ts-ignore
+    await tsParticles.load("tsparticles", {
+        preset: "bigCircles", // also "big-circles" is accepted
+    });
+})();
 
-if (createEventButton !== null) {
-    createEventButton.onclick = function () {
-        console.log("create event button clicked!")
-        // onboardOrSwitchNetwork();
 
-    }
+const getPurchasePageUrl = (index: string) => appURL + `/purchaseTicket.html?index=${index}`
+
+const goToCreateEventsButton = document.getElementById("goToCreateEventsButton") as HTMLButtonElement;
+
+const createEventButton = document.getElementById("CreateEventButton") as HTMLButtonElement;
+const eventNameInput = document.getElementById("eventNameInput") as HTMLInputElement;
+const eventPriceInput = document.getElementById("eventPriceInput") as HTMLInputElement;
+const ticketCountInput = document.getElementById("ticketCountInput") as HTMLInputElement;
+const hideCreateButton = document.getElementById("hideCreateButton") as HTMLInputElement;
+
+const createEventFormContainer = document.getElementById("createEventFormContainer") as HTMLButtonElement;
+
+goToCreateEventsButton.onclick = async function () {
+    const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
+    welcomeMessage.classList.add("hide");
+    hideCreateButton.classList.add("hide");
+    createEventFormContainer.classList.remove("hide");
 }
 
-//TODO: I need to do the onboarding and the network switching to BTTC chain
-//TODO: I need to submit the transaction to the network about the new event
+createEventButton.onclick = async function () {
+    const switched = await onboardOrSwitchNetwork(handleError);
+    if (switched) {
+        const provider = getWeb3Provider();
 
-//Then redirect to a new page where the user can interact with the event!
+        const contract = await getContract(provider, FANTOMTESTNETCONTRACTADDRESS, "/ZKTickets.json").catch(err => {
+            handleError("Unable to connect to your wallet");
+        });
+
+        const eventName = eventNameInput.value;
+        const eventPrice = eventPriceInput.value;
+        const ticketCount = ticketCountInput.value;
+        const tx = await createNewTicketedEvent(contract, eventPrice, eventName, ticketCount).catch(err => {
+            handleError("Unable to connect to your wallet");
+        });
+
+        await tx.wait().then(async (receipt) => {
+            if (receipt.status === 1) {
+                const eventIndex = await NewTicketedEventCreated(receipt, contract);
+                if (!eventIndex) {
+                    handleError("Oops, the transacion seems invalid!");
+                } else {
+                    window.location.href = getPurchasePageUrl(eventIndex.toString());
+                }
+            } else {
+                handleError("Transaction Failed")
+            }
+        });
+    }
+
+}

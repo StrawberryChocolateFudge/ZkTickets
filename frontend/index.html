@@ -14,14 +14,17 @@
 
 <body>
     <div class="container">
+        <div class="col" id="welcomeMessage">
+            <h2 class="centerWithMargin">ZkTickets</h2>
+            <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
+        </div>
         <div class="centered-row">
-            <div class="createEventContainer">
+            <div class="createEventContainer hide" id="createEventFormContainer">
                 <div class="col">
                     <h2 class="centerWithMargin">ZkTickets</h2>
                     <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
                 </div>
-                <form>
-                    <h4 class="createEventTitle">Create a new event</h4>
+                <form onsubmit="return false">
                     <table class="eventDetailsInputTable">
                         <tr>
                             <th></th>
@@ -41,12 +44,13 @@
                             <td>
                                 <div class="centered-row">
                                     <input required id="eventPriceInput" type="number" />
-                                    <img class="inputImage" src="./bttLogo.svg" width="25" />
+                                    <img class="inputImage" src="./fantomLogo.svg" width="25" />
                                 </div>
                             </td>
                         </tr>
                         <tr class="bottomBorder">
-                            <td class="labelTd"><label class="tableLabel" for="ticketCountInput">Tickets:</label></td>
+                            <td class="labelTd"><label class="tableLabel" for="ticketCountInput">Tickets:</label>
+                            </td>
                             <td>
                                 <div class="centered-row">
                                     <input required id="ticketCountInput" type="number" />
@@ -56,15 +60,26 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr>
+                            <td> </td>
+                            <td> <button id="CreateEventButton" class="button-56" type="submit">Create Event</button>
+                            </td>
+                        </tr>
                     </table>
-                    <div class="centered-row">
-                        <button id="CreateEventButton" class="button-56" type="button">Create Event</button>
-                    </div>
                 </form>
             </div>
         </div>
+        <div class="centered-row" id="hideCreateButton">
+            <button class="button-56" id="goToCreateEventsButton">Create Events</button>
+        </div>
     </div>
+    <div class="centered-row">
+        <div id="snackbar"></div>
+    </div>
+    <div class="particlesstyle" id="tsparticles"></div>
 </body>
 <script type="module" src="./index.ts"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/tsparticles-preset-big-circles@2/tsparticles.preset.bigCircles.bundle.min.js"></script>
 
 </html>
