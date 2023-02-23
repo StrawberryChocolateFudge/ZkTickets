@@ -2,3 +2,4 @@ dist
 node_modules
 artifacts
 cache
+.parcel-cache

@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "This is a ZKP based ticketing platform built with Circom, SnarkJS and Solidity and deployed on Bittorrent Chain",
   "main": "index.js",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "dev": "parcel frontend/index.html",
-    "build": "parcel build frontend/index.html && npm run copy",
+    "dev": "parcel frontend/index.html frontend/purchaseTicket.html frontend/handleTicket.html",
+    "build": "parcel build frontend/index.html frontend/purchaseTicket frontend/handleTicket.html && npm run copy",
     "copy": "sh copyToDist.sh"
   },
   "devDependencies": {
@@ -53,14 +54,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@emotion/react": "^11.5.0",
-    "@emotion/styled": "^11.3.0",
-    "@fontsource/roboto": "^4.5.8",
     "@metamask/onboarding": "^1.0.1",
-    "@mui/icons-material": "^5.11.9",
-    "@mui/material": "^5.0.0",
-    "@mui/styled-engine-sc": "^5.10.6",
-    "@mui/system": "^5.11.9",
     "@openzeppelin/contracts": "^4.7.3",
     "@openzeppelin/contracts-upgradeable": "^4.8.0",
     "@uniswap/hardhat-v3-deploy": "^0.1.1",
@@ -73,16 +67,8 @@
     "ffjavascript": "^0.2.57",
     "hardhat-circom": "^3.3.1",
     "jspdf": "^2.5.1",
-    "react": "^18.0.0",
-    "react-device-detect": "^2.2.3",
-    "react-dom": "^18.2.0",
-    "react-qr-reader": "git+https://github.com/StrawberryChocolateFudge/react-qr-reader.git",
-    "react-router-dom": "^6.8.1",
-    "snarkjs": "^0.6.1",
-    "styled-components": "^5.3.6",
-    "tronweb": "^4.4.0"
+    "snarkjs": "^0.6.1"
   },
   "author": "StrawberryChocolateFudge",
   "license": "ISC"
-
 }

@@ -1,0 +1,1 @@
+cp abis/ZKTickets.json dist/ZKTickets.json
