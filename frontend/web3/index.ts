@@ -1,6 +1,12 @@
 import MetaMaskOnboarding from "@metamask/onboarding";
 import { ethers } from "ethers";
 
+export const FANTOMTESTNETCONTRACTADDRESS = "0xEfE959bc25bAEceb16DbFc942B3508A900D0674A";
+
+export const FANTOMTESTNETID = "0xfa2";
+
+export const formatEther = (bn: ethers.BigNumberish) => ethers.utils.formatEther(bn)
+
 export function web3Injected(): boolean {
     //@ts-ignore
     if (window.ethereum !== undefined) {
@@ -16,14 +22,39 @@ export function doOnBoarding() {
 }
 
 
-export async function onboardOrSwitchNetwork(networkId, handleError) {
+export async function onboardOrSwitchNetwork(handleError) {
     if (!web3Injected()) {
         handleError("You need to install metamask!");
         await doOnBoarding();
         return false;
     }
-    await switchToDonauTestnet();
+    await switchToFantomTestnet();
     return true;
+}
+
+
+export function getWeb3Provider() {
+    //@ts-ignore
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    //@ts-ignore
+    window.ethereum.on('chainChanged', (chainId) => {
+        // Handle the new chain.
+        // Correctly handling chain changes can be complicated.
+        // We recommend reloading the page unless you have good reason not to.
+        window.location.reload();
+    });
+    return provider;
+}
+
+export async function switchToFantomTestnet() {
+    const hexChainId = FANTOMTESTNETID;
+    const chainName = "Fantom testnet";
+    const rpcUrls = ["https://xapi.testnet.fantom.network/lachesis"]
+    const blockExplorerUrls = ["https://testnet.ftmscan.com/"]
+    const switched = await switch_to_Chain(hexChainId);
+    if (!switched) {
+        await ethereumRequestAddChain(hexChainId, chainName, "FTM", "FTM", 18, rpcUrls, blockExplorerUrls)
+    }
 }
 
 export async function switchToDonauTestnet() {
@@ -102,6 +133,14 @@ export async function createNewTicketedEvent(contract: any, price: string, event
     return await contract.createNewTicketedEvent(ethers.utils.parseEther(price), eventName, availableTickets);
 }
 
+export async function getTicketedEventIndex(contract: any) {
+    return await contract.ticketedEventIndex();
+}
+
+export async function getTicketedEvents(contract: any, ticketedEventIndex: string) {
+    return await contract.ticketedEvents(ticketedEventIndex);
+}
+
 export async function purchaseTicket(contract: any, value: string, _ticketedEventIndex: number, commitment: string) {
     return await contract.purchaseTicket(_ticketedEventIndex, commitment, { value });
 }
@@ -112,4 +151,15 @@ export async function handleTicket(contract: any, proof: any, _nullifierHash: st
 
 export async function verifyTicket(contract: any, _commitment: string, _nullifierHash: string) {
     return await contract.verifyTicket(_commitment, _nullifierHash);
+}
+
+export async function NewTicketedEventCreated(receipt, contract) {
+    const log = contract.interface.parseLog(receipt.logs[0]);
+    const logName = log.name;
+
+    if (logName !== "NewTicketedEventCreated") {
+        return false;
+    } else {
+        return log.args[0];
+    }
 }
