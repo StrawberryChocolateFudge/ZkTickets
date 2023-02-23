@@ -4,15 +4,73 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <title>Purchase ZKTicket</title>
 </head>
 
 <body>
-    TODO: check for the link in URL to get contract info
-    then show the event details
-    then have a purchase button for the user to press
-    then make the user download the note
+
+    <div class="container">
+        <div class="col" id="welcomeMessage">
+            <h2 class="centerWithMargin">ZkTickets</h2>
+            <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
+        </div>
+        <div class="centered-row hide" id="loadingBanner">Loading</div>
+        <div class="centered-row">
+            <div id="eventContainer" class="createEventContainer hide">
+                <div style="text-align: center;">
+                    <h2 id="eventName" class="centerWithMargin">ZkTickets</h2>
+                </div>
+                <table class="eventDetailsInputTable">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr class="bottomBorder">
+                        <td class="labelTd">
+                            <label class="tableLabel" for="eventPriceInput">Price:</label>
+                        </td>
+                        <td>
+                            <div class="centered-row">
+                                <label id="eventPrice" class="centerWithMargin"></label>
+                                <img class="inputImage" src="./fantomLogo.svg" width="25" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="bottomBorder">
+                        <td class="labelTd"><label class="tableLabel">Tickets:</label>
+                        </td>
+                        <td>
+                            <label id="ticketsLeft" class="centerWithMargin"></label>
+                            <label class="tableLabel">Left</label>
+                        </td>
+                    </tr>
+                </table>
+                <div class="centered-row">
+                    <button id="CreateEventButton" class="button-56" type="submit">
+                        Purchase a ticket
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="centered-row" id="purchaseTicketsButton">
+            <button class="button-56">Purchase Tickets</button>
+        </div>
+        <div class="centered-row" id="handleTicketsButton">
+            <button class="button-56">Handle tickets</button>
+        </div>
+    </div>
+    <div class="centered-row">
+        <div id="snackbar"></div>
+    </div>
+    <div class="particlesstyle" id="tsparticles"></div>
 </body>
+<script type="module" src="./purchaseTicket.ts"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/tsparticles-preset-big-circles@2/tsparticles.preset.bigCircles.bundle.min.js"></script>
 
 </html>
