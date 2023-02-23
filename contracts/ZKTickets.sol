@@ -33,6 +33,8 @@ contract ZKTickets {
         ticketedEventIndex = 0;
     }
 
+    event NewTicketedEventCreated(uint256 index);
+
     mapping(uint256 => TicketedEvents) public ticketedEvents; // The events that are ticketed
     mapping(bytes32 => TicketCommitments) public ticketCommitments; // The commitments of the tickets, we check here if the ticket exists or if it has been used!
     mapping(bytes32 => bool) public nullifierHashes; // The nullifier hashes are used to store the note nullifiers!
@@ -53,6 +55,7 @@ contract ZKTickets {
         ticketedEvents[ticketedEventIndex].price = price;
         ticketedEvents[ticketedEventIndex].eventName = eventName;
         ticketedEvents[ticketedEventIndex].availableTickets = availableTickets;
+        emit NewTicketedEventCreated(ticketedEventIndex);
     }
 
     function purchaseTicket(uint256 _ticketedEventIndex, bytes32 commitment)

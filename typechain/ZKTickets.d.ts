@@ -114,8 +114,16 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
 
-  events: {};
+  events: {
+    "NewTicketedEventCreated(uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "NewTicketedEventCreated"): EventFragment;
 }
+
+export type NewTicketedEventCreatedEvent = TypedEvent<
+  [BigNumber] & { index: BigNumber }
+>;
 
 export class ZKTickets extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -362,7 +370,15 @@ export class ZKTickets extends BaseContract {
     ): Promise<boolean>;
   };
 
-  filters: {};
+  filters: {
+    "NewTicketedEventCreated(uint256)"(
+      index?: null
+    ): TypedEventFilter<[BigNumber], { index: BigNumber }>;
+
+    NewTicketedEventCreated(
+      index?: null
+    ): TypedEventFilter<[BigNumber], { index: BigNumber }>;
+  };
 
   estimateGas: {
     createNewTicketedEvent(

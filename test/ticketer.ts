@@ -12,7 +12,23 @@ describe("ZKTickets!!", function () {
         expect(eventIndex).to.equal(0);
 
         // A new event with 100 tickts
-        await ticketer.connect(eventCreator).createNewTicketedEvent(ethers.utils.parseEther("10"), "My New Event", 2);
+        const res = await ticketer.connect(eventCreator).createNewTicketedEvent(ethers.utils.parseEther("10"), "My New Event", 2);
+
+        await res.wait().then(receipt => {
+            const events = receipt.events;
+            if (events) {
+                const event = events[0];
+                if (event) {
+                    const args = event.args;
+                    if (args) {
+                        const arg = args[0]
+                        expect(arg.toString()).to.equal("1");
+                    }
+                    expect(event.event).to.equal("NewTicketedEventCreated");
+                }
+            }
+        })
+
 
         eventIndex = await ticketer.ticketedEventIndex();
 
@@ -36,7 +52,6 @@ describe("ZKTickets!!", function () {
 
         const creatorBalanceAfterSale: BigNumber = await eventCreator.getBalance();
         expect(eventCreatorBalance.lt(creatorBalanceAfterSale)).to.be.true;
-        //TODO LATER!!
 
         // I buy the second ticket then I run out
 
