@@ -44,6 +44,10 @@ const config: HardhatUserConfig = {
     //   url: process.env.BTT_DONAU_TESTNET_API || "",
     //   accounts:
     //     process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
+    // },
+    // fantomtestnet: {
+    //   url: process.env.FANTOM_TESTNET_API || "",
+    //   accounts: process.env.KEY_FANTOM !== undefined ? [process.env.KEY_FANTOM] : []
     // }
   },
   gasReporter: {
