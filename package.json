@@ -57,8 +57,6 @@
     "@metamask/onboarding": "^1.0.1",
     "@openzeppelin/contracts": "^4.7.3",
     "@openzeppelin/contracts-upgradeable": "^4.8.0",
-    "@uniswap/hardhat-v3-deploy": "^0.1.1",
-    "@uniswap/v3-core": "^1.0.1",
     "awesome-qr": "^2.1.5-rc.0",
     "big-integer": "^1.6.51",
     "circomlib": "^2.0.5",
@@ -67,6 +65,7 @@
     "ffjavascript": "^0.2.57",
     "hardhat-circom": "^3.3.1",
     "jspdf": "^2.5.1",
+    "qr-scanner": "^1.4.2",
     "snarkjs": "^0.6.1"
   },
   "author": "StrawberryChocolateFudge",
