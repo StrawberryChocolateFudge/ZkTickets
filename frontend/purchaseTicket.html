@@ -15,7 +15,7 @@
 <body>
 
     <div class="container">
-        <div class="col" id="welcomeMessage">
+        <div class="col textAlign-center" id="welcomeMessage">
             <h2 class="centerWithMargin">ZkTickets</h2>
             <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
         </div>
@@ -50,14 +50,17 @@
                         </td>
                     </tr>
                 </table>
-                <div class="centered-row">
-                    <button id="CreateEventButton" class="button-56" type="submit">
+                <div class="centered-row" id="purchaseTicketActionContainer">
+                    <button id="purchaseTicketAction" class="button-56" type="submit">
                         Purchase a ticket
                     </button>
                 </div>
+                <div class="centered-row hide" id="downloadbuttonContainer">
+                    <button id="downloadButton" class="button-56" type="button">Download Ticket</button>
+                </div>
             </div>
         </div>
-        <div class="centered-row" id="purchaseTicketsButton">
+        <div class="centered-row" id="purchaseTicketsSelectorButton">
             <button class="button-56">Purchase Tickets</button>
         </div>
         <div class="centered-row" id="handleTicketsButton">
