@@ -1,11 +1,17 @@
 import MetaMaskOnboarding from "@metamask/onboarding";
 import { ethers } from "ethers";
+import { CryptoNote, toNoteHex } from "../../lib/crypto";
 
 export const FANTOMTESTNETCONTRACTADDRESS = "0xEfE959bc25bAEceb16DbFc942B3508A900D0674A";
 
 export const FANTOMTESTNETID = "0xfa2";
+export const FANTOMTESTNETRPCURL = "https://xapi.testnet.fantom.network/lachesis";
 
 export const formatEther = (bn: ethers.BigNumberish) => ethers.utils.formatEther(bn)
+
+export function getJsonRpcProvider() {
+    return new ethers.providers.JsonRpcProvider(FANTOMTESTNETRPCURL);
+}
 
 export function web3Injected(): boolean {
     //@ts-ignore
@@ -49,7 +55,7 @@ export function getWeb3Provider() {
 export async function switchToFantomTestnet() {
     const hexChainId = FANTOMTESTNETID;
     const chainName = "Fantom testnet";
-    const rpcUrls = ["https://xapi.testnet.fantom.network/lachesis"]
+    const rpcUrls = [FANTOMTESTNETRPCURL]
     const blockExplorerUrls = ["https://testnet.ftmscan.com/"]
     const switched = await switch_to_Chain(hexChainId);
     if (!switched) {
@@ -141,7 +147,7 @@ export async function getTicketedEvents(contract: any, ticketedEventIndex: strin
     return await contract.ticketedEvents(ticketedEventIndex);
 }
 
-export async function purchaseTicket(contract: any, value: string, _ticketedEventIndex: number, commitment: string) {
+export async function purchaseTicket(contract: any, value: string, _ticketedEventIndex: string, commitment: string) {
     return await contract.purchaseTicket(_ticketedEventIndex, commitment, { value });
 }
 
@@ -162,4 +168,30 @@ export async function NewTicketedEventCreated(receipt, contract) {
     } else {
         return log.args[0];
     }
+}
+
+export async function getJsonProviderTicketedEvent(index: string, handleError: CallableFunction) {
+    const provider = getJsonRpcProvider();
+    const contract = await getContract(provider, FANTOMTESTNETCONTRACTADDRESS, "ZKTickets.json").catch(err => {
+        handleError("Network error");
+    })
+    const ticketedEvent = await getTicketedEvents(contract, index).catch(err => {
+        handleError("Unable to find the event!");
+    })
+
+    if (!ticketedEvent) {
+        handleError("Unable to connect to wallet!")
+    }
+    return ticketedEvent;
+}
+
+export async function JSONRPCProviderVerifyTicket(index: string, note: CryptoNote, handleError: CallableFunction) {
+    const provider = getJsonRpcProvider();
+    const contract = await getContract(provider, FANTOMTESTNETCONTRACTADDRESS, "ZKTickets.json").catch(err => {
+        handleError("Network error");
+    })
+    const ticketValid = await verifyTicket(contract, toNoteHex(note.commitment), toNoteHex(note.nullifierHash)).catch(err => {
+        handleError("Network error")
+    });
+    return ticketValid;
 }
