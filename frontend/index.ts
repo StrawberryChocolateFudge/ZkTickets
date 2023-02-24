@@ -43,7 +43,7 @@ createEventButton.onclick = async function () {
         const eventPrice = eventPriceInput.value;
         const ticketCount = ticketCountInput.value;
         const tx = await createNewTicketedEvent(contract, eventPrice, eventName, ticketCount).catch(err => {
-            handleError("Unable to connect to your wallet");
+            handleError("Unable to submit transaction");
         });
 
         await tx.wait().then(async (receipt) => {
