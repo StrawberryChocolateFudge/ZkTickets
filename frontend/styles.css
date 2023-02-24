@@ -32,6 +32,13 @@ h2, h6 {
     justify-content: center;
 }
 
+.leftAlignedRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+
 .col {
     display: flex;
     flex-direction: column;
@@ -101,6 +108,10 @@ input:focus {
     height: 120;
 }
 
+.height200 {
+    height: 200;
+}
+
 .inputImage {
     margin-left: 10px;
 }
@@ -115,6 +126,14 @@ input:focus {
 
 #loadingBanner {
     font-size: 60;
+}
+
+.width-300 {
+    width: 300px;
+}
+
+.textAlign-center {
+    text-align: center;
 }
 
 /* CSS */
