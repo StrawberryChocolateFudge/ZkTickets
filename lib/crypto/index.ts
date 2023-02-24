@@ -66,7 +66,7 @@ export function rbigint(): bigint { return utils.leBuff2int(crypto.randomBytes(3
  * @param proof The proof generated with SnarkJS.
  * @returns The Solidity compatible proof.
  */
-export default function packToSolidityProof(proof: Proof): SolidityProof {
+export function packToSolidityProof(proof: Proof): SolidityProof {
     return [
         proof.pi_a[0],
         proof.pi_a[1],
@@ -101,12 +101,12 @@ export function toNoteHex(number: Buffer | any, length = 32) {
 export async function cryptoNote(netId: number): Promise<string> {
     const cryptoNote = await createCryptoNote({ nullifier: rbigint(), secret: rbigint() });
     const note = toNoteHex(cryptoNote.preimage, 62);
-    const noteString = `ticket-${netId}-${note}`
+    const noteString = `zkticket-${netId}-${note}`
     return noteString;
 }
 
 export async function parseNote(noteString: string) {
-    const noteRegex = /ticket-(?<netId>\d+)-0x(?<note>[0-9a-fA-F]{124})/g;
+    const noteRegex = /zkticket-(?<netId>\d+)-0x(?<note>[0-9a-fA-F]{124})/g;
     const match = noteRegex.exec(noteString);
 
     if (!match || !match.groups) {
