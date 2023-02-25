@@ -2,7 +2,7 @@ import MetaMaskOnboarding from "@metamask/onboarding";
 import { ethers } from "ethers";
 import { CryptoNote, toNoteHex } from "../../lib/crypto";
 
-export const FANTOMTESTNETCONTRACTADDRESS = "0xEfE959bc25bAEceb16DbFc942B3508A900D0674A";
+export const FANTOMTESTNETCONTRACTADDRESS = "0x0be22a76a63927b6766648De6dD09C7183f9ed90";
 
 export const FANTOMTESTNETID = "0xfa2";
 export const FANTOMTESTNETRPCURL = "https://xapi.testnet.fantom.network/lachesis";
