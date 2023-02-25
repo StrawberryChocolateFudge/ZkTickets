@@ -20,8 +20,8 @@ export const getEventIndex = () => {
     const search = window.location.search;
     const searchParams = new URLSearchParams(search);
 
-    if (searchParams.has("index")) {
-        const index = searchParams.get("index") as string;
+    if (searchParams.has("i")) {
+        const index = searchParams.get("i") as string;
         if (isNaN(parseInt(index))) {
 
             handleError("Invalid Event Index");
