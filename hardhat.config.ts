@@ -6,7 +6,6 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
-import "@uniswap/hardhat-v3-deploy";
 import "hardhat-contract-sizer";
 
 dotenv.config();

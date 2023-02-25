@@ -8,6 +8,7 @@ struct TicketedEvents {
     uint256 price;
     string eventName;
     uint256 availableTickets;
+    address externalHandler;
 }
 
 struct TicketCommitments {
@@ -23,6 +24,10 @@ interface IVerifier {
         uint256[2] memory c,
         uint256[2] memory _input
     ) external returns (bool);
+}
+
+interface ExternalTicketHandler {
+    function ticketAction(address sender, address ticketOwer) external;
 }
 
 contract ZKTickets {
@@ -48,13 +53,15 @@ contract ZKTickets {
     function createNewTicketedEvent(
         uint256 price,
         string calldata eventName,
-        uint256 availableTickets
+        uint256 availableTickets,
+        address externalHandler
     ) external {
         ticketedEventIndex += 1;
         ticketedEvents[ticketedEventIndex].creator = payable(msg.sender);
         ticketedEvents[ticketedEventIndex].price = price;
         ticketedEvents[ticketedEventIndex].eventName = eventName;
         ticketedEvents[ticketedEventIndex].availableTickets = availableTickets;
+        ticketedEvents[ticketedEventIndex].externalHandler = externalHandler;
         emit NewTicketedEventCreated(ticketedEventIndex);
     }
 
@@ -109,6 +116,21 @@ contract ZKTickets {
             "Invalid ticket "
         );
         nullifierHashes[_nullifierHash] = true;
+        // I get the event using the commitment
+        TicketedEvents storage events = ticketedEvents[
+            ticketCommitments[_commitment].ticketedEventIndex
+        ];
+        // I get the added external handler
+        address externalHandler = events.externalHandler;
+
+        // If the handler is not zero address I call the external smart contract
+
+        if (externalHandler != address(0)) {
+            ExternalTicketHandler(externalHandler).ticketAction(
+                msg.sender,
+                ticketCommitments[_commitment].buyer
+            );
+        }
     }
 
     /*

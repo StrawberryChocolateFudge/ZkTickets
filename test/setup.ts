@@ -3,7 +3,7 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { ZKTickets } from "../typechain";
+import { MyExternalHandlerExample, ZKTickets } from "../typechain";
 
 export async function expectRevert(callback: CallableFunction, errorMessage: string) {
     let throws = false;
@@ -22,7 +22,7 @@ export async function expectRevert(callback: CallableFunction, errorMessage: str
     }
 }
 
-export async function setUpTicketer(): Promise<{ eventCreator: SignerWithAddress, buyer1: SignerWithAddress, buyer2: SignerWithAddress, ticketer: ZKTickets }> {
+export async function setUpTicketer(): Promise<{ eventCreator: SignerWithAddress, buyer1: SignerWithAddress, buyer2: SignerWithAddress, ticketer: ZKTickets, externalHandler: MyExternalHandlerExample }> {
     const [owner, eventCreator, buyer1, buyer2] = await ethers.getSigners();
 
     const VerifierFactory = await ethers.getContractFactory("contracts/TicketVerifier.sol:Verifier");
@@ -31,10 +31,13 @@ export async function setUpTicketer(): Promise<{ eventCreator: SignerWithAddress
 
     const TicketFactory = await ethers.getContractFactory("ZKTickets");
     const TicketDeploy = await TicketFactory.deploy(Verifier.address);
-    const ticketer = await TicketDeploy.deployed();
+    const ticketer = await TicketDeploy.deployed() as ZKTickets;
 
+    const ExternalHandlerFactory = await ethers.getContractFactory("MyExternalHandlerExample");
+    const ExternalHandlerDeploy = await ExternalHandlerFactory.deploy();
+    const externalHandler = await ExternalHandlerDeploy.deployed() as MyExternalHandlerExample;
 
-    return { eventCreator, buyer1, buyer2, ticketer }
+    return { eventCreator, buyer1, buyer2, ticketer, externalHandler }
 }
 
 

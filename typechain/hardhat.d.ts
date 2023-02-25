@@ -13,9 +13,17 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "MyExternalHandlerExample",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MyExternalHandlerExample__factory>;
+    getContractFactory(
       name: "Verifier",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Verifier__factory>;
+    getContractFactory(
+      name: "ExternalTicketHandler",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ExternalTicketHandler__factory>;
     getContractFactory(
       name: "IVerifier",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -26,10 +34,20 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.ZKTickets__factory>;
 
     getContractAt(
+      name: "MyExternalHandlerExample",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MyExternalHandlerExample>;
+    getContractAt(
       name: "Verifier",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Verifier>;
+    getContractAt(
+      name: "ExternalTicketHandler",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ExternalTicketHandler>;
     getContractAt(
       name: "IVerifier",
       address: string,

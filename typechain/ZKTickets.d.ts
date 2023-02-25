@@ -22,7 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ZKTicketsInterface extends ethers.utils.Interface {
   functions: {
-    "createNewTicketedEvent(uint256,string,uint256)": FunctionFragment;
+    "createNewTicketedEvent(uint256,string,uint256,address)": FunctionFragment;
     "handleTicket(uint256[8],bytes32,bytes32)": FunctionFragment;
     "nullifierHashes(bytes32)": FunctionFragment;
     "purchaseTicket(uint256,bytes32)": FunctionFragment;
@@ -35,7 +35,7 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "createNewTicketedEvent",
-    values: [BigNumberish, string, BigNumberish]
+    values: [BigNumberish, string, BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "handleTicket",
@@ -173,6 +173,7 @@ export class ZKTickets extends BaseContract {
       price: BigNumberish,
       eventName: string,
       availableTickets: BigNumberish,
+      externalHandler: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -220,11 +221,12 @@ export class ZKTickets extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, string, BigNumber] & {
+      [string, BigNumber, string, BigNumber, string] & {
         creator: string;
         price: BigNumber;
         eventName: string;
         availableTickets: BigNumber;
+        externalHandler: string;
       }
     >;
 
@@ -241,6 +243,7 @@ export class ZKTickets extends BaseContract {
     price: BigNumberish,
     eventName: string,
     availableTickets: BigNumberish,
+    externalHandler: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -285,11 +288,12 @@ export class ZKTickets extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [string, BigNumber, string, BigNumber] & {
+    [string, BigNumber, string, BigNumber, string] & {
       creator: string;
       price: BigNumber;
       eventName: string;
       availableTickets: BigNumber;
+      externalHandler: string;
     }
   >;
 
@@ -306,6 +310,7 @@ export class ZKTickets extends BaseContract {
       price: BigNumberish,
       eventName: string,
       availableTickets: BigNumberish,
+      externalHandler: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -353,11 +358,12 @@ export class ZKTickets extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, string, BigNumber] & {
+      [string, BigNumber, string, BigNumber, string] & {
         creator: string;
         price: BigNumber;
         eventName: string;
         availableTickets: BigNumber;
+        externalHandler: string;
       }
     >;
 
@@ -385,6 +391,7 @@ export class ZKTickets extends BaseContract {
       price: BigNumberish,
       eventName: string,
       availableTickets: BigNumberish,
+      externalHandler: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -441,6 +448,7 @@ export class ZKTickets extends BaseContract {
       price: BigNumberish,
       eventName: string,
       availableTickets: BigNumberish,
+      externalHandler: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
