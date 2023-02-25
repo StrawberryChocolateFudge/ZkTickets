@@ -24,6 +24,12 @@ export function web3Injected(): boolean {
     }
 }
 
+export async function requestAccounts() {
+    //@ts-ignore
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+}
+
+
 export function doOnBoarding() {
     const onboarding = new MetaMaskOnboarding();
     onboarding.startOnboarding();
@@ -36,7 +42,11 @@ export async function onboardOrSwitchNetwork(handleError) {
         await doOnBoarding();
         return false;
     }
+
+    await requestAccounts();
+
     await switchToFantomTestnet();
+
     return true;
 }
 
