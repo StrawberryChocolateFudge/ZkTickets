@@ -5,8 +5,8 @@
   "main": "index.js",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "dev": "parcel frontend/index.html frontend/purchaseTicket.html frontend/handleTicket.html",
-    "build": "parcel build frontend/index.html frontend/purchaseTicket frontend/handleTicket.html && npm run copy",
+    "dev": "parcel frontend/index.html frontend/tickets.html frontend/handleTicket.html",
+    "build": "parcel build frontend/index.html frontend/tickets.html frontend/handleTicket.html && npm run copy",
     "copy": "sh copyToDist.sh"
   },
   "devDependencies": {
