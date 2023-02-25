@@ -31,35 +31,64 @@
                             <th></th>
                         </tr>
                         <tr>
-                            <td class="labelTd"><label class="tableLabel" for="eventNameInput"> Name:</label></td>
+                            <td class="labelTd"><label class="tableLabel" for="eventNameInput">Name*</label></td>
                             <td>
                                 <div class="centered-row">
                                     <input required id="eventNameInput" type="text" maxlength="50" minlength="3" />
-                                    <span class="material-symbols-outlined inputImage">celebration</span>
+                                    <div class="tooltip">
+                                        <span class="material-symbols-outlined inputImage">celebration</span>
+                                        <div class="tooltiptext">The name of the event</div>
+                                    </div>
+
                                 </div>
                             </td>
                         </tr>
-                        <tr class="bottomBorder">
-                            <td class="labelTd"><label class="tableLabel" for="eventPriceInput">Price:</label></td>
+                        <tr>
+                            <td class="labelTd"><label class="tableLabel" for="eventPriceInput">Price*</label></td>
                             <td>
                                 <div class="centered-row">
                                     <input required id="eventPriceInput" type="number" step="0.00000000000000001" />
-                                    <img class="inputImage" src="./fantomLogo.svg" width="25" />
+                                    <div class="tooltip">
+                                        <img class="inputImage" src="./fantomLogo.svg" width="25" />
+                                        <div class="tooltiptext">Price in Fantom</div>
+                                    </div>
+
                                 </div>
                             </td>
                         </tr>
-                        <tr class="bottomBorder">
-                            <td class="labelTd"><label class="tableLabel" for="ticketCountInput">Tickets:</label>
+                        <tr>
+                            <td class="labelTd"><label class="tableLabel" for="ticketCountInput">Tickets*</label>
                             </td>
                             <td>
                                 <div class="centered-row">
                                     <input required id="ticketCountInput" type="number" />
-                                    <span class="material-symbols-outlined inputImage">
-                                        confirmation_number
-                                    </span>
+                                    <div class="tooltip">
+                                        <span class="material-symbols-outlined inputImage">
+                                            local_activity
+                                        </span>
+                                        <div class="tooltiptext">The tickets available for sale</div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td class="labelTd">
+                                <label class="tableLabel" for="handlerAddressInput">Handler</label>
+                            </td>
+                            <td>
+                                <div class="centered-row">
+                                    <input id="handlerAddressInput" type="text" />
+                                    <div class="tooltip">
+                                        <span class="material-symbols-outlined inputImage">
+                                            barcode_reader
+                                        </span>
+                                        <div class="tooltiptext">Add an External Handler Contract</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td> </td>
                             <td> <button id="CreateEventButton" class="button-56" type="submit">Create Event</button>
@@ -67,6 +96,18 @@
                         </tr>
                     </table>
                 </form>
+                <div class="centered-row">
+
+                </div>
+                <!-- <div class="centered-row">
+                    <div class="col">
+                        <label>External Handler</label>
+                        <input id="externalHandlerInput" type="text" minlength="42" maxlength="42" />
+                        <small class="fontSize-small">External contract address to perfom custom actions on
+                            ticket
+                            scanning.</small>
+                    </div>
+                </div> -->
             </div>
         </div>
         <div class="centered-row" id="hideCreateButton">

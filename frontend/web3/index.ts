@@ -7,6 +7,8 @@ export const FANTOMTESTNETCONTRACTADDRESS = "0xEfE959bc25bAEceb16DbFc942B3508A90
 export const FANTOMTESTNETID = "0xfa2";
 export const FANTOMTESTNETRPCURL = "https://xapi.testnet.fantom.network/lachesis";
 
+export const ZEROADDRESS = "0x0000000000000000000000000000000000000000"
+
 export const formatEther = (bn: ethers.BigNumberish) => ethers.utils.formatEther(bn)
 
 export function getJsonRpcProvider() {
@@ -135,8 +137,8 @@ export async function getContract(provider: any, at: string, abiPath: string): P
     return new ethers.Contract(at, artifact.abi, signer);
 }
 
-export async function createNewTicketedEvent(contract: any, price: string, eventName: string, availableTickets: string) {
-    return await contract.createNewTicketedEvent(ethers.utils.parseEther(price), eventName, availableTickets);
+export async function createNewTicketedEvent(contract: any, price: string, eventName: string, availableTickets: string, externalHandler: string) {
+    return await contract.createNewTicketedEvent(ethers.utils.parseEther(price), eventName, availableTickets, externalHandler);
 }
 
 export async function getTicketedEventIndex(contract: any) {
