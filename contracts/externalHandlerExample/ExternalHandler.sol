@@ -5,7 +5,7 @@ import "../ZKTickets.sol";
 
 /*
   This is an example contract that implements the ExternalTicketHandler interface
-  THe ZkTickets will call 
+  The ZkTickets will call 
 
 */
 contract MyExternalHandlerExample is ExternalTicketHandler {

@@ -89,14 +89,14 @@ contract ZKTickets {
 
         ticketedEvents[_ticketedEventIndex].availableTickets -= 1;
 
-        // Forward the eth to the craetor of the ticket
+        // Forward the eth to the creator of the ticket
         Address.sendValue(
             ticketedEvents[_ticketedEventIndex].creator,
             msg.value
         );
     }
 
-    // Handle the ticket
+    // Handle the ticket This will invalidate it.
 
     function handleTicket(
         uint256[8] calldata _proof,
