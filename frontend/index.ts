@@ -59,6 +59,9 @@ createEventButton.onclick = async function () {
             handleError("Unable to submit transaction");
         });
 
+        if (tx === undefined) {
+            return;
+        }
         await tx.wait().then(async (receipt) => {
             if (receipt.status === 1) {
                 const eventIndex = await NewTicketedEventCreated(receipt, contract);
