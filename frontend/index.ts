@@ -12,7 +12,7 @@ import { isAddress } from "ethers/lib/utils";
 })();
 
 
-const getPurchasePageUrl = (index: string) => appURL + `/purchaseTicket.html?index=${index}`
+const getPurchasePageUrl = (index: string) => appURL + `/tickets.html?i=${index}`
 
 const goToCreateEventsButton = document.getElementById("goToCreateEventsButton") as HTMLButtonElement;
 
