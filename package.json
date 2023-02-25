@@ -2,7 +2,6 @@
   "name": "zktickets",
   "version": "1.0.0",
   "description": "This is a ZKP based ticketing platform built with Circom, SnarkJS and Solidity and deployed on Bittorrent Chain",
-  "main": "index.js",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "dev": "parcel frontend/index.html frontend/tickets.html frontend/handleTicket.html",
