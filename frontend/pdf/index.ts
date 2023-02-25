@@ -3,55 +3,86 @@ import { jsPDF } from "jspdf";
 function splitTitle(eventTitle) {
     let firstHalf = "";
     let secondHalf = "";
-    let pushToFirst = true;
+    let thirdHalf = "";
+    let pushTo = "first";
 
     const words = eventTitle.split(" ");
 
     for (let i = 0; i < words.length; i++) {
         const word = words[i];
 
-        if (firstHalf.length + word.length >= 30) {
-            pushToFirst = false;
+        if (firstHalf.length + word.length >= 24) {
+            pushTo = "second";
+        }
+        if (secondHalf.length + word.length >= 24) {
+            pushTo = "third"
         }
 
-        if (pushToFirst) {
-
-            if (firstHalf === "") {
-                firstHalf += word;
-            } else {
-                firstHalf += " " + word;
-            }
-        } else {
-            if (secondHalf === "") {
-                secondHalf += word;
-            } else {
-                secondHalf += " " + word;
-            }
+        switch (pushTo) {
+            case "first":
+                if (firstHalf === "") {
+                    firstHalf += word;
+                } else {
+                    firstHalf += " " + word;
+                }
+                break;
+            case "second":
+                if (secondHalf === "") {
+                    secondHalf += word;
+                } else {
+                    secondHalf += " " + word;
+                }
+                break;
+            case "third":
+                if (thirdHalf === "") {
+                    thirdHalf += word;
+                } else {
+                    thirdHalf += " " + word;
+                }
+                break;
+            default:
+                break;
         }
+
     }
 
-    return [firstHalf, secondHalf];
+    return [firstHalf, secondHalf, thirdHalf];
 }
 
 export async function downloadPDF(eventTitle: string, eventPrice: string, currency: string, dataUrl: string, noteString: string, handlerLink: string) {
 
-    const [firstHalf, secondHalf] = splitTitle(eventTitle);
+    const [firstHalf, secondHalf, thirdHalf] = splitTitle(eventTitle);
 
     let doc = new jsPDF("l", "px", "credit-card");
-
-    doc.setFontSize(6);
-    doc.text(`Single use Ticket purchased for ${eventPrice} ${currency}.`, 16, 25);
-    doc.addImage(dataUrl, "JPEG", 15, 32, 40, 40);
+    doc.addImage(dataUrl, "JPEG", 1, 1, 85, 85);
     doc.setFontSize(10);
-    doc.text(firstHalf, 70, 40);
+    doc.text(firstHalf, 85, 10);
     if (secondHalf !== "") {
-        doc.text(secondHalf, 70, 50);
+        doc.text(secondHalf, 85, 20);
     }
-    doc.setFontSize(4);
-    doc.text("Ticket link:", 70, 65)
-    doc.text(`${handlerLink}`, 70, 70);
-    doc.setFontSize(2);
-    doc.text(noteString, 16, 85);
+
+    if (thirdHalf !== "") {
+        doc.text(thirdHalf, 85, 30)
+    }
+    doc.setFontSize(15)
+    doc.text(`Single use Ticket`, 85, 45);
+
+    doc.setFontSize(10);
+    doc.text(`${eventPrice} ${currency}`, 85, 60);
+
+
+    doc.setFontSize(8);
+    doc.text(`${handlerLink}`, 5, 95);
+    doc.setFontSize(3);
+    doc.text(noteString, 5, 105);
     doc.save(`ZkTicket-${eventTitle}.pdf`)
+
+    //For testing I opened it in another window!
+    // var string = doc.output('datauristring');
+    // var embed = "<embed width='100%' height='100%' src='" + string + "'/>"
+    // var x = window.open() as Window;
+    // x.document.open();
+    // x.document.write(embed);
+    // x.document.close();
 }
 
