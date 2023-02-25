@@ -2,7 +2,7 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex } from "./utils";
-import { FANTOMTESTNETCONTRACTADDRESS, FANTOMTESTNETID, formatEther, getContract, getJsonProviderTicketedEvent, getJsonRpcProvider, getTicketedEvents, getWeb3Provider, handleTicket, onboardOrSwitchNetwork, purchaseTicket } from "./web3";
+import { FANTOMTESTNETCONTRACTADDRESS, FANTOMTESTNETID, formatEther, getContract, getJsonProviderTicketedEvent, getJsonRpcProvider, getTicketedEvents, getWeb3Provider, handleTicket, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 (
     async () => {
@@ -13,8 +13,6 @@ import { getNote } from "./web3/zkp";
             preset: "bigCircles", // also "big-circles" is accepted
         });
     })();
-
-
 
 const purchaseTicketsSelectorButton = document.getElementById("purchaseTicketsSelectorButton") as HTMLElement;
 const handleTicketsButton = document.getElementById("handleTicketsButton") as HTMLElement;
@@ -31,7 +29,7 @@ const eventPrice = document.getElementById("eventPrice") as HTMLElement;
 const ticketsLeft = document.getElementById("ticketsLeft") as HTMLElement;
 
 
-const getHandleTicketURL = (index: string) => appURL + `/handleTicket.html?index=${index}`
+const getHandleTicketURL = (index: string) => appURL + `/handleTicket.html?i=${index}`
 
 
 handleTicketsButton.onclick = function () {
@@ -63,7 +61,10 @@ purchaseTicketsSelectorButton.onclick = async function () {
         const eventContainer = document.getElementById("eventContainer") as HTMLElement;
         eventContainer.classList.remove("hide");
         welcomeMessage.classList.add("hide");
-        loadingBanner.classList.add("hide")
+        loadingBanner.classList.add("hide");
+        if (ticketedEvent.creator === ZEROADDRESS) {
+            purchaseTicketActionContainer.classList.add("hide")
+        }
     }, 1000);
 };
 
