@@ -8,7 +8,8 @@ async function main() {
     const zktickets = await ZkticketsDeploy.deployed();
     console.log("ZKTickets is deployed to :", zktickets.address);
 }
-// ZKTIckets is deployed to : 0xEfE959bc25bAEceb16DbFc942B3508A900D0674A
+
+// ZKTIckets is deployed to : 0x0be22a76a63927b6766648De6dD09C7183f9ed90
 
 // main().catch(err => {
 //     console.error(err);
