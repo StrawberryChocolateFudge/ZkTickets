@@ -91,7 +91,7 @@ purchaseTicketAction.onclick = async function () {
         }
         const availableTickets = ticketedEvent.availableTickets.toNumber();
 
-        if (availableTickets === 0) {
+        if (availableTickets === 0 || availableTickets === undefined) {
             handleError("Event sold out!")
             return;
         }
