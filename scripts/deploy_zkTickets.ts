@@ -9,7 +9,7 @@ async function main() {
     console.log("ZKTickets is deployed to :", zktickets.address);
 }
 
-// ZKTIckets is deployed to : 0x0be22a76a63927b6766648De6dD09C7183f9ed90
+// ZKTIckets is deployed to : 0x0680c8Fb31faC6029f01f5b75e55b2F3D4333fC2
 
 // main().catch(err => {
 //     console.error(err);
