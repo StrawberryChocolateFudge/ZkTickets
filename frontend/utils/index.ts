@@ -1,7 +1,4 @@
-
-//TODO: add prod app url and use the node env to decide which one to load!
-export const appURL = "http://localhost:1234";
-
+export const appURL = window.location.origin;
 
 export const handleError = (msg) => {
     const snackBarElement = document.getElementById("snackbar");
