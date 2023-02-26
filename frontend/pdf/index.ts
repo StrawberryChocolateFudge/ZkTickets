@@ -11,10 +11,10 @@ function splitTitle(eventTitle) {
     for (let i = 0; i < words.length; i++) {
         const word = words[i];
 
-        if (firstHalf.length + word.length >= 24) {
+        if (firstHalf.length + word.length >= 20) {
             pushTo = "second";
         }
-        if (secondHalf.length + word.length >= 24) {
+        if (secondHalf.length + word.length >= 20) {
             pushTo = "third"
         }
 
@@ -56,20 +56,19 @@ export async function downloadPDF(eventTitle: string, eventPrice: string, curren
     let doc = new jsPDF("l", "px", "credit-card");
     doc.addImage(dataUrl, "JPEG", 1, 1, 85, 85);
     doc.setFontSize(10);
-    doc.text(firstHalf, 85, 10);
+    doc.text(firstHalf, 85, 45);
     if (secondHalf !== "") {
-        doc.text(secondHalf, 85, 20);
+        doc.text(secondHalf, 85, 55);
     }
 
     if (thirdHalf !== "") {
-        doc.text(thirdHalf, 85, 30)
+        doc.text(thirdHalf, 85, 65)
     }
-    doc.setFontSize(15)
-    doc.text(`Single use Ticket`, 85, 45);
+    doc.setFontSize(15);
+    doc.text(`Single use Ticket`, 85, 12);
 
     doc.setFontSize(10);
-    doc.text(`${eventPrice} ${currency}`, 85, 60);
-
+    doc.text(`${eventPrice} ${currency}`, 85, 22);
 
     doc.setFontSize(8);
     doc.text(`${handlerLink}`, 5, 95);
@@ -77,7 +76,7 @@ export async function downloadPDF(eventTitle: string, eventPrice: string, curren
     doc.text(noteString, 5, 105);
     doc.save(`ZkTicket-${eventTitle}.pdf`)
 
-    //For testing I opened it in another window!
+    // For testing I opened it in another window!
     // var string = doc.output('datauristring');
     // var embed = "<embed width='100%' height='100%' src='" + string + "'/>"
     // var x = window.open() as Window;
