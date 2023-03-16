@@ -7,12 +7,37 @@ export const FANTOMTESTNETCONTRACTADDRESS = "0x0680c8Fb31faC6029f01f5b75e55b2F3D
 export const FANTOMTESTNETID = "0xfa2";
 export const FANTOMTESTNETRPCURL = "https://xapi.testnet.fantom.network/lachesis";
 
+export const BTTTESTNETCONTRACTADDRESS = "0x9096DaE3B7617148D3e2bd7A35409f1183193010";
+export const BTTTESTNETID = "0x405";
+export const BTTTESTNETRPCURL = "https://pre-rpc.bt.io/";
+
+export function getNetworkFromSubdomain() {
+    // The application is deployed on different networks with a different subdomain
+    // This function checks for the subdomain, evaluates what chain should be used and returns the network details
+    // for localhost it falls back to a default network
+
+    const host = window.location.host;
+    const subdomain = host.split(".")[0];
+    switch (subdomain) {
+        case "fantom":
+            return [FANTOMTESTNETCONTRACTADDRESS, FANTOMTESTNETID, FANTOMTESTNETRPCURL]
+        case "btt":
+            return [BTTTESTNETCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
+        default:
+            // Fall back on BTT for this branch of development
+            return [BTTTESTNETCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
+    }
+}
+
+
+
 export const ZEROADDRESS = "0x0000000000000000000000000000000000000000"
 
 export const formatEther = (bn: ethers.BigNumberish) => ethers.utils.formatEther(bn)
 
 export function getJsonRpcProvider() {
-    return new ethers.providers.JsonRpcProvider(FANTOMTESTNETRPCURL);
+    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    return new ethers.providers.JsonRpcProvider(rpcurl);
 }
 
 export function web3Injected(): boolean {
@@ -45,9 +70,23 @@ export async function onboardOrSwitchNetwork(handleError) {
 
     await requestAccounts();
 
-    await switchToFantomTestnet();
-
+    await handleNetworkSwitch();
     return true;
+}
+
+async function handleNetworkSwitch() {
+    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+
+    switch (networkID) {
+        case FANTOMTESTNETID:
+            await switchToFantomTestnet();
+            break;
+        case BTTTESTNETID:
+            await switchToDonauTestnet();
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -182,9 +221,28 @@ export async function NewTicketedEventCreated(receipt, contract) {
     }
 }
 
+export async function getJsonRpcProviderTicketedEventIndex(handleError: CallableFunction) {
+    const provider = getJsonRpcProvider();
+    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    const contract = await getContract(provider, contractAddress, "ZKTickets.json").catch(err => {
+        handleError("Network error");
+    })
+    const eventIndex = await getTicketedEventIndex(contract).catch(err => {
+        handleError("Unable to get events!")
+    })
+
+    console.log(eventIndex);
+
+    if (!eventIndex) {
+        handleError("Unable to connect to network")
+    }
+    return eventIndex;
+}
+
 export async function getJsonProviderTicketedEvent(index: string, handleError: CallableFunction) {
     const provider = getJsonRpcProvider();
-    const contract = await getContract(provider, FANTOMTESTNETCONTRACTADDRESS, "ZKTickets.json").catch(err => {
+    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    const contract = await getContract(provider, contractAddress, "ZKTickets.json").catch(err => {
         handleError("Network error");
     })
     const ticketedEvent = await getTicketedEvents(contract, index).catch(err => {
@@ -199,7 +257,8 @@ export async function getJsonProviderTicketedEvent(index: string, handleError: C
 
 export async function JSONRPCProviderVerifyTicket(index: string, note: CryptoNote, handleError: CallableFunction) {
     const provider = getJsonRpcProvider();
-    const contract = await getContract(provider, FANTOMTESTNETCONTRACTADDRESS, "ZKTickets.json").catch(err => {
+    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    const contract = await getContract(provider, contractAddress, "ZKTickets.json").catch(err => {
         handleError("Network error");
     })
     const ticketValid = await verifyTicket(contract, toNoteHex(note.commitment), toNoteHex(note.nullifierHash)).catch(err => {
