@@ -2,7 +2,7 @@ import QrScanner from "qr-scanner";
 import { parseNote, toNoteHex } from "../lib/crypto";
 import { createQRCodeScanner, startScanning, stopScanning } from "./camera";
 import { getEventIndex, handleError } from "./utils";
-import { FANTOMTESTNETCONTRACTADDRESS, getContract, getJsonProviderTicketedEvent, getWeb3Provider, handleTicket, JSONRPCProviderVerifyTicket, onboardOrSwitchNetwork } from "./web3";
+import { getContract, getNetworkFromSubdomain, getWeb3Provider, handleTicket, JSONRPCProviderVerifyTicket, onboardOrSwitchNetwork } from "./web3";
 import { generateProof } from "./web3/zkp";
 
 (async () => {
@@ -153,15 +153,15 @@ invalidateTicketButton.onclick = async function () {
     const proof = await generateProof(note.cryptoNote);
     // Invalidate the Ticket
     const switched = await onboardOrSwitchNetwork(handleError);
+    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
 
     if (switched) {
         const provider = getWeb3Provider();
-        const contract = await getContract(provider, FANTOMTESTNETCONTRACTADDRESS, "ZKTickets.json").catch(err => {
+        const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
             handleError("Unable to connect to the network")
         })
 
         const tx = await handleTicket(contract, proof, toNoteHex(note.cryptoNote.nullifierHash), toNoteHex(note.cryptoNote.commitment)).catch(err => {
-            console.log(err);
             handleError("Unable to dispatch transaction")
         });
 
