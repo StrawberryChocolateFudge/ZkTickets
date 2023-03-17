@@ -132,6 +132,7 @@ validateTicketButton.onclick = async function () {
                 // Then I navigate back
                 ticketCodeInput.value = "";
                 renderTicketValidBack();
+                stopScanningButton.click();
             }
 
         }
