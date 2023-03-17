@@ -18,14 +18,19 @@ export function getNetworkFromSubdomain() {
 
     const host = window.location.host;
     const subdomain = host.split(".")[0];
+
+    const fantomRes = [FANTOMTESTNETCONTRACTADDRESS, FANTOMTESTNETID, FANTOMTESTNETRPCURL]
+
+    const bttRes = [BTTTESTNETCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
+
     switch (subdomain) {
         case "fantom":
-            return [FANTOMTESTNETCONTRACTADDRESS, FANTOMTESTNETID, FANTOMTESTNETRPCURL]
+            return fantomRes;
         case "btt":
-            return [BTTTESTNETCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
+            return bttRes;
         default:
             // Fall back on BTT for this branch of development
-            return [BTTTESTNETCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
+            return bttRes
     }
 }
 
@@ -265,4 +270,22 @@ export async function JSONRPCProviderVerifyTicket(index: string, note: CryptoNot
         handleError("Network error")
     });
     return ticketValid;
+}
+
+export async function walletRPCProviderVerifyTicket(index: string, note: CryptoNote, handleError: CallableFunction) {
+    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+
+    const switched = await onboardOrSwitchNetwork(handleError);
+    if (switched) {
+        const provider = getWeb3Provider();
+
+        const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
+            handleError("Network error")
+        })
+
+        const ticketValid = await verifyTicket(contract, toNoteHex(note.commitment), toNoteHex(note.nullifierHash)).catch(err => {
+            handleError("Network error")
+        });
+        return ticketValid;
+    }
 }
