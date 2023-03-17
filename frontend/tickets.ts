@@ -87,7 +87,7 @@ purchaseTicketsSelectorButton.onclick = async function () {
             handleError("Unable to connect to wallet!")
         }
 
-        eventCreator.textContent = "Pay To: " + ticketedEvent.creator;
+        eventCreator.textContent = "Event Creator: " + ticketedEvent.creator;
         eventName.textContent = ticketedEvent.eventName;
         eventPrice.textContent = formatEther(ticketedEvent.price);
         ticketsLeft.textContent = ticketedEvent.availableTickets;
