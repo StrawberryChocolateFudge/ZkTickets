@@ -1,6 +1,6 @@
 # zk Tickets
 
-This is a ZKP based ticketing platform built with Circom, SnarkJS and Solidity and deployed on Fantom testnet.
+This is a ZKP based ticketing platform built with Circom, SnarkJS and Solidity and deployed on testnet.
 
 The application offers the user to create an event that can have tickets. Users can purchase these tickets using FTM and receive a crypto note as a proof of purchase.
 
@@ -17,4 +17,4 @@ This application was created generally with Concert tickets in mind where you ca
 ## External handlers
 
 The protocol can support external handler contracts that add extra functionality to the handle method. 
-This could be useful for adding NFT/POAP Tokens to real life events rr even to conduct an in Person token airdrop!
+This could be useful for adding NFT/POAP Tokens to real life events or even to conduct an in-person token airdrop!

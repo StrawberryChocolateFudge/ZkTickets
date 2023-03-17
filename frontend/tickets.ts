@@ -1,9 +1,17 @@
 import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
-import { handleError, appURL, getEventIndex } from "./utils";
-import { FANTOMTESTNETCONTRACTADDRESS, FANTOMTESTNETID, formatEther, getContract, getJsonProviderTicketedEvent, getJsonRpcProvider, getTicketedEvents, getWeb3Provider, handleTicket, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
+import { handleError, appURL, getEventIndex, createNewImgElement, createNewTooltipText, appendTooltip } from "./utils";
+import { BTTTESTNETID, FANTOMTESTNETID, formatEther, getContract, getCurrencyFromNetId, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
+
+const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+const currency = getCurrencyFromNetId(NETID);
+
+const currencyPriceRow = document.getElementById("currencyPriceRow") as HTMLDivElement;
+//TODO: When clicking on purchase, use history.pushState to add a query parameter
+// if that query parameter is present in the link, only the purchase ticket page loads and the handle ticket button is not displayed at all!
+
 (
     async () => {
         //@ts-ignore
@@ -12,6 +20,16 @@ import { getNote } from "./web3/zkp";
         await tsParticles.load("tsparticles", {
             preset: "bigCircles", // also "big-circles" is accepted
         });
+
+        if (NETID === BTTTESTNETID) {
+            const imgEl = createNewImgElement("./bttLogo.svg");
+            appendTooltip(currencyPriceRow, imgEl, null);
+        } else if (NETID === FANTOMTESTNETID) {
+            const imgEl = createNewImgElement("./fantomLogo.svg");
+            appendTooltip(currencyPriceRow, imgEl, null);
+        }
+
+
     })();
 
 const purchaseTicketsSelectorButton = document.getElementById("purchaseTicketsSelectorButton") as HTMLElement;
@@ -27,10 +45,9 @@ const downloadButton = document.getElementById("downloadButton") as HTMLButtonEl
 const eventName = document.getElementById("eventName") as HTMLElement;
 const eventPrice = document.getElementById("eventPrice") as HTMLElement;
 const ticketsLeft = document.getElementById("ticketsLeft") as HTMLElement;
-
+const eventCreator = document.getElementById("eventCreator") as HTMLElement;
 
 const getHandleTicketURL = (index: string) => appURL + `/handleTicket.html?i=${index}`
-
 
 handleTicketsButton.onclick = function () {
     const index = getEventIndex();
@@ -41,31 +58,50 @@ handleTicketsButton.onclick = function () {
 }
 
 purchaseTicketsSelectorButton.onclick = async function () {
-    const index = getEventIndex();
-    if (!index) {
-        return;
-    }
+    const switched = await onboardOrSwitchNetwork(handleError);
 
-    welcomeMessage.classList.add("hide");
-    loadingBanner.classList.remove("hide");
-    purchaseTicketsSelectorButton.classList.add("hide");
-    handleTicketsButton?.classList.add("hide");
+    if (switched) {
 
-    const ticketedEvent = await getJsonProviderTicketedEvent(index, handleError);
-
-    eventName.textContent = ticketedEvent.eventName;
-    eventPrice.textContent = formatEther(ticketedEvent.price);
-    ticketsLeft.textContent = ticketedEvent.availableTickets;
-
-    setTimeout(() => {
-        const eventContainer = document.getElementById("eventContainer") as HTMLElement;
-        eventContainer.classList.remove("hide");
-        welcomeMessage.classList.add("hide");
-        loadingBanner.classList.add("hide");
-        if (ticketedEvent.creator === ZEROADDRESS) {
-            purchaseTicketActionContainer.classList.add("hide")
+        const index = getEventIndex();
+        if (!index) {
+            return;
         }
-    }, 1000);
+
+        welcomeMessage.classList.add("hide");
+        loadingBanner.classList.remove("hide");
+        purchaseTicketsSelectorButton.classList.add("hide");
+        handleTicketsButton?.classList.add("hide");
+
+        const provider = getWeb3Provider();
+        const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+
+        const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
+            handleError("Network error");
+        })
+
+        const ticketedEvent = await getTicketedEvents(contract, index).catch(err => {
+            handleError("Unable to find the event!");
+        })
+
+        if (!ticketedEvent) {
+            handleError("Unable to connect to wallet!")
+        }
+
+        eventCreator.textContent = "Pay To: " + ticketedEvent.creator;
+        eventName.textContent = ticketedEvent.eventName;
+        eventPrice.textContent = formatEther(ticketedEvent.price);
+        ticketsLeft.textContent = ticketedEvent.availableTickets;
+
+        setTimeout(() => {
+            const eventContainer = document.getElementById("eventContainer") as HTMLElement;
+            eventContainer.classList.remove("hide");
+            welcomeMessage.classList.add("hide");
+            loadingBanner.classList.add("hide");
+            if (ticketedEvent.creator === ZEROADDRESS) {
+                purchaseTicketActionContainer.classList.add("hide")
+            }
+        }, 1000);
+    }
 };
 
 purchaseTicketAction.onclick = async function () {
@@ -76,9 +112,11 @@ purchaseTicketAction.onclick = async function () {
 
     const switched = await onboardOrSwitchNetwork(handleError);
 
+    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+
     if (switched) {
         const provider = getWeb3Provider();
-        const contract = await getContract(provider, FANTOMTESTNETCONTRACTADDRESS, "ZKTickets.json").catch(err => {
+        const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
             handleError("Unable to connect to the network");
         })
 
@@ -98,7 +136,7 @@ purchaseTicketAction.onclick = async function () {
 
         const price = ticketedEvent.price;
         // Then I create the crypto note
-        const noteDetails = await getNote(FANTOMTESTNETID);
+        const noteDetails = await getNote(NETID);
         const details = noteDetails[0];
         const noteString = noteDetails[1];
         // Now I Prompt the user to pay with metamask if there are available tickets!        
@@ -118,7 +156,7 @@ purchaseTicketAction.onclick = async function () {
                 downloadButton.dataset.eventName = ticketedEvent.eventName;
                 downloadButton.dataset.eventPrice = formatEther(ticketedEvent.price);
                 const dataUrl = await createQR(noteString) as string;
-                await downloadPDF(ticketedEvent.eventName, formatEther(ticketedEvent.price), "FTM", dataUrl, noteString, window.location.href);
+                await downloadPDF(ticketedEvent.eventName, formatEther(ticketedEvent.price), currency, dataUrl, noteString, window.location.href);
 
 
             } else {
@@ -135,5 +173,5 @@ downloadButton.onclick = async function () {
     const eventPrice = downloadButton.dataset.eventPrice as string;
     const dataUrl = await createQR(noteString) as string;
 
-    await downloadPDF(eventName, eventPrice, "FTM", dataUrl, noteString, window.location.href);
+    await downloadPDF(eventName, eventPrice, currency, dataUrl, noteString, window.location.href);
 }

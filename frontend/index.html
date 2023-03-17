@@ -16,7 +16,7 @@
     <div class="container">
         <div class="col textAlign-center" id="welcomeMessage">
             <h2 class="centerWithMargin">ZkTickets</h2>
-            <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
+            <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol</h6>
         </div>
         <div class="centered-row">
             <div class="createEventContainer hide" id="createEventFormContainer">
@@ -50,9 +50,8 @@
                                 <div class="centered-row">
                                     <input autocomplete="off" required id="eventPriceInput" type="number"
                                         step="0.000001" />
-                                    <div class="tooltip">
-                                        <img class="inputImage" src="./fantomLogo.svg" width="25" />
-                                        <div class="tooltiptext">Price in Fantom</div>
+                                    <div class="tooltip" id="currencyTooltip">
+                                    
                                     </div>
 
                                 </div>
@@ -101,7 +100,10 @@
             </div>
         </div>
         <div class="centered-row" id="hideCreateButton">
-            <button class="button-56" id="goToCreateEventsButton">Create Events</button>
+            <div class="col">
+                <button class="button-56" id="goToCreateEventsButton">Create an Event</button>
+                <!-- <a class="button-56" href="./browseEvents.html">Browse Events</a> -->
+            </div>
         </div>
     </div>
     <div class="centered-row">
