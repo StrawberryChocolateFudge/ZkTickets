@@ -28,3 +28,25 @@ export const getEventIndex = () => {
 
     }
 }
+
+export function createNewImgElement(src) {
+    const imgEl = document.createElement("img");
+    imgEl.classList.add("inputImage");
+    imgEl.width = 25;
+    imgEl.src = src;
+    return imgEl;
+}
+
+export function createNewTooltipText(txt) {
+    const divEl = document.createElement("div");
+    divEl.classList.add("tooltiptext");
+    divEl.innerText = txt;
+    return divEl;
+}
+
+export function appendTooltip(parent, child1, child2) {
+    parent.appendChild(child1);
+    if (child2) {
+        parent.appendChild(child2)
+    }
+}
