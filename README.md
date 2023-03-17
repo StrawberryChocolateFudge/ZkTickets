@@ -2,7 +2,7 @@
 
 This is a ZKP based ticketing platform built with Circom, SnarkJS and Solidity and deployed on testnet.
 
-The application offers the user to create an event that can have tickets. Users can purchase these tickets using FTM and receive a crypto note as a proof of purchase.
+The application offers the user to create an event that can have tickets. Users can purchase these tickets using native currency and receive a crypto note as a proof of purchase.
 
 The webapp is divided into 3 pages.
 On the first page you can create a ticketed event and interact with the smart contract to do so.
