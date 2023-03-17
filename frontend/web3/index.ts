@@ -33,8 +33,16 @@ export function getNetworkFromSubdomain() {
             return bttRes
     }
 }
-
-
+export function getCurrencyFromNetId(netId) {
+    switch (netId) {
+        case FANTOMTESTNETID:
+            return "FTT"
+        case BTTTESTNETID:
+            return "BTT"
+        default:
+            return "";
+    }
+}
 
 export const ZEROADDRESS = "0x0000000000000000000000000000000000000000"
 

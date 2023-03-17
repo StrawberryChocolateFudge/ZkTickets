@@ -2,13 +2,15 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex, createNewImgElement, createNewTooltipText, appendTooltip } from "./utils";
-import { BTTTESTNETID, FANTOMTESTNETID, formatEther, getContract, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
+import { BTTTESTNETID, FANTOMTESTNETID, formatEther, getContract, getCurrencyFromNetId, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 
 const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+const currency = getCurrencyFromNetId(NETID);
 
 const currencyPriceRow = document.getElementById("currencyPriceRow") as HTMLDivElement;
-
+//TODO: When clicking on purchase, use history.pushState to add a query parameter
+// if that query parameter is present in the link, only the purchase ticket page loads and the handle ticket button is not displayed at all!
 
 (
     async () => {
@@ -85,7 +87,7 @@ purchaseTicketsSelectorButton.onclick = async function () {
             handleError("Unable to connect to wallet!")
         }
 
-        eventCreator.textContent = "Pay To: "+ticketedEvent.creator;
+        eventCreator.textContent = "Pay To: " + ticketedEvent.creator;
         eventName.textContent = ticketedEvent.eventName;
         eventPrice.textContent = formatEther(ticketedEvent.price);
         ticketsLeft.textContent = ticketedEvent.availableTickets;
@@ -154,7 +156,7 @@ purchaseTicketAction.onclick = async function () {
                 downloadButton.dataset.eventName = ticketedEvent.eventName;
                 downloadButton.dataset.eventPrice = formatEther(ticketedEvent.price);
                 const dataUrl = await createQR(noteString) as string;
-                await downloadPDF(ticketedEvent.eventName, formatEther(ticketedEvent.price), "FTM", dataUrl, noteString, window.location.href);
+                await downloadPDF(ticketedEvent.eventName, formatEther(ticketedEvent.price), currency, dataUrl, noteString, window.location.href);
 
 
             } else {
@@ -171,5 +173,5 @@ downloadButton.onclick = async function () {
     const eventPrice = downloadButton.dataset.eventPrice as string;
     const dataUrl = await createQR(noteString) as string;
 
-    await downloadPDF(eventName, eventPrice, "FTM", dataUrl, noteString, window.location.href);
+    await downloadPDF(eventName, eventPrice, currency, dataUrl, noteString, window.location.href);
 }
