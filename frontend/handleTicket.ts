@@ -2,7 +2,7 @@ import QrScanner from "qr-scanner";
 import { parseNote, toNoteHex } from "../lib/crypto";
 import { createQRCodeScanner, startScanning, stopScanning } from "./camera";
 import { getEventIndex, handleError } from "./utils";
-import { getContract, getNetworkFromSubdomain, getWeb3Provider, handleTicket, JSONRPCProviderVerifyTicket, onboardOrSwitchNetwork } from "./web3";
+import { getContract, getNetworkFromSubdomain, getWeb3Provider, handleTicket, JSONRPCProviderVerifyTicket, onboardOrSwitchNetwork, walletRPCProviderVerifyTicket } from "./web3";
 import { generateProof } from "./web3/zkp";
 
 (async () => {
@@ -87,7 +87,7 @@ validateTicketButton.onclick = async function () {
         if (!note) {
             return;
         }
-        const ticketValid = await JSONRPCProviderVerifyTicket(index, note.cryptoNote, handleError);
+        const ticketValid = await walletRPCProviderVerifyTicket(index, note.cryptoNote, handleError);
         if (!ticketValid) {
             handleError("Invalid Ticket");
             return;
@@ -96,6 +96,12 @@ validateTicketButton.onclick = async function () {
         // Then a button to invalidate it!
         eventContainer.classList.add("hide");
         invalidateTicketContainer.classList.remove("hide");
+        invalidateBackButton.onclick = async function () {
+            // If the back button is pressed, I empty the input field
+            // Then I navigate back
+            ticketCodeInput.value = "";
+            renderTicketValidBack();
+        }
     } else {
 
         //I hide current ui
@@ -109,7 +115,7 @@ validateTicketButton.onclick = async function () {
             if (!note) {
                 return;
             }
-            const ticketValid = await JSONRPCProviderVerifyTicket(index, note.cryptoNote, handleError);
+            const ticketValid = await walletRPCProviderVerifyTicket(index, note.cryptoNote, handleError);
             if (!ticketValid) {
                 handleError("Invalid Ticket");
                 return;
