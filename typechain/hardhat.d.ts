@@ -13,9 +13,37 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
+      name: "ERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20__factory>;
+    getContractFactory(
+      name: "IERC20Permit",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Permit__factory>;
+    getContractFactory(
+      name: "IERC20Metadata",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Metadata__factory>;
+    getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
       name: "MyExternalHandlerExample",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MyExternalHandlerExample__factory>;
+    getContractFactory(
+      name: "ProStaking",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ProStaking__factory>;
+    getContractFactory(
+      name: "TicketPro",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TicketPro__factory>;
     getContractFactory(
       name: "Verifier",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -34,10 +62,45 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.ZKTickets__factory>;
 
     getContractAt(
+      name: "Ownable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Ownable>;
+    getContractAt(
+      name: "ERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20>;
+    getContractAt(
+      name: "IERC20Permit",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Permit>;
+    getContractAt(
+      name: "IERC20Metadata",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Metadata>;
+    getContractAt(
+      name: "IERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20>;
+    getContractAt(
       name: "MyExternalHandlerExample",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MyExternalHandlerExample>;
+    getContractAt(
+      name: "ProStaking",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ProStaking>;
+    getContractAt(
+      name: "TicketPro",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TicketPro>;
     getContractAt(
       name: "Verifier",
       address: string,
