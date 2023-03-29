@@ -23,7 +23,6 @@ contract ProStaking is Ownable {
 
     event Stake(address indexed _address, uint256 totalStaked);
     event Unstake(address indexed _address, uint256 totalStaked);
-    event ExtendStakeTime(address indexed _address, uint256 stakeDate);
 
     constructor(IERC20 _token_, uint256 _stakingBlocks_, uint256 _stakeUnit_) {
         _token = _token_;
