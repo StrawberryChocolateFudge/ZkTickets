@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./ProStaking.sol";
-import "hardhat/console.sol";
+import "./ExternalTicketHandler.sol";
 
 struct TicketedEvents {
     address payable creator;
@@ -53,13 +53,9 @@ interface IVerifier {
     ) external returns (bool);
 }
 
-interface ExternalTicketHandler {
-    function ticketAction(address sender, address ticketOwer) external;
-}
-
 contract ZKTickets {
     using SafeMath for uint256;
-
+    using Address for address;
     address payable contractCreator;
     IVerifier public verifier;
     ProStaking public proStaking;
@@ -127,6 +123,7 @@ contract ZKTickets {
     /*
     Create a new ticketed event!
     */
+    // ..TODO verify the event name is max 50 characters
 
     function createNewTicketedEvent(
         uint256 price,
@@ -212,15 +209,52 @@ contract ZKTickets {
         address externalHandler = events.externalHandler;
 
         // If the handler is not zero address I call the external smart contract
+        // I verify if the interface was implemented
 
         if (externalHandler != address(0)) {
-            ExternalTicketHandler(externalHandler).ticketAction(
-                msg.sender,
-                ticketCommitments[_commitment].buyer
-            );
+            if (
+                isValidHandler(
+                    externalHandler,
+                    msg.sender,
+                    ticketCommitments[_commitment].buyer
+                )
+            ) {
+                ExternalTicketHandler(externalHandler).ticketAction(
+                    msg.sender,
+                    ticketCommitments[_commitment].buyer
+                );
+            }
         }
 
         emit TicketInvalidated(_commitment);
+    }
+
+    function isValidHandler(
+        address handler,
+        address sender,
+        address ticketOwner
+    ) private returns (bool) {
+        if (handler.isContract()) {
+            try
+                ExternalTicketHandler(handler).onTicketActionSupported(
+                    sender,
+                    ticketOwner
+                )
+            returns (bytes4 response) {
+                if (
+                    response !=
+                    ExternalTicketHandler.onTicketActionSupported.selector
+                ) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } catch {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /*

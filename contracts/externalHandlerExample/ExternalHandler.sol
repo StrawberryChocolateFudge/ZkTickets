@@ -6,15 +6,22 @@ import "../ZKTickets.sol";
 /*
   This is an example contract that implements the ExternalTicketHandler interface
   The ZkTickets will call 
-
+  
 */
 contract MyExternalHandlerExample is ExternalTicketHandler {
     event TicketAction(address sender, address ticketOwner);
 
-    function ticketAction(address sender, address ticketOwner)
-        external
-        override
-    {
+    function ticketAction(
+        address sender,
+        address ticketOwner
+    ) external override {
         emit TicketAction(sender, ticketOwner);
+    }
+
+    function onTicketActionSupported(
+        address,
+        address
+    ) public virtual override returns (bytes4) {
+        return this.onTicketActionSupported.selector;
     }
 }
