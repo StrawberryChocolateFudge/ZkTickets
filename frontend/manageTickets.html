@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./tickets.css" />
+    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <title>Purchase ZKTicket</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col textAlign-center" id="welcomeMessage">
+            <h2 class="centerWithMargin">ZkTickets</h2>
+            <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
+        </div>
+
+        <div class="centered-row hide" id="loadingBanner">
+            <div class="lds-circle">
+                <div></div>
+            </div>
+        </div>
+        <br />
+
+
+        <div class="centered-row">
+            <div id="snackbar"></div>
+        </div>
+        <div class="particlesstyle" id="tsparticles"></div>
+</body>
+<script type="module" src="./manageTickets.ts"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/tsparticles-preset-big-circles@2/tsparticles.preset.bigCircles.bundle.min.js"></script>
+
+</html>
