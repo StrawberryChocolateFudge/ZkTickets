@@ -21,14 +21,23 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MyExternalHandlerExampleInterface extends ethers.utils.Interface {
   functions: {
+    "onTicketActionSupported(address,address)": FunctionFragment;
     "ticketAction(address,address)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "onTicketActionSupported",
+    values: [string, string]
+  ): string;
   encodeFunctionData(
     functionFragment: "ticketAction",
     values: [string, string]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "onTicketActionSupported",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "ticketAction",
     data: BytesLike
@@ -89,12 +98,24 @@ export class MyExternalHandlerExample extends BaseContract {
   interface: MyExternalHandlerExampleInterface;
 
   functions: {
+    onTicketActionSupported(
+      arg0: string,
+      arg1: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     ticketAction(
       sender: string,
       ticketOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  onTicketActionSupported(
+    arg0: string,
+    arg1: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   ticketAction(
     sender: string,
@@ -103,6 +124,12 @@ export class MyExternalHandlerExample extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    onTicketActionSupported(
+      arg0: string,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     ticketAction(
       sender: string,
       ticketOwner: string,
@@ -129,6 +156,12 @@ export class MyExternalHandlerExample extends BaseContract {
   };
 
   estimateGas: {
+    onTicketActionSupported(
+      arg0: string,
+      arg1: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     ticketAction(
       sender: string,
       ticketOwner: string,
@@ -137,6 +170,12 @@ export class MyExternalHandlerExample extends BaseContract {
   };
 
   populateTransaction: {
+    onTicketActionSupported(
+      arg0: string,
+      arg1: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     ticketAction(
       sender: string,
       ticketOwner: string,

@@ -80,21 +80,15 @@ interface ProStakingInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "unstake", data: BytesLike): Result;
 
   events: {
-    "ExtendStakeTime(address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Stake(address,uint256)": EventFragment;
     "Unstake(address,uint256)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "ExtendStakeTime"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Stake"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unstake"): EventFragment;
 }
-
-export type ExtendStakeTimeEvent = TypedEvent<
-  [string, BigNumber] & { _address: string; stakeDate: BigNumber }
->;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
@@ -262,22 +256,6 @@ export class ProStaking extends BaseContract {
   };
 
   filters: {
-    "ExtendStakeTime(address,uint256)"(
-      _address?: string | null,
-      stakeDate?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { _address: string; stakeDate: BigNumber }
-    >;
-
-    ExtendStakeTime(
-      _address?: string | null,
-      stakeDate?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { _address: string; stakeDate: BigNumber }
-    >;
-
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null

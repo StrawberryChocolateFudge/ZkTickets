@@ -19,6 +19,30 @@ const _abi = [
       },
       {
         internalType: "address",
+        name: "ticketOwner",
+        type: "address",
+      },
+    ],
+    name: "onTicketActionSupported",
+    outputs: [
+      {
+        internalType: "bytes4",
+        name: "",
+        type: "bytes4",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        internalType: "address",
         name: "ticketOwer",
         type: "address",
       },

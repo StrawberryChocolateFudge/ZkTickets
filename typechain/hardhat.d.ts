@@ -37,6 +37,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MyExternalHandlerExample__factory>;
     getContractFactory(
+      name: "ExternalTicketHandler",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ExternalTicketHandler__factory>;
+    getContractFactory(
       name: "ProStaking",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ProStaking__factory>;
@@ -91,6 +95,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MyExternalHandlerExample>;
+    getContractAt(
+      name: "ExternalTicketHandler",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ExternalTicketHandler>;
     getContractAt(
       name: "ProStaking",
       address: string,
