@@ -34,12 +34,15 @@ const readerContainer = document.getElementById("readerContainer") as HTMLElemen
 
 const invalidateBackButton = document.getElementById("invalidateBackButton") as HTMLButtonElement;
 
+const useTheAppBanner = document.getElementById("useTheAppBanner") as HTMLElement;
+
 const renderScanner = () => {
     ticketCodeInputTable.classList.add("hide");
     validateTicketButtonRow.classList.add("hide");
     enterTheTicketCodeInfoRow.classList.add("hide");
     stopScanningButtonRow.classList.remove("hide");
     readerContainer.classList.remove("hide");
+    useTheAppBanner.classList.add("hide");
 }
 
 const renderStopScan = () => {
@@ -48,6 +51,7 @@ const renderStopScan = () => {
     validateTicketButtonRow.classList.remove("hide");
     enterTheTicketCodeInfoRow.classList.remove("hide");
     stopScanningButtonRow.classList.add("hide");
+    useTheAppBanner.classList.remove("hide");
 }
 
 const renderTicketValid = () => {
