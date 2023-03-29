@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./index.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
@@ -15,7 +16,7 @@
 <body>
     <div class="container">
         <div class="col textAlign-center" id="welcomeMessage">
-            <h2 class="centerWithMargin">ZkTickets</h2>
+            <h2 class="centerWithMargin tangerine">ZkTickets</h2>
             <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol</h6>
         </div>
         <div class="centered-row">
@@ -29,18 +30,21 @@
                         <tr>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                         <tr>
                             <td class="labelTd"><label class="tableLabel" for="eventNameInput">Name*</label></td>
                             <td>
                                 <div class="centered-row">
-                                    <input autocomplete="off" required id="eventNameInput" type="text" maxlength="50"
-                                        minlength="3" />
-                                    <div class="tooltip">
-                                        <span class="material-symbols-outlined inputImage">celebration</span>
-                                        <div class="tooltiptext">The name of the event</div>
-                                    </div>
+                                    <input placeholder="Required" class="arginput text-input-3" autocomplete="off"
+                                        required id="eventNameInput" type="text" maxlength="50" minlength="3" />
 
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tooltip">
+                                    <span class="material-symbols-outlined inputImage">celebration</span>
+                                    <div class="tooltiptext">The name of the event</div>
                                 </div>
                             </td>
                         </tr>
@@ -48,12 +52,13 @@
                             <td class="labelTd"><label class="tableLabel" for="eventPriceInput">Price*</label></td>
                             <td>
                                 <div class="centered-row">
-                                    <input autocomplete="off" required id="eventPriceInput" type="number"
+                                    <input placeholder="Required. 1% fee will be added" class="arginput"
+                                        autocomplete="off" required id="eventPriceInput" type="number"
                                         step="0.000001" />
-                                    <div class="tooltip" id="currencyTooltip">
-                                    
-                                    </div>
-
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tooltip" id="currencyTooltip">
                                 </div>
                             </td>
                         </tr>
@@ -62,37 +67,63 @@
                             </td>
                             <td>
                                 <div class="centered-row">
-                                    <input autocomplete="off" required id="ticketCountInput" type="number" />
-                                    <div class="tooltip">
-                                        <span class="material-symbols-outlined inputImage">
-                                            local_activity
-                                        </span>
-                                        <div class="tooltiptext">The tickets available for sale</div>
-                                    </div>
+                                    <input placeholder="Required" class="arginput" autocomplete="off" required
+                                        id="ticketCountInput" type="number" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tooltip">
+                                    <span class="material-symbols-outlined inputImage">
+                                        local_activity
+                                    </span>
+                                    <div class="tooltiptext">The tickets available for sale</div>
                                 </div>
                             </td>
                         </tr>
-
+                        <tr>
+                            <td class="labelTd">
+                                <label class="tableLabel" for="allowSpeculationInput">Speculation*</label>
+                            </td>
+                            <td>
+                                <div class="checkbox-wrapper-5">
+                                    <div class="check">
+                                        <input id="allowSpeculationInput" type="checkbox" />
+                                        <label for="allowSpeculationInput"></label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tooltip">
+                                    <span class="material-symbols-outlined inputImage">
+                                        candlestick_chart
+                                    </span>
+                                    <div class="tooltiptext">Allow custom resale price</div>
+                                </div>
+                            </td>
+                        </tr>
                         <tr>
                             <td class="labelTd">
                                 <label class="tableLabel" for="handlerAddressInput">Handler</label>
                             </td>
                             <td>
                                 <div class="centered-row">
-                                    <input id="handlerAddressInput" type="text" />
-                                    <div class="tooltip">
-                                        <span class="material-symbols-outlined inputImage">
-                                            barcode_reader
-                                        </span>
-                                        <div class="tooltiptext">Add an External Handler Contract</div>
-                                    </div>
+                                    <input autocomplete="off" class="arginput" placeholder="Optional Field"
+                                        id="handlerAddressInput" type="text" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tooltip">
+                                    <span class="material-symbols-outlined inputImage">
+                                        barcode_reader
+                                    </span>
+                                    <div class="tooltiptext">Add an External Handler Contract</div>
                                 </div>
                             </td>
                         </tr>
 
                         <tr>
                             <td> </td>
-                            <td> <button id="CreateEventButton" class="button-56" type="submit">Create Event</button>
+                            <td> <button id="CreateEventButton" class="button-50" type="submit">Create Event</button>
                             </td>
                         </tr>
                     </table>
@@ -102,7 +133,6 @@
         <div class="centered-row" id="hideCreateButton">
             <div class="col">
                 <button class="button-56" id="goToCreateEventsButton">Create an Event</button>
-                <!-- <a class="button-56" href="./browseEvents.html">Browse Events</a> -->
             </div>
         </div>
     </div>
