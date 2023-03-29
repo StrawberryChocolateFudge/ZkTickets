@@ -3,7 +3,6 @@ import { handleError, appURL, createNewImgElement, createNewTooltipText, appendT
 import { isAddress } from "ethers/lib/utils";
 
 const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
-
 const currencyTooltip = document.getElementById("currencyTooltip") as HTMLDivElement;
 
 
@@ -36,7 +35,7 @@ const createEventButton = document.getElementById("CreateEventButton") as HTMLBu
 const eventNameInput = document.getElementById("eventNameInput") as HTMLInputElement;
 const eventPriceInput = document.getElementById("eventPriceInput") as HTMLInputElement;
 const ticketCountInput = document.getElementById("ticketCountInput") as HTMLInputElement;
-
+const allowSpeculationInput = document.getElementById("allowSpeculationInput") as HTMLInputElement;
 const handlerAddressInput = document.getElementById("handlerAddressInput") as HTMLInputElement;
 
 const hideCreateButton = document.getElementById("hideCreateButton") as HTMLInputElement;
@@ -67,11 +66,26 @@ createEventButton.onclick = async function () {
         });
 
         const eventName = eventNameInput.value;
+        if (eventName.length < 3) {
+            handleError("Event name too short!");
+            return;
+        }
         const eventPrice = eventPriceInput.value;
+        if (isNaN(parseFloat(eventPrice))) {
+            handleError("Invalid Event price");
+            return;
+        }
         const ticketCount = ticketCountInput.value;
+
+        if (isNaN(parseFloat(ticketCount))) {
+            handleError("Invalid ticket count");
+            return;
+        }
+
         const handlerAddressToSubmit = handlerAddress.length === 0 ? ZEROADDRESS : handlerAddress;
 
-        const tx = await createNewTicketedEvent(contract, eventPrice, eventName, ticketCount, handlerAddressToSubmit).catch(err => {
+        const allowSpeculation = allowSpeculationInput.checked;
+        const tx = await createNewTicketedEvent(contract, eventPrice, eventName, ticketCount, handlerAddressToSubmit, allowSpeculation).catch(err => {
             handleError("Unable to submit transaction");
         });
 
