@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./tickets.css" />
+    <link rel="stylesheet" href="./index.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
@@ -18,40 +20,49 @@
             <h2 class="centerWithMargin">ZkTickets</h2>
             <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
         </div>
-        <div class="centered-row hide" id="loadingBanner">Loading</div>
+
+        <div class="centered-row hide" id="loadingBanner">
+            <div class="lds-circle">
+                <div></div>
+            </div>
+        </div>
+        <br />
+        <div class="centered-row">
+
+            <div class="centered-row" id="purchaseTicketsSelectorButton">
+                <button id="accessEventButton" class="button-50 width-300"></button>
+            </div>
+
+        </div>
+
+
         <div class="centered-row">
             <div id="eventContainer" class="createEventContainer hide">
                 <div style="text-align: center;">
                     <h2 id="eventName" class="centerWithMargin">ZkTickets</h2>
                 </div>
+                <div style="text-align:center;">
+                    <div class="tooltip">
+                        <pre id="eventCreator" class="centerWithMargin fontSizeSmall"></pre>
+                        <div class="tooltiptextCenter">Event Creator Address</div>
+                    </div>
+                </div>
+                <br />
+                <div class="marginAuto">
+                    <label class="tableLabel">Tickets:</label>
+                    <label id="ticketsLeft" class="centerWithMargin"></label>
+                    <label class="tableLabel">Left</label>
+                </div>
+                <br />
+                <div class="spaceEvenlyRow" id="purchaseTicketActionContainer">
 
-                <table class="eventDetailsInputTable">
-                    <tr>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <tr class="bottomBorder">
-                        <td class="labelTd">
-                            <label class="tableLabel" for="eventPriceInput">Price:</label>
-                        </td>
-                        <td>
-                            <div class="centered-row" id="currencyPriceRow">
+                    <button id="purchaseTicketAction" class="button-53" type="submit">
+                        <div class="centered-row" id="currencyPriceRow">
+                            <div>
+
                                 <label id="eventPrice" class="centerWithMargin"></label>
                             </div>
-                        </td>
-                    </tr>
-                    <tr class="bottomBorder">
-                        <td class="labelTd"><label class="tableLabel">Tickets:</label>
-                        </td>
-                        <td>
-                            <label id="ticketsLeft" class="centerWithMargin"></label>
-                            <label class="tableLabel">Left</label>
-                        </td>
-                    </tr>
-                </table>
-                <div class="centered-row" id="purchaseTicketActionContainer">
-                    <button id="purchaseTicketAction" class="button-56" type="submit">
-                        Purchase a ticket
+                        </div> Buy
                     </button>
                 </div>
 
@@ -59,18 +70,19 @@
                     <button id="downloadButton" class="button-56" type="button">Download Ticket</button>
                 </div>
                 <br />
-                <br />
-                <div style="text-align:center;">
-                    <pre id="eventCreator" class="centerWithMargin fontSizeSmall"></pre>
+                <div class="spaceEvenlyRow">
+                    <button id="handleTicketsButton" class="button-57"><span class="text">Handle
+                            Tickets</span><span>Verify or
+                            Invalidate a Ticket</span></button>
+                    <button id="manageTicketsButton" class="button-57"><span class="text">Manage</span><span>Transfer
+                            Refund
+                            Sell</span></button>
                 </div>
             </div>
         </div>
-        <div class="centered-row" id="purchaseTicketsSelectorButton">
-            <button class="button-56">Purchase Tickets</button>
-        </div>
-        <div class="centered-row" id="handleTicketsButton">
-            <button class="button-56">Handle tickets</button>
-        </div>
+
+
+
     </div>
     <div class="centered-row">
         <div id="snackbar"></div>

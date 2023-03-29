@@ -2,15 +2,16 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex, createNewImgElement, createNewTooltipText, appendTooltip } from "./utils";
-import { BTTTESTNETID, FANTOMTESTNETID, formatEther, getContract, getCurrencyFromNetId, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
+import { BTTTESTNETID, calculatePurchaseFee, FANTOMTESTNETID, formatEther, getContract, getCurrencyFromNetId, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 
 const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+const index = getEventIndex();
+
 const currency = getCurrencyFromNetId(NETID);
 
 const currencyPriceRow = document.getElementById("currencyPriceRow") as HTMLDivElement;
-//TODO: When clicking on purchase, use history.pushState to add a query parameter
-// if that query parameter is present in the link, only the purchase ticket page loads and the handle ticket button is not displayed at all!
+const accessEventButton = document.getElementById("accessEventButton") as HTMLDivElement;
 
 (
     async () => {
@@ -28,12 +29,17 @@ const currencyPriceRow = document.getElementById("currencyPriceRow") as HTMLDivE
             const imgEl = createNewImgElement("./fantomLogo.svg");
             appendTooltip(currencyPriceRow, imgEl, null);
         }
-
+        if (!index) {
+            accessEventButton.innerHTML = `Invalid Event`
+            return;
+        }
+        accessEventButton.innerHTML = `Enter Event ${index}`
 
     })();
 
 const purchaseTicketsSelectorButton = document.getElementById("purchaseTicketsSelectorButton") as HTMLElement;
 const handleTicketsButton = document.getElementById("handleTicketsButton") as HTMLElement;
+const manageTicketsButton = document.getElementById("manageTicketsButton") as HTMLButtonElement;
 const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
 const loadingBanner = document.getElementById("loadingBanner") as HTMLElement;
 const purchaseTicketAction = document.getElementById("purchaseTicketAction") as HTMLElement;
@@ -48,16 +54,25 @@ const ticketsLeft = document.getElementById("ticketsLeft") as HTMLElement;
 const eventCreator = document.getElementById("eventCreator") as HTMLElement;
 
 const getHandleTicketURL = (index: string) => appURL + `/handleTicket.html?i=${index}`
-
+const getManageTicketsURL = (index: string) => appURL + `/manageTickets.html?i=${index}`
 handleTicketsButton.onclick = function () {
-    const index = getEventIndex();
     if (!index) {
         return;
     }
-    window.location.href = getHandleTicketURL(index)
+    window.location.href = getHandleTicketURL(index);
+}
+manageTicketsButton.onclick = function () {
+    if (!index) {
+        return;
+    }
+    window.location.href = getManageTicketsURL(index);
 }
 
 purchaseTicketsSelectorButton.onclick = async function () {
+    if (!index) {
+        return;
+    }
+
     const switched = await onboardOrSwitchNetwork(handleError);
 
     if (switched) {
@@ -70,7 +85,6 @@ purchaseTicketsSelectorButton.onclick = async function () {
         welcomeMessage.classList.add("hide");
         loadingBanner.classList.remove("hide");
         purchaseTicketsSelectorButton.classList.add("hide");
-        handleTicketsButton?.classList.add("hide");
 
         const provider = getWeb3Provider();
         const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
@@ -87,10 +101,13 @@ purchaseTicketsSelectorButton.onclick = async function () {
             handleError("Unable to connect to wallet!")
         }
 
-        eventCreator.textContent = "Event Creator: " + ticketedEvent.creator;
+        const eventPriceWithFee = await calculatePurchaseFee(contract, ticketedEvent.price);
+
+        eventCreator.textContent = ticketedEvent.creator;
         eventName.textContent = ticketedEvent.eventName;
-        eventPrice.textContent = formatEther(ticketedEvent.price);
+        eventPrice.textContent = formatEther(eventPriceWithFee.total);
         ticketsLeft.textContent = ticketedEvent.availableTickets;
+
 
         setTimeout(() => {
             const eventContainer = document.getElementById("eventContainer") as HTMLElement;
@@ -105,7 +122,6 @@ purchaseTicketsSelectorButton.onclick = async function () {
 };
 
 purchaseTicketAction.onclick = async function () {
-    const index = getEventIndex();
     if (!index) {
         return;
     }
@@ -140,8 +156,9 @@ purchaseTicketAction.onclick = async function () {
         const details = noteDetails[0];
         const noteString = noteDetails[1];
         // Now I Prompt the user to pay with metamask if there are available tickets!        
+        const eventPriceWithFee = await calculatePurchaseFee(contract, ticketedEvent.price);
 
-        const purchaseTx = await purchaseTicket(contract, price, index, toNoteHex(details.cryptoNote.commitment));
+        const purchaseTx = await purchaseTicket(contract, eventPriceWithFee.total, index, toNoteHex(details.cryptoNote.commitment));
 
         await purchaseTx.wait().then(async (receipt) => {
             if (receipt.status === 1) {
