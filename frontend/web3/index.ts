@@ -1,5 +1,5 @@
 import MetaMaskOnboarding from "@metamask/onboarding";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { CryptoNote, toNoteHex } from "../../lib/crypto";
 
 //TODO: Deprecate fantom testnet version!
@@ -46,6 +46,22 @@ export function getNetworkFromSubdomain() {
         default:
             // Fall back on BTT for this branch of development
             return bttRes
+    }
+}
+
+export function getStakingContractsFromSubdomain() {
+    const host = window.location.host;
+    const subdomain = host.split(".")[0];
+
+    switch (subdomain) {
+        case "fantom":
+            // TODO: fantom will be deprecated
+            return ["", ""];
+        case "btt":
+            return [BTTPROSTAKINGADDRESS, BTTTOKENCONTRACTADDRESS];
+        default:
+            // Fallback to btt
+            return [BTTPROSTAKINGADDRESS, BTTTOKENCONTRACTADDRESS];
     }
 }
 
@@ -247,8 +263,8 @@ export async function calculateResaleFee(zktickets: any, resalePrice: string) {
     return await zktickets.calculateResaleFee(resalePrice);
 }
 
-export async function transferRequests(zktickets: any, eventIndex: string) {
-    return await zktickets.transferRequests(eventIndex);
+export async function getTransferRequestsByEventIndex(zktickets: any, eventIndex: string) {
+    return await zktickets.getTransferRequestsByEventIndex(eventIndex);
 }
 export async function speculativeSaleCounter(zktickets: any, eventIndex: string, address: string) {
     return await zktickets.speculativeSaleCounter(eventIndex, address);
@@ -413,15 +429,15 @@ export async function balanceOf(ticketPro: any, address: string) {
     return await ticketPro.balanceOf(address);
 }
 
-export async function approveSpend(ticketPro: any, spender: string, amount: string) {
+export async function approveSpend(ticketPro: any, spender: string, amount: BigNumber) {
     return await ticketPro.approve(spender, amount);
 }
 
-export async function stake(proStaking: any, amount: string) {
+export async function stake(proStaking: any, amount: BigNumber) {
     return await proStaking.stake(amount);
 }
 
-export async function unstake(proStaking: any, amount: string) {
+export async function unstake(proStaking: any, amount: BigNumber) {
     return await proStaking.unstake(amount);
 }
 
