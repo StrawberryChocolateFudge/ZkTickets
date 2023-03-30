@@ -89,16 +89,33 @@ purchaseTicketsSelectorButton.onclick = async function () {
         const provider = getWeb3Provider();
         const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
 
+        let errorOccured = false;
+
         const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
             handleError("Network error");
+            errorOccured = true;
         })
+
+        if (errorOccured) {
+            return;
+        }
 
         const ticketedEvent = await getTicketedEvents(contract, index).catch(err => {
             handleError("Unable to find the event!");
+            errorOccured = true;
         })
+
+        if (errorOccured) {
+            return;
+        }
 
         if (!ticketedEvent) {
             handleError("Unable to connect to wallet!")
+            errorOccured = true;
+        }
+
+        if (errorOccured) {
+            return;
         }
 
         const eventPriceWithFee = await calculatePurchaseFee(contract, ticketedEvent.price);
@@ -132,25 +149,37 @@ purchaseTicketAction.onclick = async function () {
 
     if (switched) {
         const provider = getWeb3Provider();
+        let errorOccured = false;
         const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
             handleError("Unable to connect to the network");
+            errorOccured = true;
         })
+
+
+        if (errorOccured) {
+            return;
+        }
 
         const ticketedEvent = await getTicketedEvents(contract, index).catch(err => {
             handleError("Unable to find the event!");
+            errorOccured = true;
         })
+
+        if (errorOccured) {
+            return;
+        }
 
         if (!ticketedEvent) {
             handleError("Unable to connect to the network!");
+            return;
         }
+
         const availableTickets = ticketedEvent.availableTickets.toNumber();
 
         if (availableTickets === 0 || availableTickets === undefined) {
             handleError("Event sold out!")
             return;
         }
-
-        const price = ticketedEvent.price;
         // Then I create the crypto note
         const noteDetails = await getNote(NETID);
         const details = noteDetails[0];
@@ -171,9 +200,9 @@ purchaseTicketAction.onclick = async function () {
                 downloadbuttonContainer.classList.remove("hide");
                 downloadButton.dataset.note = noteString;
                 downloadButton.dataset.eventName = ticketedEvent.eventName;
-                downloadButton.dataset.eventPrice = formatEther(ticketedEvent.price);
+                downloadButton.dataset.eventPrice = formatEther(eventPriceWithFee.total);
                 const dataUrl = await createQR(noteString) as string;
-                await downloadPDF(ticketedEvent.eventName, formatEther(ticketedEvent.price), currency, dataUrl, noteString, window.location.href);
+                await downloadPDF(ticketedEvent.eventName, formatEther(eventPriceWithFee.total), currency, dataUrl, noteString, window.location.href);
 
 
             } else {
