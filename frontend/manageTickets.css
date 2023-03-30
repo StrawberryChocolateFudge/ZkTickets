@@ -1,0 +1,131 @@
+#manageUiContainer {
+    height: 100vh;
+    width: 100%;
+    background-color: pink;
+}
+
+#stakingDataContainer {
+    display: flex;
+    max-width: 500px;
+    min-width: 300px;
+    width: 100%;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    /* margin: 0 auto; */
+    border-radius: 25px;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+#transferRequestsDataContainer {
+    display: flex;
+    max-width: 500px;
+    min-width: 300px;
+    width: 100%;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    /* margin: 0 auto; */
+    border-radius: 25px;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+#ticketCodeInput {
+    border: 2px solid pink;
+    border-radius: 4px;
+    width: 200px;
+    height: 20px;
+}
+
+
+.initialFont {
+    font-family: sans-serif;
+    font-size: 15px;
+
+}
+
+tr {
+    text-align: left;
+}
+
+td {
+    font-size: medium;
+}
+
+table {
+    padding: 20px;
+}
+
+/* CSS */
+.button-11 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 14px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    border-radius: 6px;
+    color: #3D3D3D;
+    background: #fff;
+    border: none;
+    box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button-11:focus {
+    box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+    outline: 0;
+}
+
+.marginTop30 {
+    margin-top: 30px;
+}
+
+.marginLeft30 {
+    margin-left: 30px;
+}
+
+.margin30 {
+    margin: 30;
+}
+
+.row-SpaceEvenlyAndWrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 4;
+}
+
+#overlay-layout {
+    padding-left: 10px;
+    padding-right: 10px;
+    /* height: 80%; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    border-radius: 10px;
+    overflow: auto;
+    margin-top: 100px;
+}

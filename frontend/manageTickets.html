@@ -8,31 +8,244 @@
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./tickets.css" />
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="./manageTickets.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <title>Purchase ZKTicket</title>
+    <title>ZKTickets</title>
 </head>
 
 <body>
-    <div class="container">
-        <div class="col textAlign-center" id="welcomeMessage">
+    <div class="container" id="welcomeMessage">
+        <div class="col textAlign-center">
             <h2 class="centerWithMargin">ZkTickets</h2>
             <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
         </div>
 
-        <div class="centered-row hide" id="loadingBanner">
+        <div class="centered-row">
             <div class="lds-circle">
                 <div></div>
             </div>
         </div>
-        <br />
+    </div>
 
-
+    <div class="hide" id="manageUiContainer">
         <div class="centered-row">
-            <div id="snackbar"></div>
+            <h2>Manage Tickets</h2>
         </div>
-        <div class="particlesstyle" id="tsparticles"></div>
+        <div class="row-SpaceEvenlyAndWrap">
+
+            <div class="hide" id="transferRequestsDataContainer">
+                <h5 class="margin30">
+                    Create Transfer Requests
+                </h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="initialFont">Ticket Code:</span></td>
+                            <td>
+                                <input autocomplete="off" id="ticketCodeInput" type="text" />
+                            </td>
+                        </tr>
+                        <tr class="marginTop30">
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><span class="initialFont">Open the scanner:</span></td>
+                            <td> <button id="scanTicketButton" class="button-50">Scan</button>
+                            </td>
+                        </tr>
+                        <tr class="marginTop30">
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="initialFont">Transfer Type:</span>
+                            </td>
+                            <td>
+                                <select class="arginput" id="selectTransferType"></select>
+                            </td>
+                        </tr>
+                        <tr class="marginTop30">
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr id="priceRow">
+                            <td>
+                                <span class="initialFont">Price:</span>
+                            </td>
+                            <td>
+                                <input disabled class="arginput" id="resalepriceInput" type="number"
+                                    placeholder="Transfers are free" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><span class="initialFont">2% fee is added to resale price</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="initialFont">Transfer To:</span>
+                            </td>
+                            <td>
+                                <input class="arginput" id="transferTo" type="text"
+                                    placeholder="Address of recepient" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                <button class="button-50">Create Request</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+            </div>
+
+            <div class="hide" id="stakingDataContainer">
+                <h5 class="margin30">You need to stake to create custom price resale requests. This protects the
+                    protocol
+                    against
+                    ticket
+                    scalping. To create a custom priced resale you need to stake 1000 tokens. Your token resale requests
+                    are
+                    counted
+                    per event!</h5>
+                <table>
+                    <thead>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> <span class="initialFont"><strong>Stake TPR</strong></span>
+                            </td>
+                            <td> <span class="initialFont"><strong>To resell tickets at custom price</strong></span>
+                            </td>
+                        </tr>
+                        <tr class="marginTop30">
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><span class="initialFont">Token Balance: </span></td>
+                            <td><span class="initialFont" id="tokenBalance"></span></td>
+                        </tr>
+                        <tr class="marginTop30">
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="stakeBalance" class="initialFont"></span>
+                            </td>
+                            <td>
+                                <span class="initialFont"><strong>Set How much to stake or unstake</strong></span>
+                            </td>
+                        </tr>
+                        <tr class="marginTop30">
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td><span class="initialFont">Amount:</span>
+                                <span data-amount="0" class="initialFont" id="amountToStake">0 TPR</span>
+                            </td>
+                            <td>
+                                <div class="leftAlignedRow">
+                                    <button id="increaseStakeAmount" class="button-11">
+                                        <span class="material-symbols-outlined">
+                                            arrow_upward
+                                        </span>
+                                    </button>
+                                    <button id="decreaseStakeAmount" class="button-11 marginLeft30">
+                                        <span class="material-symbols-outlined">
+                                            arrow_downward
+                                        </span>
+                                    </button>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <tr class="marginTop30">
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><button id="stakeButton" class="button-50">Stake</button></td>
+                            <td><button disabled id="unstakeButton" class="button-50">Unstake</button></td>
+                        </tr>
+                        <tr id="blocksLeftTr" class="hide">
+                            <td>
+                                <span class="initialFont">Till unstake:</span>
+                            </td>
+                            <td>
+                                <div class="initialFont" id="blocksLeft"></div>
+                            </td>
+                        </tr>
+                        <tr class="marginTop30">
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="initialFont">Custom Resales Created:</span>
+                            </td>
+                            <td>
+                                <strong>
+                                    <div class="initialFont" id="customPriceResalesCreated"></div>
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="initialFont">Custom Resales Left: </span>
+                            </td>
+                            <td>
+                                <strong>
+                                    <div class="initialFont" id="customPriceResalesLeft"></div>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="overlay">
+        <div id="overlay-layout">
+            <div class="centered-row" id="readerContainer">
+                <video id="reader" width="400px" height="400"></video>
+            </div>
+            <div class="centered-row" id="stopScanningButtonRow">
+                <button id="stopScanningButton" class="button-50 width-300" type="button">
+                    Stop Scanning
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div class="centered-row">
+        <div id="snackbar"></div>
+    </div>
+    <div class="particlesstyle" id="tsparticles"></div>
 </body>
 <script type="module" src="./manageTickets.ts"></script>
 <script
