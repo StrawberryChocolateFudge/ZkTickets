@@ -112,7 +112,7 @@ h2, h6 {
     border: 2px solid pink;
     border-radius: 4px;
     width: 200px;
-    height: 20px;
+    height: 30px;
 }
 
 .arginput:focus {
@@ -250,6 +250,8 @@ h2, h6 {
     /* Center the snackbar */
     bottom: 30px;
     /* 30px from the bottom */
+    font-family: initial;
+    font-size: medium;
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
@@ -326,7 +328,8 @@ h2, h6 {
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
-
+    font-family: sans-serif;
+    font-size: small;
     /* Position the tooltip */
     position: absolute;
     left: -100;
@@ -341,7 +344,8 @@ h2, h6 {
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
-
+    font-family: sans-serif;
+    font-size: small;
     /* Position the tooltip */
     position: absolute;
     right: 100;
