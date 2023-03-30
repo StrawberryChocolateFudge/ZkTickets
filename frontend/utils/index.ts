@@ -44,9 +44,35 @@ export function createNewTooltipText(txt) {
     return divEl;
 }
 
+
+export function createOptionElements(allowSpeculation: boolean) {
+    let elements = Array<string>(3);
+    elements.push(`<option value="Transfer">Transfer</option>`);
+    elements.push(`<option value="Refund">Refund</option>`);
+    if (allowSpeculation) {
+        elements.push(`<option value="Resale">Resale</option>`)
+    }
+    return elements;
+}
+
+export function appendOptionsElementsTo(selectEl: HTMLElement, elements: Array<string>) {
+    for (let i = 0; i < elements.length; i++) {
+        selectEl.innerHTML += elements[i];
+    }
+}
+
 export function appendTooltip(parent, child1, child2) {
     parent.appendChild(child1);
     if (child2) {
         parent.appendChild(child2)
+    }
+}
+
+export function triggerOverlay(to: boolean) {
+    const overlay = document.getElementById("overlay") as HTMLDivElement;
+    if (to) {
+        overlay.style.display = "block";
+    } else {
+        overlay.style.display = "none";
     }
 }
