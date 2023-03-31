@@ -30,7 +30,10 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
     "cancelTransferRequest(bytes32,bytes32,uint256[8],uint256,uint256)": FunctionFragment;
     "createNewTicketedEvent(uint256,string,uint256,address,bool)": FunctionFragment;
     "createTransferRequest(bytes32,bytes32,uint256[8],uint256,uint8,address,uint256)": FunctionFragment;
+    "getRequestsByMe(uint256,address)": FunctionFragment;
+    "getRequestsToMe(uint256,address)": FunctionFragment;
     "getTransferRequestsByEventIndex(uint256)": FunctionFragment;
+    "getTransferRequestsForPagination(uint256,uint256[5])": FunctionFragment;
     "handleTicket(uint256[8],bytes32,bytes32)": FunctionFragment;
     "nullifierHashes(bytes32)": FunctionFragment;
     "proStaking()": FunctionFragment;
@@ -108,8 +111,23 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "getRequestsByMe",
+    values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRequestsToMe",
+    values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getTransferRequestsByEventIndex",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTransferRequestsForPagination",
+    values: [
+      BigNumberish,
+      [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "handleTicket",
@@ -195,7 +213,19 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getRequestsByMe",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRequestsToMe",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getTransferRequestsByEventIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTransferRequestsForPagination",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -417,6 +447,18 @@ export class ZKTickets extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    getRequestsByMe(
+      eventIndex: BigNumberish,
+      myAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]]>;
+
+    getRequestsToMe(
+      eventIndex: BigNumberish,
+      myAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]]>;
+
     getTransferRequestsByEventIndex(
       eventIndex: BigNumberish,
       overrides?: CallOverrides
@@ -431,6 +473,68 @@ export class ZKTickets extends BaseContract {
           transferType: number;
           price: BigNumber;
         })[]
+      ]
+    >;
+
+    getTransferRequestsForPagination(
+      eventIndex: BigNumberish,
+      indexes: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [
+          [boolean, number, string, string, string, number, BigNumber] & {
+            exists: boolean;
+            status: number;
+            ticketCommitment: string;
+            ticketNullifierHash: string;
+            transferTo: string;
+            transferType: number;
+            price: BigNumber;
+          },
+          [boolean, number, string, string, string, number, BigNumber] & {
+            exists: boolean;
+            status: number;
+            ticketCommitment: string;
+            ticketNullifierHash: string;
+            transferTo: string;
+            transferType: number;
+            price: BigNumber;
+          },
+          [boolean, number, string, string, string, number, BigNumber] & {
+            exists: boolean;
+            status: number;
+            ticketCommitment: string;
+            ticketNullifierHash: string;
+            transferTo: string;
+            transferType: number;
+            price: BigNumber;
+          },
+          [boolean, number, string, string, string, number, BigNumber] & {
+            exists: boolean;
+            status: number;
+            ticketCommitment: string;
+            ticketNullifierHash: string;
+            transferTo: string;
+            transferType: number;
+            price: BigNumber;
+          },
+          [boolean, number, string, string, string, number, BigNumber] & {
+            exists: boolean;
+            status: number;
+            ticketCommitment: string;
+            ticketNullifierHash: string;
+            transferTo: string;
+            transferType: number;
+            price: BigNumber;
+          }
+        ]
       ]
     >;
 
@@ -589,6 +693,18 @@ export class ZKTickets extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  getRequestsByMe(
+    eventIndex: BigNumberish,
+    myAddress: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
+
+  getRequestsToMe(
+    eventIndex: BigNumberish,
+    myAddress: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
+
   getTransferRequestsByEventIndex(
     eventIndex: BigNumberish,
     overrides?: CallOverrides
@@ -602,6 +718,66 @@ export class ZKTickets extends BaseContract {
       transferType: number;
       price: BigNumber;
     })[]
+  >;
+
+  getTransferRequestsForPagination(
+    eventIndex: BigNumberish,
+    indexes: [
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ],
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      [boolean, number, string, string, string, number, BigNumber] & {
+        exists: boolean;
+        status: number;
+        ticketCommitment: string;
+        ticketNullifierHash: string;
+        transferTo: string;
+        transferType: number;
+        price: BigNumber;
+      },
+      [boolean, number, string, string, string, number, BigNumber] & {
+        exists: boolean;
+        status: number;
+        ticketCommitment: string;
+        ticketNullifierHash: string;
+        transferTo: string;
+        transferType: number;
+        price: BigNumber;
+      },
+      [boolean, number, string, string, string, number, BigNumber] & {
+        exists: boolean;
+        status: number;
+        ticketCommitment: string;
+        ticketNullifierHash: string;
+        transferTo: string;
+        transferType: number;
+        price: BigNumber;
+      },
+      [boolean, number, string, string, string, number, BigNumber] & {
+        exists: boolean;
+        status: number;
+        ticketCommitment: string;
+        ticketNullifierHash: string;
+        transferTo: string;
+        transferType: number;
+        price: BigNumber;
+      },
+      [boolean, number, string, string, string, number, BigNumber] & {
+        exists: boolean;
+        status: number;
+        ticketCommitment: string;
+        ticketNullifierHash: string;
+        transferTo: string;
+        transferType: number;
+        price: BigNumber;
+      }
+    ]
   >;
 
   handleTicket(
@@ -756,6 +932,18 @@ export class ZKTickets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    getRequestsByMe(
+      eventIndex: BigNumberish,
+      myAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
+
+    getRequestsToMe(
+      eventIndex: BigNumberish,
+      myAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
+
     getTransferRequestsByEventIndex(
       eventIndex: BigNumberish,
       overrides?: CallOverrides
@@ -769,6 +957,66 @@ export class ZKTickets extends BaseContract {
         transferType: number;
         price: BigNumber;
       })[]
+    >;
+
+    getTransferRequestsForPagination(
+      eventIndex: BigNumberish,
+      indexes: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [boolean, number, string, string, string, number, BigNumber] & {
+          exists: boolean;
+          status: number;
+          ticketCommitment: string;
+          ticketNullifierHash: string;
+          transferTo: string;
+          transferType: number;
+          price: BigNumber;
+        },
+        [boolean, number, string, string, string, number, BigNumber] & {
+          exists: boolean;
+          status: number;
+          ticketCommitment: string;
+          ticketNullifierHash: string;
+          transferTo: string;
+          transferType: number;
+          price: BigNumber;
+        },
+        [boolean, number, string, string, string, number, BigNumber] & {
+          exists: boolean;
+          status: number;
+          ticketCommitment: string;
+          ticketNullifierHash: string;
+          transferTo: string;
+          transferType: number;
+          price: BigNumber;
+        },
+        [boolean, number, string, string, string, number, BigNumber] & {
+          exists: boolean;
+          status: number;
+          ticketCommitment: string;
+          ticketNullifierHash: string;
+          transferTo: string;
+          transferType: number;
+          price: BigNumber;
+        },
+        [boolean, number, string, string, string, number, BigNumber] & {
+          exists: boolean;
+          status: number;
+          ticketCommitment: string;
+          ticketNullifierHash: string;
+          transferTo: string;
+          transferType: number;
+          price: BigNumber;
+        }
+      ]
     >;
 
     handleTicket(
@@ -1027,8 +1275,32 @@ export class ZKTickets extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    getRequestsByMe(
+      eventIndex: BigNumberish,
+      myAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getRequestsToMe(
+      eventIndex: BigNumberish,
+      myAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getTransferRequestsByEventIndex(
       eventIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTransferRequestsForPagination(
+      eventIndex: BigNumberish,
+      indexes: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1166,8 +1438,32 @@ export class ZKTickets extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    getRequestsByMe(
+      eventIndex: BigNumberish,
+      myAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getRequestsToMe(
+      eventIndex: BigNumberish,
+      myAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getTransferRequestsByEventIndex(
       eventIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTransferRequestsForPagination(
+      eventIndex: BigNumberish,
+      indexes: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

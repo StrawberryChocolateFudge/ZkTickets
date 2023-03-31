@@ -94,6 +94,10 @@ contract ZKTickets {
 
     mapping(uint256 => TransferRequest[]) transferRequests; // Access the transfer requests by event index. Then access the specific transfer requests by their array index!s
 
+    // The eventIndex =>  msg.sender => TransferRequest Index these helper mappings allow easy querying the TransferRequests Array!
+    mapping(uint256 => mapping(address => uint256[])) requestsByMe; // Requests created by my address
+    mapping(uint256 => mapping(address => uint256[])) requestsToMe; // Requests created for me to accept. Requests that anyone can accept are at address(0)
+
     mapping(uint256 => mapping(address => uint256))
         public speculativeSaleCounter; // A mapping to check (eventIndex => (msg.sender => relaseCount)) for events where speculative resale is allowed. This will work together with the ProStaking contract
 
@@ -376,6 +380,17 @@ contract ZKTickets {
         );
         transferRequests[eventIndex].push(request);
         ticketCommitments[_commitment].transferInitiated = true;
+
+        //Save this as it's a request by me
+        requestsByMe[eventIndex][ticketCommitments[_commitment].buyer].push(
+            transferRequests[eventIndex].length - 1
+        );
+
+        // This is a transfer to me
+        requestsToMe[eventIndex][transferTo].push(
+            transferRequests[eventIndex].length - 1
+        );
+
         emit TicketTransferRequestCreated(
             eventIndex,
             transferRequests[eventIndex].length - 1
@@ -572,5 +587,43 @@ contract ZKTickets {
         uint256 eventIndex
     ) external view returns (TransferRequest[] memory) {
         return transferRequests[eventIndex];
+    }
+
+    /*
+    Get requests by me
+    */
+    function getRequestsByMe(
+        uint256 eventIndex,
+        address myAddress
+    ) external view returns (uint256[] memory) {
+        return requestsByMe[eventIndex][myAddress];
+    }
+
+    /*
+      Get requests sent to me
+    */
+
+    function getRequestsToMe(
+        uint256 eventIndex,
+        address myAddress
+    ) external view returns (uint256[] memory) {
+        return requestsToMe[eventIndex][myAddress];
+    }
+
+    /*
+    Get the transfer requests for the front end to use!
+    */
+
+    function getTransferRequestsForPagination(
+        uint256 eventIndex,
+        uint256[5] calldata indexes
+    ) external view returns (TransferRequest[5] memory) {
+        return [
+            transferRequests[eventIndex][indexes[0]],
+            transferRequests[eventIndex][indexes[1]],
+            transferRequests[eventIndex][indexes[2]],
+            transferRequests[eventIndex][indexes[3]],
+            transferRequests[eventIndex][indexes[4]]
+        ];
     }
 }

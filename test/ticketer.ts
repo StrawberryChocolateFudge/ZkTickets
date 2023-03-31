@@ -191,7 +191,7 @@ describe("ZKTickets!!", function () {
                 eventIndex,
                 TransferType.TRANSFER,
                 buyer2.address,
-                ZEROADDRESS
+                0
 
             )
         } catch (err) {
@@ -797,9 +797,105 @@ describe("ZKTickets!!", function () {
             staker = await proStaking.stakers(buyer1.address);
             expect(staker.isStaking).to.be.false;
         });
-
-
-
-
     })
+
+    it("Test requestsByMe and requestsToMe and requests for pagination", async function () {
+        const { owner, eventCreator, buyer1, buyer2, ticketer, externalHandler } = await setUpTicketer();
+
+        await ticketer.connect(eventCreator).createNewTicketedEvent(ethers.utils.parseEther("10"), "My New Event", 20, ZEROADDRESS, false);
+        let event = await ticketer.ticketedEvents(1);
+        const ticketPrice = await ticketer.calculatePurchaseFee(event.price);
+
+        // Buyer1 will buy 2 tickets
+        const getParsedNote = async () => {
+            const noteString = await cryptoNote(0x2b6653dc);
+            return await parseNote(noteString);
+        }
+        let eventIndex = await ticketer.ticketedEventIndex();
+
+        const note1 = await getParsedNote();
+        const note2 = await getParsedNote();
+        const note3 = await getParsedNote();
+
+        await ticketer.connect(buyer1).purchaseTicket(eventIndex,
+            toNoteHex(note1.cryptoNote.commitment),
+
+            { value: ticketPrice.total });
+
+        await ticketer.connect(buyer1).purchaseTicket(eventIndex,
+            toNoteHex(note2.cryptoNote.commitment),
+
+            { value: ticketPrice.total });
+
+        await ticketer.connect(buyer1).purchaseTicket(eventIndex,
+            toNoteHex(note3.cryptoNote.commitment),
+
+            { value: ticketPrice.total });
+
+
+
+        // Now buyer1 will create 2 transfer requests
+        const { proof: proof1, publicSignals: sig1 } = await generateTicketProof({ cryptoNote: note1.cryptoNote });
+        const { proof: proof2, publicSignals: sig2 } = await generateTicketProof({ cryptoNote: note2.cryptoNote });
+        const { proof: proof3, publicSignals: sig3 } = await generateTicketProof({ cryptoNote: note3.cryptoNote });
+
+        await ticketer.connect(buyer1).createTransferRequest(
+            toNoteHex(note1.cryptoNote.commitment),
+            toNoteHex(note1.cryptoNote.nullifierHash),
+            packToSolidityProof(proof1),
+            eventIndex,
+            TransferType.TRANSFER,
+            buyer2.address,
+            ZEROADDRESS
+        )
+
+        await ticketer.connect(buyer1).createTransferRequest(
+            toNoteHex(note2.cryptoNote.commitment),
+            toNoteHex(note2.cryptoNote.nullifierHash),
+            packToSolidityProof(proof2),
+            eventIndex,
+            TransferType.REFUND,
+            eventCreator.address,
+            event.price
+        )
+        await ticketer.connect(buyer1).createTransferRequest(
+            toNoteHex(note3.cryptoNote.commitment),
+            toNoteHex(note3.cryptoNote.nullifierHash),
+            packToSolidityProof(proof3),
+            eventIndex,
+            TransferType.RESALE,
+            ZEROADDRESS,
+            event.price
+        )
+
+
+        const requestsByMe = await ticketer.getRequestsByMe(eventIndex, buyer1.address)
+
+        // I expect I have 2 requests created at 0 and at 1 index of transfer requests!
+        expect(requestsByMe.length).to.equal(3);
+        expect(requestsByMe[0].toNumber()).to.equal(0);
+        expect(requestsByMe[1].toNumber()).to.equal(1);
+        expect(requestsByMe[2].toNumber()).to.equal(2);
+
+        const requestsToBuyer2 = await ticketer.getRequestsToMe(eventIndex, buyer2.address);
+
+        expect(requestsToBuyer2.length).to.equal(1);
+        expect(requestsByMe[0].toNumber()).to.equal(0);
+
+        const requestsToEventCreator = await ticketer.getRequestsToMe(eventIndex, eventCreator.address);
+
+        expect(requestsToEventCreator.length).to.equal(1);
+        expect(requestsToEventCreator[0].toNumber()).to.equal(1);
+
+        const requestsToZeroAddress = await ticketer.getRequestsToMe(eventIndex, ZEROADDRESS);
+        expect(requestsToZeroAddress.length).to.equal(1);
+        expect(requestsToZeroAddress[0].toNumber()).to.equal(2);
+
+        // getting them for pagination
+        const transferRequestsForPagination = await ticketer.getTransferRequestsForPagination(eventIndex, [0, 1, 2, 0, 0]);
+        expect(transferRequestsForPagination.length).to.equal(5);
+        //From logging I can see it contains the data I'm looking for
+        // console.log(transferRequestsForPagination);
+
+    });
 })

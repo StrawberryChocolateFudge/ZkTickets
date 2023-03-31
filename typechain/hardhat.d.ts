@@ -53,10 +53,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Verifier__factory>;
     getContractFactory(
-      name: "ExternalTicketHandler",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ExternalTicketHandler__factory>;
-    getContractFactory(
       name: "IVerifier",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IVerifier__factory>;
@@ -115,11 +111,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Verifier>;
-    getContractAt(
-      name: "ExternalTicketHandler",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ExternalTicketHandler>;
     getContractAt(
       name: "IVerifier",
       address: string,
