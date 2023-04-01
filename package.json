@@ -60,6 +60,7 @@
     "big-integer": "^1.6.51",
     "circomlib": "^2.0.5",
     "circomlibjs": "0.0.8",
+    "decimal.js": "^10.4.3",
     "ethers": "^5.7.2",
     "ffjavascript": "^0.2.57",
     "hardhat-circom": "^3.3.1",
