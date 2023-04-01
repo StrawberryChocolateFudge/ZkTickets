@@ -10,7 +10,7 @@ export const FANTOMTESTNETRPCURL = "https://xapi.testnet.fantom.network/lachesis
 
 export const BTTTOKENCONTRACTADDRESS = "0x305c9d8599d4e6d85ad0C1b4d2De294b6eFB82a2";
 export const BTTPROSTAKINGADDRESS = "0xddD5455619eEe9A6AD5A8cbBD668Db15A4ab3710";
-export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0x0e7EDA461a9d4129Fa70DCf08753708107dbced4"; // Updated address
+export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0xA186deff34278c32d2176f6b90e1B2A3FBD824f9"; // Updated address
 export const BTTTESTNETID = "0x405";
 export const BTTTESTNETRPCURL = "https://pre-rpc.bt.io/";
 
@@ -18,6 +18,19 @@ export const TransferType = {
     TRANSFER: 0,
     REFUND: 1,
     RESALE: 2
+}
+
+export function getTransferType(from: string) {
+    switch (from) {
+        case "Transfer":
+            return TransferType.TRANSFER
+        case "Refund":
+            return TransferType.REFUND;
+        case 'Resale':
+            return TransferType.RESALE;
+        default:
+            return 0;
+    }
 }
 
 export const TransferStatus = {
@@ -259,7 +272,7 @@ export async function calculatePurchaseFee(zktickets: any, purchasePrice: string
     return await zktickets.calculatePurchaseFee(purchasePrice);
 }
 
-export async function calculateResaleFee(zktickets: any, resalePrice: string) {
+export async function calculateResaleFee(zktickets: any, resalePrice: BigNumber) {
     return await zktickets.calculateResaleFee(resalePrice);
 }
 
@@ -268,6 +281,77 @@ export async function getTransferRequestsByEventIndex(zktickets: any, eventIndex
 }
 export async function speculativeSaleCounter(zktickets: any, eventIndex: string, address: string) {
     return await zktickets.speculativeSaleCounter(eventIndex, address);
+}
+export async function ticketCommitments(zktickets: any, _commitment: string) {
+    return await zktickets.ticketCommitments(_commitment);
+}
+
+export async function getRequestsByMe(zktickets: any, eventIndex: string, myAddress: string) {
+    return await zktickets.getRequestsByMe(eventIndex, myAddress);
+}
+
+export async function getRequestsToMe(zktickets: any, eventIndex: string, myAddress: string) {
+    return await zktickets.getRequestsToMe(eventIndex, myAddress);
+}
+
+export async function getTransferRequestsForPagination(zktickets: any, eventIndex: string, indexes: Array<number>) {
+    return await zktickets.getTransferRequestsForPagination(eventIndex, indexes);
+}
+
+async function prepareAndFetchRequests(zktickets: any, eventIndex: string, indexes: Array<number>) {
+    if (indexes.length === 0) {
+        return [];
+    }
+    // So the paging function expects 5 indexes and will return me 5 indexes 
+    // however many times I don't have 5 so I pad it and keep track of the padding
+    let addedPadding = 0;
+    let indexesToFetch: Array<number> = [];
+    for (let i = 0; i < 5; i++) {
+        if (indexes.length < i + 1) {
+            addedPadding++;
+            indexesToFetch.push(0);
+        } else {
+            indexesToFetch.push(indexes[i]);
+        }
+    }
+    const requests = await getTransferRequestsForPagination(zktickets, eventIndex, indexesToFetch);
+    let returnedRequests: Array<any> = [];
+    //Now I remove the padded values from the list
+    for (let i = 0; i < requests.length - addedPadding; i++) {
+        returnedRequests.push(requests[i]);
+    }
+    return returnedRequests;
+}
+
+
+export async function requestFetcher(zktickets: any, eventindex: string, indexes: Array<number>) {
+    // I need to separate all the indexes an create chunks of 5 and single requests
+    // And these will be fed to the prepareAndFetchRequests 
+
+    // So I want to create a list of arrays with the requests in them
+    let fiveIndexArrayList: Array<Array<number>> = []
+    let arrayBuilder: Array<number> = [];
+
+    for (let i = 0; i < indexes.length; i++) {
+        // I push the index into the array builder
+        arrayBuilder.push(indexes[i]);
+
+        // then if the indexes are over or arraybuilder length is 5 I push it into fixeIndexArrayList
+        // and empty the array builder
+        if (arrayBuilder.length === 5 || i + 1 === indexes.length) {
+            fiveIndexArrayList.push(arrayBuilder);
+            arrayBuilder = [];
+        }
+    }
+    let requests: Array<any> = [];
+
+    // Now I can loop over the fiveIndexArrayList to prepare and fetch requests!
+    for (let i = 0; i < fiveIndexArrayList.length; i++) {
+        let sortedIndexes = fiveIndexArrayList[i];
+        const returnedRequests = await prepareAndFetchRequests(zktickets, eventindex, sortedIndexes);
+        requests = requests.concat(returnedRequests);
+    }
+    return requests;
 }
 
 export async function createTransferRequest(
@@ -278,7 +362,7 @@ export async function createTransferRequest(
     eventIndex: string,
     transferType: number,
     transferTo: string,
-    transferPrice: string) {
+    transferPrice: BigNumber) {
     return await zktickets.createTransferRequest(
         _commitment,
         _nullifierHash,
@@ -323,7 +407,7 @@ export async function acceptRefundRequest(
     zktickets: any,
     eventIndex: string,
     transferRequestIndex: string,
-    value: string
+    value: BigNumber
 ) {
     return await zktickets.acceptRefundRequest(
         eventIndex,
@@ -337,7 +421,7 @@ export async function acceptResaleRequest(
     eventIndex: string,
     transferRequestIndex: string,
     newCommitment: string,
-    value: string
+    value: BigNumber
 ) {
     return await zktickets.acceptResaleRequest(
         eventIndex,
@@ -455,4 +539,19 @@ export async function stakingBlocks(proStaking: any) {
 
 export async function stakeUnit(proStaking: any) {
     return await proStaking.stakeUnit();
+}
+
+// Some helper functions to filter transaction requests
+
+export function hashData(data: string) {
+    return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(data));
+}
+
+export function requestHashIdentifier(
+    contractAddress: string,
+    userAddress: string,
+    eventIndex: string,
+    requestIndex: string) {
+    const data = `${contractAddress}${userAddress}${eventIndex}${requestIndex}`;
+    return hashData(data);
 }
