@@ -1,10 +1,10 @@
 #manageUiContainer {
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     background-color: pink;
 }
 
-#stakingDataContainer {
+.dataContainer {
     display: flex;
     max-width: 500px;
     min-width: 300px;
@@ -19,20 +19,10 @@
     margin-bottom: 30px;
 }
 
-#transferRequestsDataContainer {
-    display: flex;
-    max-width: 500px;
-    min-width: 300px;
-    width: 100%;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    /* margin: 0 auto; */
-    border-radius: 25px;
-    flex-direction: column;
-    justify-content: center;
-    margin: 0 auto;
-    margin-bottom: 30px;
+.requestsShadow {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 }
+
 
 #ticketCodeInput {
     border: 2px solid pink;
@@ -42,14 +32,13 @@
 }
 
 
-.initialFont {
-    font-family: sans-serif;
-    font-size: 15px;
-
-}
-
 tr {
     text-align: left;
+}
+
+.shadowedTr {
+    margin-top: 10px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
 td {
@@ -58,6 +47,10 @@ td {
 
 table {
     padding: 20px;
+}
+
+.width80Percent {
+    width: 80%;
 }
 
 /* CSS */
@@ -111,7 +104,7 @@ table {
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 4;
+    z-index: 10;
 }
 
 #overlay-layout {
@@ -128,4 +121,14 @@ table {
     border-radius: 10px;
     overflow: auto;
     margin-top: 100px;
+}
+
+#priceInfoContainer {
+    font-size: 12;
+    color: grey;
+}
+
+.priceInfo {
+    font-size: 12;
+    color: grey;
 }

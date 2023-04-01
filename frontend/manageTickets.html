@@ -33,94 +33,216 @@
         <div class="centered-row">
             <h2>Manage Tickets</h2>
         </div>
+
+
+        <br />
         <div class="row-SpaceEvenlyAndWrap">
+            <div id="transferRequestsOutterContainer">
 
-            <div class="hide" id="transferRequestsDataContainer">
-                <h5 class="margin30">
-                    Create Transfer Requests
-                </h5>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="initialFont">Ticket Code:</span></td>
-                            <td>
-                                <input autocomplete="off" id="ticketCodeInput" type="text" />
-                            </td>
-                        </tr>
-                        <tr class="marginTop30">
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><span class="initialFont">Open the scanner:</span></td>
-                            <td> <button id="scanTicketButton" class="button-50">Scan</button>
-                            </td>
-                        </tr>
-                        <tr class="marginTop30">
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="initialFont">Transfer Type:</span>
-                            </td>
-                            <td>
-                                <select class="arginput" id="selectTransferType"></select>
-                            </td>
-                        </tr>
-                        <tr class="marginTop30">
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr id="priceRow">
-                            <td>
-                                <span class="initialFont">Price:</span>
-                            </td>
-                            <td>
-                                <input disabled class="arginput" id="resalepriceInput" type="number"
-                                    placeholder="Transfers are free" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><span class="initialFont">2% fee is added to resale price</span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="initialFont">Transfer To:</span>
-                            </td>
-                            <td>
-                                <input class="arginput" id="transferTo" type="text"
-                                    placeholder="Address of recepient" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                            </td>
-                            <td>
-                                <button class="button-50">Create Request</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="dataContainer">
+                    <h5 class="margin30">
+                        You can create transfer requests to send your tickets to others, refund the ticket or sell it to
+                        somebody on an open market.
+                    </h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> <button id="goToViewRequests" class="button-57"><span>View
+                                            Requests</span><span>Navigate to see tranfers</span></button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="initialFont">Ticket Code:</span></td>
+                                <td>
+                                    <input autocomplete="off" id="ticketCodeInput" type="text" />
+                                </td>
+                            </tr>
+                            <tr class="marginTop30">
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="initialFont">Open the scanner:</span></td>
+                                <td> <button id="scanTicketButton" class="button-50">Scan</button>
+                                </td>
+                            </tr>
+                            <tr class="marginTop30">
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="initialFont">Type:</span>
+                                </td>
+                                <td>
+                                    <select class="arginput" id="selectTransferType"></select>
+                                </td>
+                            </tr>
+                            <tr class="marginTop30">
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr id="priceRow">
+                                <td>
+                                    <span class="initialFont">Price:</span>
+                                </td>
+                                <td>
+                                    <input disabled class="arginput" id="resalepriceInput" type="number"
+                                        placeholder="0" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><span id="priceInfoContainer" class="initialFont">Transfers are free</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="initialFont">Transfer To:</span>
+                                </td>
+                                <td>
+                                    <input class="arginput" id="transferTo" type="text"
+                                        placeholder="Address of recipient" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <button id="createRequests" class="button-50">Create Request</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <div>
+            <div id="showTransferRequestsOutterContainer" class="hide">
+                <div class="dataContainer">
+
+                    <h5 class="margin30">You can see all the transfer requests here that are related to you!</h5>
+                    <div class="centered-row">
+                        <button id="goToCreateRequests" class="button-57"><span>Create
+                                Transfer</span><span>Navigate to create request</span></button>
+                        <button id="goToStaking" class="button-57"><span>Staking</span><span>Navigate to
+                                staking page</span></button>
+                    </div>
+                    <br />
+                    <div class="requestsShadow">
+                        <div class="centered-row">
+                            <h5 class="margin30">Your transfer requests are visible below. To cancel a
+                                request, you need to use
+                                your ticket!</h5s>
+                        </div>
+
+                        <table class="width80Percent margin30">
+                            <thead>
+                                <th></th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="initialFont">Ticket Code:</span></td>
+                                    <td>
+                                        <input class="arginput" autocomplete="off" id="cancelRequestTicketCodeInput"
+                                            type="text" />
+                                    </td>
+                                </tr>
+                                <tr class="marginTop30">
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="initialFont">Open the scanner:</span></td>
+                                    <td> <button id="cancelRequestScanTicketButton" class="button-50">Scan</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="margin30 width80Percent">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="myRequestsTableBody">
+                            </tbody>
+                        </table>
+                        <div class="centered-row">
+                            <button id="fetchMyRequests" class="button-50">Load Requests</button>
+                        </div>
+                        <br />
+                    </div>
+
+
+
+                    <div class="requestsShadow">
+                        <div class="centered-row">
+                            <h5 class="margin30">You can see all the acive requests only you can accept below! Click on
+                                Load Requests to
+                                fetch all active requests!</h5>
+                        </div>
+                        <table class="margin30 width80Percent">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="requestsToMeTableBody">
+                            </tbody>
+                        </table>
+                        <div class="centered-row">
+                            <small class="initialFont priceInfo">A 2% fee is added to resale orders</small>
+                        </div>
+                        <div class="centered-row">
+                            <button id="fetchToMeRequests" class="button-50">Load Requests</button>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="requestsShadow">
+                        <div class="centered-row">
+                            <h5 class="margin30">Open Resale Requests. These requests can be accepted by anyone. If the
+                                event allows
+                                speculation, the price may vary!</h5>
+                        </div>
+                        <table class="margin30 width80Percent">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="openResaleRequestsTableBody">
+                            </tbody>
+                        </table>
+                        <div class="centered-row">
+                            <small class="initialFont priceInfo">A 2% fee is added to all orders</small>
+                        </div>
+                        <div class="centered-row">
+                            <button id="fetchOpenResaleRequests" class="button-50">Load Requests</button>
+                        </div>
+                        <br />
+                    </div>
+                </div>
             </div>
 
-            <div class="hide" id="stakingDataContainer">
+        </div>
+        <div id="stakingDataOutterContainer" class="hide">
+            <div class="dataContainer">
                 <h5 class="margin30">You need to stake to create custom price resale requests. This protects the
                     protocol
                     against
                     ticket
-                    scalping. To create a custom priced resale you need to stake 1000 tokens. Your token resale requests
+                    scalping. To create a custom priced resale you need to stake 1000 tokens. Your token resale
+                    requests
                     are
                     counted
                     per event!</h5>
@@ -135,7 +257,8 @@
                         <tr>
                             <td> <span class="initialFont"><strong>Stake TPR</strong></span>
                             </td>
-                            <td> <span class="initialFont"><strong>To resell tickets at custom price</strong></span>
+                            <td> <span class="initialFont"><strong>To resell tickets at custom
+                                        price</strong></span>
                             </td>
                         </tr>
                         <tr class="marginTop30">
@@ -155,7 +278,8 @@
                                 <span id="stakeBalance" class="initialFont"></span>
                             </td>
                             <td>
-                                <span class="initialFont"><strong>Set How much to stake or unstake</strong></span>
+                                <span class="initialFont"><strong>Set How much to stake or
+                                        unstake</strong></span>
                             </td>
                         </tr>
                         <tr class="marginTop30">
@@ -224,11 +348,18 @@
                                 </strong>
                             </td>
                         </tr>
+                        <tr>
+                            <td> <button id="goToShowRequestFromStaking" class="button-57"><span class="text">Show
+                                        Requests</span><span>Navigate to transfer requests</span></button>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    </div>
+
     <div id="overlay">
         <div id="overlay-layout">
             <div class="centered-row" id="readerContainer">
