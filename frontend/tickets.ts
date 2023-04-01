@@ -53,6 +53,9 @@ const eventPrice = document.getElementById("eventPrice") as HTMLElement;
 const ticketsLeft = document.getElementById("ticketsLeft") as HTMLElement;
 const eventCreator = document.getElementById("eventCreator") as HTMLElement;
 
+const priceInfoRow = document.getElementById("priceInfoRow") as HTMLElement;
+const priceInfo = document.getElementById("priceInfo") as HTMLSpanElement;
+
 const getHandleTicketURL = (index: string) => appURL + `/handleTicket.html?i=${index}`
 const getManageTicketsURL = (index: string) => appURL + `/manageTickets.html?i=${index}`
 handleTicketsButton.onclick = function () {
@@ -125,6 +128,7 @@ purchaseTicketsSelectorButton.onclick = async function () {
         eventPrice.textContent = formatEther(eventPriceWithFee.total);
         ticketsLeft.textContent = ticketedEvent.availableTickets;
 
+        priceInfo.textContent = `${formatEther(ticketedEvent.price)} ${currency} plus 1% Fee!`;
 
         setTimeout(() => {
             const eventContainer = document.getElementById("eventContainer") as HTMLElement;
@@ -187,28 +191,38 @@ purchaseTicketAction.onclick = async function () {
         // Now I Prompt the user to pay with metamask if there are available tickets!        
         const eventPriceWithFee = await calculatePurchaseFee(contract, ticketedEvent.price);
 
-        const purchaseTx = await purchaseTicket(contract, eventPriceWithFee.total, index, toNoteHex(details.cryptoNote.commitment));
+        const purchaseTx = await purchaseTicket(contract, eventPriceWithFee.total, index, toNoteHex(details.cryptoNote.commitment))
+            .catch(err => {
+                handleError("An Error Occured!")
+            });
 
-        await purchaseTx.wait().then(async (receipt) => {
-            if (receipt.status === 1) {
-                // Update how many tickets are left
-                const updatedEvent = await getTicketedEvents(contract, index);
-                ticketsLeft.textContent = updatedEvent.availableTickets
+        if (purchaseTx !== undefined) {
+            const dataUrl = await createQR(noteString) as string;
+            await downloadPDF(ticketedEvent.eventName, formatEther(ticketedEvent.price), currency, dataUrl, noteString, window.location.href);
 
-                // I automaticly start the download here but if it's blocked for some reason the users will have a download button
-                purchaseTicketActionContainer.classList.add("hide");
-                downloadbuttonContainer.classList.remove("hide");
-                downloadButton.dataset.note = noteString;
-                downloadButton.dataset.eventName = ticketedEvent.eventName;
-                downloadButton.dataset.eventPrice = formatEther(eventPriceWithFee.total);
-                const dataUrl = await createQR(noteString) as string;
-                await downloadPDF(ticketedEvent.eventName, formatEther(eventPriceWithFee.total), currency, dataUrl, noteString, window.location.href);
+            await purchaseTx.wait().then(async (receipt) => {
+                if (receipt.status === 1) {
+                    // Update how many tickets are left
+                    const updatedEvent = await getTicketedEvents(contract, index);
+                    ticketsLeft.textContent = updatedEvent.availableTickets
+
+                    // I automaticly start the download here but if it's blocked for some reason the users will have a download button
+                    purchaseTicketActionContainer.classList.add("hide");
+                    downloadbuttonContainer.classList.remove("hide");
+                    priceInfoRow.classList.add("hide");
+                    downloadButton.dataset.note = noteString;
+                    downloadButton.dataset.eventName = ticketedEvent.eventName;
+                    downloadButton.dataset.eventPrice = formatEther(eventPriceWithFee.total);
+
+                } else {
+                    handleError("Transaction failed!")
+                }
+            })
+        }
 
 
-            } else {
-                handleError("Transaction failed!")
-            }
-        })
+
+
 
     }
 }
