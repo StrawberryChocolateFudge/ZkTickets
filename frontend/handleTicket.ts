@@ -67,6 +67,7 @@ const renderTicketValidBack = () => {
 (async () => {
     const index = getEventIndex();
     if (!index) {
+        handleError("Invalid Link")
         return;
     }
 
