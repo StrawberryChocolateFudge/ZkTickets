@@ -9,7 +9,7 @@ async function main() {
     const zktickets = await ZkticketsDeploy.deployed();
     console.log("ZKTickets is deployed to :", zktickets.address);
 
-    // ZKTickets is deployed to : 0x0e7EDA461a9d4129Fa70DCf08753708107dbced4 //Donau testnet
+    // ZKTickets is deployed to : 0xA186deff34278c32d2176f6b90e1B2A3FBD824f9 //Donau testnet
 }
 
 
