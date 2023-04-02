@@ -51,24 +51,16 @@ function splitTitle(eventTitle) {
 
 export async function downloadPDF(eventTitle: string, eventPrice: string, currency: string, dataUrl: string, noteString: string, handlerLink: string) {
 
-    const [firstHalf, secondHalf, thirdHalf] = splitTitle(eventTitle);
 
     let doc = new jsPDF("l", "px", "credit-card");
     doc.addImage(dataUrl, "JPEG", 1, 1, 85, 85);
     doc.setFontSize(10);
-    doc.text(firstHalf, 85, 45);
-    if (secondHalf !== "") {
-        doc.text(secondHalf, 85, 55);
-    }
+    let maxLineWidth = 100;
+    let textLines = doc.splitTextToSize(eventTitle, maxLineWidth)
+    doc.text(textLines, 85, 25);
 
-    if (thirdHalf !== "") {
-        doc.text(thirdHalf, 85, 65)
-    }
     doc.setFontSize(15);
     doc.text(`Single use Ticket`, 85, 12);
-
-    doc.setFontSize(10);
-    doc.text(`${eventPrice} ${currency}`, 85, 22);
 
     doc.setFontSize(8);
     doc.text(`${handlerLink}`, 5, 95);
