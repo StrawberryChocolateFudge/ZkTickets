@@ -127,7 +127,6 @@ contract ZKTickets {
     /*
     Create a new ticketed event!
     */
-    // ..TODO verify the event name is max 50 characters
 
     function createNewTicketedEvent(
         uint256 price,
