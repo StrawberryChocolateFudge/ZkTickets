@@ -33,6 +33,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
+      name: "EventWarnings",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.EventWarnings__factory>;
+    getContractFactory(
       name: "MyExternalHandlerExample",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MyExternalHandlerExample__factory>;
@@ -86,6 +90,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
+    getContractAt(
+      name: "EventWarnings",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.EventWarnings>;
     getContractAt(
       name: "MyExternalHandlerExample",
       address: string,
