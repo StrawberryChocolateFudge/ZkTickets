@@ -6,6 +6,7 @@ async function main() {
     const verifier = await VerifierDeploy.deployed();
 
     console.log("Verifier has been deployed to : ", verifier.address);
+    // TODO: REDEPLOY!
     // verifier deployed on BTT Donau testnet : 0xC88ec599D643D84C7BE4315087b23581ac854064
 }
 
