@@ -14,6 +14,8 @@ export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0xA186deff34278c32d2176f6b90e
 export const BTTTESTNETID = "0x405";
 export const BTTTESTNETRPCURL = "https://pre-rpc.bt.io/";
 
+export const BTTTESTNETEVENTWARNINGS = "0xA48bbf691169767F535490663aD8a5583367f701";
+
 export const TransferType = {
     TRANSFER: 0,
     REFUND: 1,
@@ -75,6 +77,21 @@ export function getStakingContractsFromSubdomain() {
         default:
             // Fallback to btt
             return [BTTPROSTAKINGADDRESS, BTTTOKENCONTRACTADDRESS];
+    }
+}
+
+export function getEventWarningsFromSubdomain() {
+    const host = window.location.host;
+    const subdomain = host.split(".")[0];
+
+    switch (subdomain) {
+        case "fantom":
+            // /?TODO:fantom will be deprecated
+            return ""
+        case "btt":
+            return BTTTESTNETEVENTWARNINGS;
+        default:
+            return BTTTESTNETEVENTWARNINGS;
     }
 }
 
@@ -554,4 +571,29 @@ export function requestHashIdentifier(
     requestIndex: string) {
     const data = `${contractAddress}${userAddress}${eventIndex}${requestIndex}`;
     return hashData(data);
+}
+
+// Event warnings functions
+
+export enum WarningLevel {
+    NONE = 0,
+    LOW = 1,
+    MEDIUM = 2,
+    HIGH = 3
+}
+
+export async function createWarning(eventWarnings: any, level: WarningLevel, message: string, about: string) {
+    return await eventWarnings.createWarning(level, message, about);
+}
+
+export async function editWarning(eventWarnings: any, level: WarningLevel, message: string, about: string, arrayIndex: number) {
+    return await eventWarnings.editWarning(level, message, about, arrayIndex);
+}
+
+export async function getWarnings(eventWarnings: any, about: string) {
+    return await eventWarnings.getWarnings(about);
+}
+
+export async function getWarningCount(eventWarnings: any, about: string) {
+    return await eventWarnings.warningCount(about);
 }
