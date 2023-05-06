@@ -36,11 +36,21 @@ const eventNameInput = document.getElementById("eventNameInput") as HTMLInputEle
 const eventPriceInput = document.getElementById("eventPriceInput") as HTMLInputElement;
 const ticketCountInput = document.getElementById("ticketCountInput") as HTMLInputElement;
 const allowSpeculationInput = document.getElementById("allowSpeculationInput") as HTMLInputElement;
+const speculationWarning = document.getElementById("speculationWarning") as HTMLSpanElement;
+
 const handlerAddressInput = document.getElementById("handlerAddressInput") as HTMLInputElement;
 
 const hideCreateButton = document.getElementById("hideCreateButton") as HTMLInputElement;
 
 const createEventFormContainer = document.getElementById("createEventFormContainer") as HTMLButtonElement;
+
+allowSpeculationInput.onchange = function () {
+    if (allowSpeculationInput.checked) {
+        speculationWarning.style.display = "block";
+    } else {
+        speculationWarning.style.display = "none";
+    }
+}
 
 goToCreateEventsButton.onclick = async function () {
     const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
