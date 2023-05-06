@@ -2,7 +2,7 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex, createNewImgElement, createNewTooltipText, appendTooltip } from "./utils";
-import { BTTTESTNETID, calculatePurchaseFee, FANTOMTESTNETID, formatEther, getContract, getCurrencyFromNetId, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
+import { BTTTESTNETID, calculatePurchaseFee, FANTOMTESTNETID, formatEther, getContract, getCurrencyFromNetId, getEventWarningsFromSubdomain, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWarningCount, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 
 const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
@@ -56,6 +56,9 @@ const eventCreator = document.getElementById("eventCreator") as HTMLElement;
 const priceInfoRow = document.getElementById("priceInfoRow") as HTMLElement;
 const priceInfo = document.getElementById("priceInfo") as HTMLSpanElement;
 
+const warnings = document.getElementById("warnings") as HTMLSpanElement;
+const goToWarnings = document.getElementById("goToWarnings") as HTMLButtonElement;
+
 const getHandleTicketURL = (index: string) => appURL + `/handleTicket.html?i=${index}`
 const getManageTicketsURL = (index: string) => appURL + `/manageTickets.html?i=${index}`
 handleTicketsButton.onclick = function () {
@@ -91,10 +94,15 @@ purchaseTicketsSelectorButton.onclick = async function () {
 
         const provider = getWeb3Provider();
         const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
-
+        const eventWarningsContractAddress = getEventWarningsFromSubdomain();
         let errorOccured = false;
 
-        const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
+        const zktickets = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
+            handleError("Network error");
+            errorOccured = true;
+        })
+
+        const eventWarnings = await getContract(provider, eventWarningsContractAddress, "EventWarnings.json").catch(err => {
             handleError("Network error");
             errorOccured = true;
         })
@@ -103,7 +111,7 @@ purchaseTicketsSelectorButton.onclick = async function () {
             return;
         }
 
-        const ticketedEvent = await getTicketedEvents(contract, index).catch(err => {
+        const ticketedEvent = await getTicketedEvents(zktickets, index).catch(err => {
             handleError("Unable to find the event!");
             errorOccured = true;
         })
@@ -121,7 +129,7 @@ purchaseTicketsSelectorButton.onclick = async function () {
             return;
         }
 
-        const eventPriceWithFee = await calculatePurchaseFee(contract, ticketedEvent.price);
+        const eventPriceWithFee = await calculatePurchaseFee(zktickets, ticketedEvent.price);
 
         eventCreator.textContent = ticketedEvent.creator;
         eventName.textContent = ticketedEvent.eventName;
@@ -129,6 +137,9 @@ purchaseTicketsSelectorButton.onclick = async function () {
         ticketsLeft.textContent = ticketedEvent.availableTickets;
 
         priceInfo.textContent = `${formatEther(ticketedEvent.price)} ${currency} plus 1% Fee!`;
+
+        const warningCount = await getWarningCount(eventWarnings, ticketedEvent.creator);
+        // warnings.innerText = warningCount.toNumber() + " Warnings";
 
         setTimeout(() => {
             const eventContainer = document.getElementById("eventContainer") as HTMLElement;
@@ -219,11 +230,6 @@ purchaseTicketAction.onclick = async function () {
                 }
             })
         }
-
-
-
-
-
     }
 }
 

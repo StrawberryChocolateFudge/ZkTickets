@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./tickets.css" />
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="./handleTicket.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
@@ -41,12 +42,24 @@
                 <div style="text-align: center;">
                     <h2 id="eventName" class="centerWithMargin">ZkTickets</h2>
                 </div>
+
                 <div style="text-align:center;">
                     <div class="tooltip">
                         <pre id="eventCreator" class="centerWithMargin fontSizeSmall"></pre>
-                        <div class="tooltiptextCenter">Event Creator Address</div>
+                        <div class="tooltiptextCenter">Event Creator Address </div>
                     </div>
                 </div>
+
+                <!-- <div style="text-align:center;">
+                    <button id="goToWarnings" class="button-2">
+                        <div class="col">
+                            <span class="material-symbols-outlined">
+                                report
+                            </span><span id="warnings"></span>
+                        </div>
+                    </button>
+                </div> -->
+
                 <div class="marginAuto">
                     <label id="ticketsLeft" class="centerWithMargin"></label>
                     <label class="tableLabel">Tickets Left</label>
@@ -80,8 +93,6 @@
                 </div>
             </div>
         </div>
-
-
 
     </div>
     <div class="centered-row">
