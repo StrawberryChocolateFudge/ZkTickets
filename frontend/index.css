@@ -94,6 +94,37 @@
     line-height: 0;
 }
 
+#speculationWarning {
+    padding-left: 10px;
+    display: none;
+    font-size: small;
+    font-family: sans-serif;
+    color: pink;
+    animation: blinkingText 1.2s infinite;
+}
+
+@keyframes blinkingText {
+    0% {
+        color: pink;
+    }
+
+    49% {
+        color: pink;
+    }
+
+    60% {
+        color: transparent;
+    }
+
+    99% {
+        color: transparent;
+    }
+
+    100% {
+        color: pink;
+    }
+}
+
 .button-50 {
     appearance: button;
     background-color: #000;
