@@ -1,54 +1,5 @@
 import { jsPDF } from "jspdf";
 
-function splitTitle(eventTitle) {
-    let firstHalf = "";
-    let secondHalf = "";
-    let thirdHalf = "";
-    let pushTo = "first";
-
-    const words = eventTitle.split(" ");
-
-    for (let i = 0; i < words.length; i++) {
-        const word = words[i];
-
-        if (firstHalf.length + word.length >= 20) {
-            pushTo = "second";
-        }
-        if (secondHalf.length + word.length >= 20) {
-            pushTo = "third"
-        }
-
-        switch (pushTo) {
-            case "first":
-                if (firstHalf === "") {
-                    firstHalf += word;
-                } else {
-                    firstHalf += " " + word;
-                }
-                break;
-            case "second":
-                if (secondHalf === "") {
-                    secondHalf += word;
-                } else {
-                    secondHalf += " " + word;
-                }
-                break;
-            case "third":
-                if (thirdHalf === "") {
-                    thirdHalf += word;
-                } else {
-                    thirdHalf += " " + word;
-                }
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    return [firstHalf, secondHalf, thirdHalf];
-}
-
 export async function downloadPDF(eventTitle: string, eventPrice: string, currency: string, dataUrl: string, noteString: string, handlerLink: string) {
 
 
