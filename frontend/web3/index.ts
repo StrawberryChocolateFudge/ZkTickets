@@ -2,12 +2,6 @@ import MetaMaskOnboarding from "@metamask/onboarding";
 import { BigNumber, ethers } from "ethers";
 import { CryptoNote, toNoteHex } from "../../lib/crypto";
 
-//TODO: Deprecate fantom testnet version!
-export const FANTOMTESTNETCONTRACTADDRESS = "0x0680c8Fb31faC6029f01f5b75e55b2F3D4333fC2";
-
-export const FANTOMTESTNETID = "0xfa2";
-export const FANTOMTESTNETRPCURL = "https://xapi.testnet.fantom.network/lachesis";
-
 export const BTTTOKENCONTRACTADDRESS = "0x305c9d8599d4e6d85ad0C1b4d2De294b6eFB82a2";
 export const BTTPROSTAKINGADDRESS = "0xddD5455619eEe9A6AD5A8cbBD668Db15A4ab3710";
 export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0xA186deff34278c32d2176f6b90e1B2A3FBD824f9"; // Updated address
@@ -49,13 +43,10 @@ export function getNetworkFromSubdomain() {
     const host = window.location.host;
     const subdomain = host.split(".")[0];
 
-    const fantomRes = [FANTOMTESTNETCONTRACTADDRESS, FANTOMTESTNETID, FANTOMTESTNETRPCURL]
 
     const bttRes = [BTTTESTNETZKTICKETSCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
 
     switch (subdomain) {
-        case "fantom":
-            return fantomRes;
         case "btt":
             return bttRes;
         default:
@@ -97,8 +88,6 @@ export function getEventWarningsFromSubdomain() {
 
 export function getCurrencyFromNetId(netId) {
     switch (netId) {
-        case FANTOMTESTNETID:
-            return "FTT"
         case BTTTESTNETID:
             return "BTT"
         default:
@@ -153,9 +142,6 @@ async function handleNetworkSwitch() {
     const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
 
     switch (networkID) {
-        case FANTOMTESTNETID:
-            await switchToFantomTestnet();
-            break;
         case BTTTESTNETID:
             await switchToDonauTestnet();
             break;
@@ -178,16 +164,6 @@ export function getWeb3Provider() {
     return provider;
 }
 
-export async function switchToFantomTestnet() {
-    const hexChainId = FANTOMTESTNETID;
-    const chainName = "Fantom testnet";
-    const rpcUrls = [FANTOMTESTNETRPCURL]
-    const blockExplorerUrls = ["https://testnet.ftmscan.com/"]
-    const switched = await switch_to_Chain(hexChainId);
-    if (!switched) {
-        await ethereumRequestAddChain(hexChainId, chainName, "FTM", "FTM", 18, rpcUrls, blockExplorerUrls)
-    }
-}
 
 export async function switchToDonauTestnet() {
     const chainId = 1029;

@@ -29,7 +29,7 @@ h2, h6 {
 .container {
     height: 100vh;
     width: 100%;
-    background-color: pink;
+    background-color: lightblue;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -83,6 +83,7 @@ h2, h6 {
     justify-content: center;
     flex-direction: column;
     border-radius: 25px;
+    z-index:2;
 }
 
 .scanTicketContainer {
@@ -131,7 +132,7 @@ h2, h6 {
 }
 
 .arginput {
-    border: 2px solid pink;
+    border: 2px solid lightblue;
     border-radius: 4px;
     width: 200px;
     height: 30px;
@@ -193,7 +194,7 @@ h2, h6 {
     margin-top: 10px;
     align-items: center;
     background-color: #fee6e3;
-    border: 2px solid pink;
+    border: 2px solid lightblue;
     border-radius: 8px;
     box-sizing: border-box;
     color: grey;
@@ -429,7 +430,7 @@ h2, h6 {
 }
 
 .eventNameBackground {
-    background-color: lightpink;
+    background-color: lightblue;
     padding: 5px;
 }
 

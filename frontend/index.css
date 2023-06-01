@@ -2,7 +2,7 @@
     --size: 40px;
 
     position: relative;
-    background: linear-gradient(90deg, pink, #f099b5);
+    background: linear-gradient(90deg, lightblue, lightblue);
     line-height: 0;
     perspective: 400px;
     font-size: var(--size);
@@ -99,17 +99,17 @@
     display: none;
     font-size: small;
     font-family: sans-serif;
-    color: pink;
+    color: lightblue;
     animation: blinkingText 1.2s infinite;
 }
 
 @keyframes blinkingText {
     0% {
-        color: pink;
+        color: lightblue;
     }
 
     49% {
-        color: pink;
+        color: lightblue;
     }
 
     60% {
@@ -121,7 +121,7 @@
     }
 
     100% {
-        color: pink;
+        color: lightblue;
     }
 }
 

@@ -268,6 +268,7 @@ async function fetchOpenResaleRequestsClick(openResaleRequests, zkTickets, index
     indexes = getPageRequestIndexesToFetch(indexes, userAddress, CONTRACTADDRESS, index);
     const openResaleResults = await requestFetcher(zkTickets, index, indexes);
     setPageRequestIndexesToNotFetch(indexes, openResaleResults, CONTRACTADDRESS, userAddress, index);
+    //TODO: SORT RESALE REQUESTS BY PRICE!
     renderRequestRows(indexes, openResaleResults, openResaleRequestsTableBody, createOpenRequestsTR, eventName);
     handleBuyButtons(zkTickets, index);
 }
