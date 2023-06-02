@@ -21,7 +21,6 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 });
 
 import "./tasks/deploy";
-import "./tasks/deployAirdrop";
 import "./tasks/zkpVerifierTestnet";
 
 // You need to export an object to set up your config
