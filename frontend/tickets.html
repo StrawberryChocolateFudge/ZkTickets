@@ -16,19 +16,17 @@
 </head>
 
 <body>
+    <canvas id="canvas">Your browser doesn't support "canvas", sorry come again.</canvas>
+
     <div class="container">
         <div class="col textAlign-center" id="welcomeMessage">
-            <h2 class="centerWithMargin">ZkTickets</h2>
-            <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
+            <h2 class="centerWithMargin">ZKTICKETS</h2>
+            <h6 class="centerWithMargin">A ZERO KNOWLEDGE PROOF BASED EVENT TICKETING PROTOCOL </h6>
         </div>
 
-        <div class="centered-row hide" id="loadingBanner">
-            <div class="lds-circle">
-                <div></div>
-            </div>
-        </div>
+     
         <br />
-        <div class="centered-row">
+        <div class="centered-row" style="z-index: 10;">
 
             <div class="centered-row" id="purchaseTicketsSelectorButton">
                 <button id="accessEventButton" class="button-50 width-300"></button>
@@ -50,19 +48,9 @@
                     </div>
                 </div>
 
-                <!-- <div style="text-align:center;">
-                    <button id="goToWarnings" class="button-2">
-                        <div class="col">
-                            <span class="material-symbols-outlined">
-                                report
-                            </span><span id="warnings"></span>
-                        </div>
-                    </button>
-                </div> -->
-
                 <div class="marginAuto">
                     <label id="ticketsLeft" class="centerWithMargin"></label>
-                    <label class="tableLabel">Tickets Left</label>
+                    <label class="tableLabel">TICKETS LEFT</label>
                 </div>
                 <br />
                 <div class="spaceEvenlyRow" id="purchaseTicketActionContainer">
@@ -80,7 +68,7 @@
                     <span class="initialFont" id="priceInfo"></span>
                 </div>
                 <div class="centered-row hide" id="downloadbuttonContainer">
-                    <button id="downloadButton" class="button-50" type="button">Download Ticket</button>
+                    <button id="downloadButton" class="button-50" type="button">DOWNLOAD TICKETS</button>
                 </div>
                 <br />
                 <div class="spaceEvenlyRow">
@@ -98,10 +86,8 @@
     <div class="centered-row">
         <div id="snackbar"></div>
     </div>
-    <div class="particlesstyle" id="tsparticles"></div>
 </body>
 <script type="module" src="./tickets.ts"></script>
-<script
-    src="https://cdn.jsdelivr.net/npm/tsparticles-preset-big-circles@2/tsparticles.preset.bigCircles.bundle.min.js"></script>
+<script src="./fx//matrix.js"></script>
 
 </html>

@@ -2,7 +2,7 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex, createNewImgElement, createNewTooltipText, appendTooltip } from "./utils";
-import { BTTTESTNETID, calculatePurchaseFee, FANTOMTESTNETID, formatEther, getContract, getCurrencyFromNetId, getEventWarningsFromSubdomain, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWarningCount, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, ZEROADDRESS } from "./web3";
+import { BTTTESTNETID, calculatePurchaseFee, formatEther, getContract, getCurrencyFromNetId, getEventWarningsFromSubdomain, getJsonProviderTicketedEvent, getNetworkFromSubdomain, getTicketedEvents, getWarningCount, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 
 const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
@@ -15,25 +15,18 @@ const accessEventButton = document.getElementById("accessEventButton") as HTMLDi
 
 (
     async () => {
-        //@ts-ignore
-        await loadBigCirclesPreset(tsParticles); // this is required only if you are not using the bundle script
-        //@ts-ignore
-        await tsParticles.load("tsparticles", {
-            preset: "bigCircles", // also "big-circles" is accepted
-        });
-
         if (NETID === BTTTESTNETID) {
             const imgEl = createNewImgElement("./bttLogo.svg");
             appendTooltip(currencyPriceRow, imgEl, null);
-        } else if (NETID === FANTOMTESTNETID) {
-            const imgEl = createNewImgElement("./fantomLogo.svg");
+        } else if (NETID === TRONZKEVMTESTNET.chainId) {
+            const imgEl = createNewImgElement("./tron-trx-logo.svg");
             appendTooltip(currencyPriceRow, imgEl, null);
         }
         if (!index) {
-            accessEventButton.innerHTML = `Invalid Event`
+            accessEventButton.innerHTML = `INVALID EVENT`
             return;
         }
-        accessEventButton.innerHTML = `Enter Event ${index}`
+        accessEventButton.innerHTML = `ENTER EVENT ${index}`
 
     })();
 
@@ -41,7 +34,6 @@ const purchaseTicketsSelectorButton = document.getElementById("purchaseTicketsSe
 const handleTicketsButton = document.getElementById("handleTicketsButton") as HTMLElement;
 const manageTicketsButton = document.getElementById("manageTicketsButton") as HTMLButtonElement;
 const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
-const loadingBanner = document.getElementById("loadingBanner") as HTMLElement;
 const purchaseTicketAction = document.getElementById("purchaseTicketAction") as HTMLElement;
 
 const purchaseTicketActionContainer = document.getElementById("purchaseTicketActionContainer") as HTMLElement;
@@ -89,7 +81,6 @@ purchaseTicketsSelectorButton.onclick = async function () {
         }
 
         welcomeMessage.classList.add("hide");
-        loadingBanner.classList.remove("hide");
         purchaseTicketsSelectorButton.classList.add("hide");
 
         const provider = getWeb3Provider();
@@ -110,7 +101,7 @@ purchaseTicketsSelectorButton.onclick = async function () {
         if (errorOccured) {
             return;
         }
-
+        console.log(zktickets);
         const ticketedEvent = await getTicketedEvents(zktickets, index).catch(err => {
             handleError("Unable to find the event!");
             errorOccured = true;
@@ -145,7 +136,6 @@ purchaseTicketsSelectorButton.onclick = async function () {
             const eventContainer = document.getElementById("eventContainer") as HTMLElement;
             eventContainer.classList.remove("hide");
             welcomeMessage.classList.add("hide");
-            loadingBanner.classList.add("hide");
             if (ticketedEvent.creator === ZEROADDRESS) {
                 purchaseTicketActionContainer.classList.add("hide")
             }

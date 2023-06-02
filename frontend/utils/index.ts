@@ -7,7 +7,7 @@ export const appURL = window.location.origin;
 export const handleError = (msg) => {
     const snackBarElement = document.getElementById("snackbar");
     if (snackBarElement !== null) {
-        snackBarElement.textContent = msg;
+        snackBarElement.textContent = msg.toLocaleUpperCase();
 
         // Add the "show" class to DIV
         snackBarElement.className = "show";
@@ -109,7 +109,7 @@ function renderNothingToShow() {
     const el = document.createElement("tr");
     el.classList.add("shadowedTr");
     const td = document.createElement("td");
-    td.innerHTML = `<div class="centered-row"><h2>Nothing to show</h2></div>`
+    td.innerHTML = `<div class="centered-row"><h2>NOTHING TO SHOW :) </h2></div>`
     el.appendChild(td);
     return el;
 }

@@ -15,15 +15,12 @@
 </head>
 
 <body>
+    <canvas id="canvas">Your browser doesn't support "canvas", sorry come again.</canvas>
+
     <div class="container">
         <div class="col textAlign-center" id="welcomeMessage">
-            <h2 class="centerWithMargin">ZkTickets</h2>
-            <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
-        </div>
-        <div class="centered-row" id="loadingBanner">
-            <div class="lds-circle">
-                <div></div>
-            </div>
+            <h2 class="centerWithMargin">ZKTICKETS</h2>
+            <h6 class="centerWithMargin">A ZERO KNOWLEDGE PROOF BASED EVENT TICKETING PROTOCOL</h6>
         </div>
 
         <div class="centered-row">
@@ -36,7 +33,7 @@
                 </div>
 
                 <div class="centered-row textAlign-center" id="enterTheTicketCodeInfoRow">
-                    <small>Enter the ticket code. Leave it empty to use the scanner!</small>
+                    <small>ENTER THE TICKET CODE. LEAVE IT EMPTY TO USE THE SCANNER!</small>
                 </div>
 
                 <table class="eventDetailsInputTable" id="ticketCodeInputTable">
@@ -45,40 +42,22 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <td><label for="ticketCodeInput">Ticket code:</label></td>
+                        <td><label for="ticketCodeInput">TICKET CODE:</label></td>
                         <td><input class="arginput" autocomplete="off" id="ticketCodeInput" type="text" /></td>
                     </tr>
                 </table>
 
                 <div class="centered-row" id="validateTicketButtonRow">
                     <button id="validateTicketButton" class="button-50 width-300" type="button">
-                        Validate Ticket
+                        VALIDATE TICKET
                     </button>
                 </div>
                 <br />
 
 
-                <div id="useTheAppBanner">
-                    <div class="centered-row">
-                        <h5 class="initialFont">Use the android application to scan tickets in person</h5>
-                    </div>
-                    <div class="centered-row">
-                        <a class="button-50" href="/apk/ZkTickets_Scanner_0.0.1_release.apk">
-                            Download Android App
-                        </a>
-                    </div>
-                    <div class="centered-row padding30">
-                        <p class="initialFont">You can download the APK by clicking on the button and install the app on
-                            Android
-                        </p>
-                    </div>
-                </div>
-
-
-
                 <div class="centered-row hide" id="stopScanningButtonRow">
                     <button id="stopScanningButton" class="button-50 width-300" type="button">
-                        Stop Scanning
+                        STOP SCANNING
                     </button>
                 </div>
                 <br />
@@ -89,11 +68,11 @@
         <div class="centered-row">
             <div class="createEventContainer hide" id="invalidateTicketContainer">
                 <div class="centered-row">
-                    <h4>Ticket is Valid!</h4>
+                    <h4>TICKET IS VALID!</h4>
                 </div>
                 <div class="centered-row">
                     <button id="invalidateTicketButton" class="button-50 width-300" type="button">
-                        Invalidate Ticket
+                        INVALIDATE TICKET
                     </button>
                 </div>
                 <div class="centered-row">
@@ -108,10 +87,8 @@
     <div class="centered-row">
         <div id="snackbar"></div>
     </div>
-    <div class="particlesstyle" id="tsparticles"></div>
 </body>
 <script type="module" src="./handleTicket.ts"></script>
-<script
-    src="https://cdn.jsdelivr.net/npm/tsparticles-preset-big-circles@2/tsparticles.preset.bigCircles.bundle.min.js"></script>
+<script src="./fx//matrix.js"></script>
 
 </html>

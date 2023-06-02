@@ -1,8 +1,12 @@
 #manageUiContainer {
     min-height: 100vh;
+    position: absolute;
+    margin: 0 auto;
     width: 100%;
-    background-color: lightblue;
+    z-index: 2;
+
 }
+
 
 .dataContainer {
     display: flex;

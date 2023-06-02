@@ -71,3 +71,8 @@
   font-size: 13;
   color: gray;
 }
+
+#eventName{
+  font-size: 35px;
+  margin-bottom: 10px;
+}

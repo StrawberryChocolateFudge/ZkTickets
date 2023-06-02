@@ -10,7 +10,6 @@ import { appendOptionsElementsTo, bigNumberIndexesToNumber, createOpenRequestsTR
 import { acceptRefundRequest, acceptResaleRequest, acceptTransfer, approveSpend, balanceOf, calculateResaleFee, cancelTransferRequest, createTransferRequest, formatEther, getContract, getCurrencyFromNetId, getNetworkFromSubdomain, getRequestsByMe, getRequestsToMe, getStakingContractsFromSubdomain, getTicketedEvents, getTransferRequestsByEventIndex, getTransferType, getWeb3Provider, onboardOrSwitchNetwork, requestAccounts, requestFetcher, speculativeSaleCounter, stake, stakers, stakeUnit, stakingBlocks, ticketCommitments, totalStaked, TransferType, unstake, walletRPCProviderVerifyTicket, ZEROADDRESS } from "./web3";
 import { generateProof, getNote } from "./web3/zkp";
 
-const welcomeMessage = document.getElementById("welcomeMessage") as HTMLDivElement;
 const manageUiContainer = document.getElementById("manageUiContainer") as HTMLDivElement;
 const stakeBalance = document.getElementById("stakeBalance") as HTMLElement;
 
@@ -74,13 +73,6 @@ const index = getEventIndex();
 
 (
     async () => {
-        //@ts-ignore
-        await loadBigCirclesPreset(tsParticles); // this is required only if you are not using the bundle script
-        //@ts-ignore
-        await tsParticles.load("tsparticles", {
-            preset: "bigCircles", // also "big-circles" is accepted
-        });
-
         if (!index) {
             return;
         }
@@ -146,7 +138,6 @@ function renderManageUI(data) {
     const { openResaleRequests, requestsToMe, requestsByMe, speculativeSaleCounterValue, proStaking, zkTickets, tokenContract, stakeUnitTokens, event, stakingBlockUnits, currentBlock, tokenBalance, address } = data;
     const { allowSpeculation, creator, eventName, externalHandelr, price, } = event;
 
-    welcomeMessage.classList.add("hide");
     manageUiContainer.classList.remove("hide");
 
     increaseStakeAmount.onclick = function () {

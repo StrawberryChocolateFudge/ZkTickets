@@ -5,18 +5,7 @@ import { getEventIndex, handleError } from "./utils";
 import { getContract, getNetworkFromSubdomain, getWeb3Provider, handleTicket, JSONRPCProviderVerifyTicket, onboardOrSwitchNetwork, walletRPCProviderVerifyTicket } from "./web3";
 import { generateProof } from "./web3/zkp";
 
-(async () => {
-    //@ts-ignore
-    await loadBigCirclesPreset(tsParticles); // this is required only if you are not using the bundle script
-    //@ts-ignore
-    await tsParticles.load("tsparticles", {
-        preset: "bigCircles", // also "big-circles" is accepted
-    });
-})();
-
-
 const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
-const loadingBanner = document.getElementById("loadingBanner") as HTMLElement;
 const eventContainer = document.getElementById("createEventFormContainer") as HTMLElement;
 const ticketCodeInput = document.getElementById("ticketCodeInput") as HTMLInputElement;
 const validateTicketButton = document.getElementById("validateTicketButton") as HTMLButtonElement;
@@ -34,7 +23,6 @@ const readerContainer = document.getElementById("readerContainer") as HTMLElemen
 
 const invalidateBackButton = document.getElementById("invalidateBackButton") as HTMLButtonElement;
 
-const useTheAppBanner = document.getElementById("useTheAppBanner") as HTMLElement;
 
 const renderScanner = () => {
     ticketCodeInputTable.classList.add("hide");
@@ -42,7 +30,6 @@ const renderScanner = () => {
     enterTheTicketCodeInfoRow.classList.add("hide");
     stopScanningButtonRow.classList.remove("hide");
     readerContainer.classList.remove("hide");
-    useTheAppBanner.classList.add("hide");
 }
 
 const renderStopScan = () => {
@@ -51,7 +38,6 @@ const renderStopScan = () => {
     validateTicketButtonRow.classList.remove("hide");
     enterTheTicketCodeInfoRow.classList.remove("hide");
     stopScanningButtonRow.classList.add("hide");
-    useTheAppBanner.classList.remove("hide");
 }
 
 const renderTicketValid = () => {
@@ -73,7 +59,6 @@ const renderTicketValidBack = () => {
 
     setTimeout(() => {
         welcomeMessage.classList.add("hide");
-        loadingBanner.classList.add("hide");
         eventContainer.classList.remove("hide");
     }, 1000);
 })();
@@ -174,6 +159,7 @@ invalidateTicketButton.onclick = async function () {
         })
 
         const tx = await handleTicket(contract, proof, toNoteHex(note.cryptoNote.nullifierHash), toNoteHex(note.cryptoNote.commitment)).catch(err => {
+            console.log(err);
             handleError("Unable to dispatch transaction")
         });
 

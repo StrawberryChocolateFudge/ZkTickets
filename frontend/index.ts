@@ -1,4 +1,4 @@
-import { BTTTESTNETID, createNewTicketedEvent, FANTOMTESTNETID, getContract, getNetworkFromSubdomain, getWeb3Provider, NewTicketedEventCreated, onboardOrSwitchNetwork, ZEROADDRESS } from "./web3";
+import { BTTTESTNETID, createNewTicketedEvent, getContract, getNetworkFromSubdomain, getWeb3Provider, NewTicketedEventCreated, onboardOrSwitchNetwork, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
 import { handleError, appURL, createNewImgElement, createNewTooltipText, appendTooltip } from "./utils";
 import { isAddress } from "ethers/lib/utils";
 
@@ -7,29 +7,26 @@ const currencyTooltip = document.getElementById("currencyTooltip") as HTMLDivEle
 
 
 (async () => {
-    //@ts-ignore
-    await loadBigCirclesPreset(tsParticles); // this is required only if you are not using the bundle script
-    //@ts-ignore
-    await tsParticles.load("tsparticles", {
-        preset: "bigCircles", // also "big-circles" is accepted
-    });
+
 
     if (NETID === BTTTESTNETID) {
         const imgEl = createNewImgElement("./bttLogo.svg");
         const tooltipTxt = createNewTooltipText("Price in Btt");
         appendTooltip(currencyTooltip, imgEl, tooltipTxt);
-    } else if (NETID === FANTOMTESTNETID) {
-        const imgEl = createNewImgElement("./fantomLogo.svg");
-        const tooltipTxt = createNewTooltipText("Price in Fantom");
-        appendTooltip(currencyTooltip, imgEl, tooltipTxt);
+    } else if (NETID === TRONZKEVMTESTNET.chainId) {
+        const imgEl = createNewImgElement("./tron-trx-logo.svg");
+        const txt = createNewTooltipText("Price in TRX")
+        appendTooltip(currencyTooltip, imgEl, txt);
     }
+
+    setTimeout(() => {
+        goToCreateEvents();
+    }, 2000)
 })();
 
 
 const getPurchasePageUrl = (index: string) => appURL + `/tickets.html?i=${index}`
 
-
-const goToCreateEventsButton = document.getElementById("goToCreateEventsButton") as HTMLButtonElement;
 
 const createEventButton = document.getElementById("CreateEventButton") as HTMLButtonElement;
 const eventNameInput = document.getElementById("eventNameInput") as HTMLInputElement;
@@ -38,9 +35,6 @@ const ticketCountInput = document.getElementById("ticketCountInput") as HTMLInpu
 const allowSpeculationInput = document.getElementById("allowSpeculationInput") as HTMLInputElement;
 const speculationWarning = document.getElementById("speculationWarning") as HTMLSpanElement;
 
-const handlerAddressInput = document.getElementById("handlerAddressInput") as HTMLInputElement;
-
-const hideCreateButton = document.getElementById("hideCreateButton") as HTMLInputElement;
 
 const createEventFormContainer = document.getElementById("createEventFormContainer") as HTMLButtonElement;
 
@@ -52,15 +46,15 @@ allowSpeculationInput.onchange = function () {
     }
 }
 
-goToCreateEventsButton.onclick = async function () {
-    const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
-    welcomeMessage.classList.add("hide");
-    hideCreateButton.classList.add("hide");
+function goToCreateEvents() {
+    // const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
+    // welcomeMessage.classList.add("hide");
+    // hideCreateButton.classList.add("hide");
     createEventFormContainer.classList.remove("hide");
 }
 
 createEventButton.onclick = async function () {
-    const handlerAddress = handlerAddressInput.value;
+    const handlerAddress = "";
 
     if (handlerAddress.length > 0 && !isAddress(handlerAddress)) {
         handleError("Invalid Handler Address")
@@ -70,10 +64,11 @@ createEventButton.onclick = async function () {
     const switched = await onboardOrSwitchNetwork(handleError);
     if (switched) {
         const provider = getWeb3Provider();
-
+        console.log(provider);
         const contract = await getContract(provider, CONTRACTADDRESS, "/ZKTickets.json").catch(err => {
             handleError("Unable to connect to your wallet");
         });
+        console.log(contract);
 
         const eventName = eventNameInput.value;
         if (eventName.length < 3) {
@@ -96,6 +91,7 @@ createEventButton.onclick = async function () {
 
         const allowSpeculation = allowSpeculationInput.checked;
         const tx = await createNewTicketedEvent(contract, eventPrice, eventName, ticketCount, handlerAddressToSubmit, allowSpeculation).catch(err => {
+            console.log(err)
             handleError("Unable to submit transaction");
         });
 
@@ -104,6 +100,7 @@ createEventButton.onclick = async function () {
         }
         await tx.wait().then(async (receipt) => {
             if (receipt.status === 1) {
+                console.log(receipt);
                 const eventIndex = await NewTicketedEventCreated(receipt, contract);
                 if (!eventIndex) {
                     handleError("Oops, the transacion seems invalid!");

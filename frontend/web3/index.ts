@@ -10,6 +10,18 @@ export const BTTTESTNETRPCURL = "https://pre-rpc.bt.io/";
 
 export const BTTTESTNETEVENTWARNINGS = "0xA48bbf691169767F535490663aD8a5583367f701";
 
+export const TRONZKEVMTESTNET = {
+    name: "TRON zkEVM Testnet",
+    rpc: ["https://test-rpc-zkevm.bt.io/"],
+    chainId: "0x31641",
+    currency: "TRX",
+    TOKENADDRESS: "0xe96Fb5737D3ae08EF6Ebdb63A866944781EDebe1",
+    PROSTAKINGADDRESS: "0xF63B78bb8Cb7d9BB7E3287798685130f0d5bef58",
+    ZKTICKETSCONTRACTADDRESS: "0xa578CEA7efd46D990040B67908A2C4213f186265",
+    EVENTWARNING: "0x03CD0226c9f830d65edC0E2E83eFa36aE66d5C2B"
+
+}
+
 export const TransferType = {
     TRANSFER: 0,
     REFUND: 1,
@@ -46,12 +58,16 @@ export function getNetworkFromSubdomain() {
 
     const bttRes = [BTTTESTNETZKTICKETSCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
 
+    const zktron = [TRONZKEVMTESTNET.ZKTICKETSCONTRACTADDRESS, TRONZKEVMTESTNET.chainId, TRONZKEVMTESTNET.rpc[0]]
+
     switch (subdomain) {
         case "btt":
             return bttRes;
+        case "zktron":
+            return zktron;
         default:
-            // Fall back on BTT for this branch of development
-            return bttRes
+            // Fall back on ZkTron for this branch of development
+            return zktron;
     }
 }
 
@@ -60,14 +76,13 @@ export function getStakingContractsFromSubdomain() {
     const subdomain = host.split(".")[0];
 
     switch (subdomain) {
-        case "fantom":
-            // TODO: fantom will be deprecated
-            return ["", ""];
         case "btt":
             return [BTTPROSTAKINGADDRESS, BTTTOKENCONTRACTADDRESS];
+        case "zktron":
+            return [TRONZKEVMTESTNET.PROSTAKINGADDRESS, TRONZKEVMTESTNET.TOKENADDRESS]
         default:
             // Fallback to btt
-            return [BTTPROSTAKINGADDRESS, BTTTOKENCONTRACTADDRESS];
+            return [TRONZKEVMTESTNET.PROSTAKINGADDRESS, TRONZKEVMTESTNET.TOKENADDRESS];
     }
 }
 
@@ -76,13 +91,12 @@ export function getEventWarningsFromSubdomain() {
     const subdomain = host.split(".")[0];
 
     switch (subdomain) {
-        case "fantom":
-            // /?TODO:fantom will be deprecated
-            return ""
         case "btt":
             return BTTTESTNETEVENTWARNINGS;
+        case "zktron":
+            return TRONZKEVMTESTNET.EVENTWARNING
         default:
-            return BTTTESTNETEVENTWARNINGS;
+            return TRONZKEVMTESTNET.EVENTWARNING
     }
 }
 
@@ -90,6 +104,8 @@ export function getCurrencyFromNetId(netId) {
     switch (netId) {
         case BTTTESTNETID:
             return "BTT"
+        case TRONZKEVMTESTNET.chainId:
+            return "Tron";
         default:
             return "";
     }
@@ -145,6 +161,9 @@ async function handleNetworkSwitch() {
         case BTTTESTNETID:
             await switchToDonauTestnet();
             break;
+        case TRONZKEVMTESTNET.chainId:
+            await switchToTronZKEVM();
+            break;
         default:
             break;
     }
@@ -159,11 +178,25 @@ export function getWeb3Provider() {
         // Handle the new chain.
         // Correctly handling chain changes can be complicated.
         // We recommend reloading the page unless you have good reason not to.
-        window.location.reload();
+        // window.location.reload();
     });
     return provider;
 }
 
+export async function switchToTronZKEVM() {
+    const switched = await switch_to_Chain(TRONZKEVMTESTNET.chainId);
+    if (!switched) {
+        await ethereumRequestAddChain(
+            TRONZKEVMTESTNET.chainId,
+            TRONZKEVMTESTNET.name,
+            TRONZKEVMTESTNET.currency,
+            TRONZKEVMTESTNET.currency,
+            18,
+            TRONZKEVMTESTNET.rpc,
+            []
+        )
+    }
+}
 
 export async function switchToDonauTestnet() {
     const chainId = 1029;

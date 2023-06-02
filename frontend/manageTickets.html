@@ -16,22 +16,11 @@
 </head>
 
 <body>
-    <div class="container" id="welcomeMessage">
-        <div class="col textAlign-center">
-            <h2 class="centerWithMargin">ZkTickets</h2>
-            <h6 class="centerWithMargin">A zero-knowledge proof based event ticketing protocol </h6>
-        </div>
-
-        <div class="centered-row">
-            <div class="lds-circle">
-                <div></div>
-            </div>
-        </div>
-    </div>
+    <canvas id="canvas">Your browser doesn't support "canvas", sorry come again.</canvas>
 
     <div class="hide" id="manageUiContainer">
         <div class="centered-row">
-            <h2>Manage Tickets</h2>
+            <h2>MANAGE TICKETS</h2>
         </div>
 
 
@@ -41,8 +30,8 @@
 
                 <div class="dataContainer">
                     <h5 class="margin30">
-                        You can create transfer requests to send your tickets to others, refund the ticket or sell it to
-                        somebody on an open market.
+                        YOU CAN CREATE TRANSFER REQUESTS TO SEND YOUR TICKETS TO OTHERS , REFUND THE TICKET OR SELL IT TO
+                        SOMEBODY ON THE OPEN MARKET.
                     </h5>
                     <table>
                         <thead>
@@ -70,7 +59,7 @@
                             </tr>
                             <tr>
                                 <td><span class="initialFont">Open the scanner:</span></td>
-                                <td> <button id="scanTicketButton" class="button-50">Scan</button>
+                                <td> <button id="scanTicketButton" class="button-50">SCAN</button>
                                 </td>
                             </tr>
                             <tr class="marginTop30">
@@ -116,7 +105,7 @@
 
                                 </td>
                                 <td>
-                                    <button id="createRequests" class="button-50">Create Request</button>
+                                    <button id="createRequests" class="button-50">CREATE REQUEST</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -127,7 +116,7 @@
             <div id="showTransferRequestsOutterContainer" class="hide">
                 <div class="dataContainer">
 
-                    <h5 class="margin30">You can see all the transfer requests here that are related to you!</h5>
+                    <h5 class="margin30">YOU CAN SEE ALL THE TRANSFER REQUESTS HERE THAT ARE RELATED TO YOU!</h5>
                     <div class="centered-row">
                         <button id="goToCreateRequests" class="button-57"><span>Create
                                 Transfer</span><span>Navigate to create request</span></button>
@@ -137,9 +126,9 @@
                     <br />
                     <div class="requestsShadow">
                         <div class="centered-row">
-                            <h5 class="margin30">Your transfer requests are visible below. To cancel a
-                                request, you need to use
-                                your ticket!</h5s>
+                            <h5 class="margin30">YOUR TRANSFER REQUESTS ARE VISIBLE BELOW. TO CANCEL A
+                                REQUEST, YOU NEED TO USE
+                                YOUR TICKET!</h5s>
                         </div>
 
                         <table class="width80Percent margin30">
@@ -161,7 +150,7 @@
                                 </tr>
                                 <tr>
                                     <td><span class="initialFont">Open the scanner:</span></td>
-                                    <td> <button id="cancelRequestScanTicketButton" class="button-50">Scan</button>
+                                    <td> <button id="cancelRequestScanTicketButton" class="button-50">SCAN</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -177,7 +166,7 @@
                             </tbody>
                         </table>
                         <div class="centered-row">
-                            <button id="fetchMyRequests" class="button-50">Load Requests</button>
+                            <button id="fetchMyRequests" class="button-50">LOAD REQUESTS</button>
                         </div>
                         <br />
                     </div>
@@ -186,9 +175,8 @@
 
                     <div class="requestsShadow">
                         <div class="centered-row">
-                            <h5 class="margin30">You can see all the acive requests only you can accept below! Click on
-                                Load Requests to
-                                fetch all active requests!</h5>
+                            <h5 class="margin30">YOU CAN SEE ALL THE ACTIVE REQUESTS ONLY YOU CAN ACCEPT BELOW! CLICK ON
+                                LOAD REQUESTS TO FETCH ALL ACTIVE REQUESTS</h5>
                         </div>
                         <table class="margin30 width80Percent">
                             <thead>
@@ -203,16 +191,15 @@
                             <small class="initialFont priceInfo">A 2% fee is added to resale orders</small>
                         </div>
                         <div class="centered-row">
-                            <button id="fetchToMeRequests" class="button-50">Load Requests</button>
+                            <button id="fetchToMeRequests" class="button-50">LOAD REQUESTS</button>
                         </div>
                         <br />
                     </div>
 
                     <div class="requestsShadow">
                         <div class="centered-row">
-                            <h5 class="margin30">Open Resale Requests. These requests can be accepted by anyone. If the
-                                event allows
-                                speculation, the price may vary!</h5>
+                            <h5 class="margin30">OPEN RESALE REQUESTS. THESE REQUESTS CAN BE ACCEPTED BY ANYONE. IF THE
+                                EVENT ALLOWS SPECULATION, THE PRICE MAY VARY!</h5>
                         </div>
                         <table class="margin30 width80Percent">
                             <thead>
@@ -227,7 +214,7 @@
                             <small class="initialFont priceInfo">A 2% fee is added to all orders</small>
                         </div>
                         <div class="centered-row">
-                            <button id="fetchOpenResaleRequests" class="button-50">Load Requests</button>
+                            <button id="fetchOpenResaleRequests" class="button-50">LOAD REQUESTS</button>
                         </div>
                         <br />
                     </div>
@@ -237,15 +224,9 @@
         </div>
         <div id="stakingDataOutterContainer" class="hide">
             <div class="dataContainer">
-                <h5 class="margin30">You need to stake to create custom price resale requests. This protects the
-                    protocol
-                    against
-                    ticket
-                    scalping. To create a custom priced resale you need to stake 1000 tokens. Your token resale
-                    requests
-                    are
-                    counted
-                    per event!</h5>
+                <h5 class="margin30">YOU NEED TO STAKE TO CREATE CUSTOM PRICE RESALE REQUESTS. THIS PROTECTS THE
+                    PROTOCOL AGAINST TICKET SCALPING. TO CREATE A CUSTOM PRICED RESALE YOU NEED TO STAKE 1000 TOKENS.
+                    YOUR TOKEN RESALE REQUESTS ARE COUNTED PER EVENT!</h5>
                 <table>
                     <thead>
                         <th>
@@ -313,8 +294,8 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td><button id="stakeButton" class="button-50">Stake</button></td>
-                            <td><button disabled id="unstakeButton" class="button-50">Unstake</button></td>
+                            <td><button id="stakeButton" class="button-50">STAKE</button></td>
+                            <td><button disabled id="unstakeButton" class="button-50">UNSTAKE</button></td>
                         </tr>
                         <tr id="blocksLeftTr" class="hide">
                             <td>
@@ -367,7 +348,7 @@
             </div>
             <div class="centered-row" id="stopScanningButtonRow">
                 <button id="stopScanningButton" class="button-50 width-300" type="button">
-                    Stop Scanning
+                    STOP SCANNING
                 </button>
             </div>
 
@@ -376,10 +357,8 @@
     <div class="centered-row">
         <div id="snackbar"></div>
     </div>
-    <div class="particlesstyle" id="tsparticles"></div>
 </body>
 <script type="module" src="./manageTickets.ts"></script>
-<script
-    src="https://cdn.jsdelivr.net/npm/tsparticles-preset-big-circles@2/tsparticles.preset.bigCircles.bundle.min.js"></script>
+<script src="./fx//matrix.js"></script>
 
 </html>

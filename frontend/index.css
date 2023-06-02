@@ -99,17 +99,17 @@
     display: none;
     font-size: small;
     font-family: sans-serif;
-    color: lightblue;
+    color: black;
     animation: blinkingText 1.2s infinite;
 }
 
 @keyframes blinkingText {
     0% {
-        color: lightblue;
+        color: black;
     }
 
     49% {
-        color: lightblue;
+        color: black;
     }
 
     60% {
@@ -121,7 +121,7 @@
     }
 
     100% {
-        color: lightblue;
+        color: black;
     }
 }
 
@@ -136,7 +136,7 @@
     color: #fff;
     cursor: pointer;
     display: inline-block;
-    font-family: ITCAvantGardeStd-Bk, Arial, sans-serif;
+    font-family: "matrix-code";
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
