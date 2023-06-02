@@ -20,6 +20,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
+import "./tasks/deployToTronZkEvm";
+import "./tasks/zkpVerifierTestnet";
+
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
@@ -39,6 +42,11 @@ const config: HardhatUserConfig = {
     //   accounts:
     //     process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
     // },
+    zktron: {
+      url: process.env.ZKTRON || "",
+      accounts:
+        process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
