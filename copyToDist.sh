@@ -8,5 +8,5 @@ cp circuits/Ticket/ticket_js/ticket.wasm dist/ticket.wasm
 
 cp frontend/images/bttLogo.svg dist/bttLogo.svg
 cp frontend/images/fantomLogo.svg dist/fantomLogo.svg
-
+cp frontend/images/tron-trx-logo.svg dist/tron-trx-logo.svg
 cp apk/ZkTickets_Scanner_0.0.1_release.apk dist/ZkTickets_Scanner_0.0.1_release.apk
