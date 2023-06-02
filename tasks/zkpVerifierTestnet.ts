@@ -5,7 +5,10 @@ import { cryptoNote, generateTicketProof, packToSolidityProof, parseNote, toNote
 const main = async (args: any, hre: HardhatRuntimeEnvironment) => {
     const [signer] = await hre.ethers.getSigners();
     const VerifierFactory = await hre.ethers.getContractFactory("contracts/TicketVerifier.sol:Verifier");
-    const verifier = VerifierFactory.attach("0x5FbDB2315678afecb367f032d93F642f64180aa3");
+    const verifier = await VerifierFactory.deploy()
+    await verifier.deployed();
+
+    console.log("verifier deployed to: ", verifier.address);
 
     const noteString = await cryptoNote(0x2b6653dc);
     const parsedNote = await parseNote(noteString);

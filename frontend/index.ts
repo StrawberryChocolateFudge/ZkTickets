@@ -34,6 +34,7 @@ const eventPriceInput = document.getElementById("eventPriceInput") as HTMLInputE
 const ticketCountInput = document.getElementById("ticketCountInput") as HTMLInputElement;
 const allowSpeculationInput = document.getElementById("allowSpeculationInput") as HTMLInputElement;
 const speculationWarning = document.getElementById("speculationWarning") as HTMLSpanElement;
+const handlerAddressInput = document.getElementById("handlerAddressInput") as HTMLInputElement;
 
 
 const createEventFormContainer = document.getElementById("createEventFormContainer") as HTMLButtonElement;
@@ -47,14 +48,14 @@ allowSpeculationInput.onchange = function () {
 }
 
 function goToCreateEvents() {
-    // const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
-    // welcomeMessage.classList.add("hide");
-    // hideCreateButton.classList.add("hide");
+    const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
+    welcomeMessage.classList.add("hide");
+
     createEventFormContainer.classList.remove("hide");
 }
 
 createEventButton.onclick = async function () {
-    const handlerAddress = "";
+    const handlerAddress = handlerAddressInput.value;
 
     if (handlerAddress.length > 0 && !isAddress(handlerAddress)) {
         handleError("Invalid Handler Address")
@@ -64,11 +65,9 @@ createEventButton.onclick = async function () {
     const switched = await onboardOrSwitchNetwork(handleError);
     if (switched) {
         const provider = getWeb3Provider();
-        console.log(provider);
         const contract = await getContract(provider, CONTRACTADDRESS, "/ZKTickets.json").catch(err => {
             handleError("Unable to connect to your wallet");
         });
-        console.log(contract);
 
         const eventName = eventNameInput.value;
         if (eventName.length < 3) {

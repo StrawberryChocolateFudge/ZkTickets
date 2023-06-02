@@ -12,6 +12,7 @@ export type { ExternalTicketHandler } from "./ExternalTicketHandler";
 export type { ProStaking } from "./ProStaking";
 export type { TicketPro } from "./TicketPro";
 export type { Verifier } from "./Verifier";
+export type { TokenClaimEvent } from "./TokenClaimEvent";
 export type { IVerifier } from "./IVerifier";
 export type { ZKTickets } from "./ZKTickets";
 
@@ -26,5 +27,6 @@ export { ExternalTicketHandler__factory } from "./factories/ExternalTicketHandle
 export { ProStaking__factory } from "./factories/ProStaking__factory";
 export { TicketPro__factory } from "./factories/TicketPro__factory";
 export { Verifier__factory } from "./factories/Verifier__factory";
+export { TokenClaimEvent__factory } from "./factories/TokenClaimEvent__factory";
 export { IVerifier__factory } from "./factories/IVerifier__factory";
 export { ZKTickets__factory } from "./factories/ZKTickets__factory";

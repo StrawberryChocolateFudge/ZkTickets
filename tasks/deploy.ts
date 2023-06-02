@@ -63,3 +63,22 @@ task("deploy", "Deploy the contracts").setAction(main);
 // TicketProToken: 0xeE55e7A619343B2f045bfD9A720BF912e1FCfEC7
 // ProStaking: 0xF273919f7e9239D5C8C70f49368fF80c0a91064A
 // zktickets: 0x57ca49c07328da62335Fc450176C274157C01eB6
+
+
+
+
+
+
+
+
+
+
+
+
+// LATEST ON DONAU TESTNET:
+
+// Verifier: 0x60C2352df0dEE01dB8Dbf261AfC2D8D4b5e3fb55
+// TicketProToken: 0xe48179BaB24c62E48eec1C73f8FB25CBb2B8E635
+// ProStaking: 0x26B7E178CE20bf43ce8fa3aB945B2B65088dC963
+// zktickets: 0x3E6F7e33F99d76803365184a0a83B473A75e425d
+// Event warning are deployed to: 0x44930bCdA63307ce111804D858fAE487b36A599a

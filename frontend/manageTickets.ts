@@ -393,7 +393,7 @@ async function downloadNoteAndAttach(note, eventName, price, btn) {
     btn.classList.remove("button-53");
     btn.classList.add("button-50");
     btn.style.width = "100%";
-    btn.innerText = "Download Note"
+    btn.innerText = "DOWNLOAD NOTE"
 
     btn.onclick = async function () {
         await downloadPDF(eventName, price, currency, dataUrl, note[1], window.location.href);

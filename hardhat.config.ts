@@ -20,7 +20,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-import "./tasks/deployToTronZkEvm";
+import "./tasks/deploy";
+import "./tasks/deployAirdrop";
 import "./tasks/zkpVerifierTestnet";
 
 // You need to export an object to set up your config
@@ -37,20 +38,31 @@ const config: HardhatUserConfig = {
     }
   },
   networks: {
-    // donau: {
-    //   url: process.env.BTT_DONAU_TESTNET_API || "",
-    //   accounts:
-    //     process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
-    // },
-    zktron: {
-      url: process.env.ZKTRON || "",
+    donau: {
+      url: process.env.BTT_DONAU_TESTNET_API || "",
       accounts:
         process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
     },
+    // zktron: {
+    //   url: process.env.ZKTRON || "",
+    //   accounts:
+    //     process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
+    // },
+    // mumbai: {
+    //   url: process.env.MUMBAI || "",
+    //   accounts:
+    //     process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
+    // },
+    // nile: {
+    //   url: process.env.NILE || "",
+    //   accounts:
+    //     process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
+    // }
   },
   gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
+    enabled: true,
     currency: "USD",
+    gasPrice: 40
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,

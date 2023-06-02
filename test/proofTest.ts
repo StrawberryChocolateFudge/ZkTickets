@@ -16,9 +16,6 @@ describe("Ticket ZKP", function () {
         const factory = await ethers.getContractFactory("contracts/TicketVerifier.sol:Verifier");
         const contract = await factory.deploy();
         await contract.deployed();
-        console.log(parsedNote.cryptoNote.nullifierHash);
-        console.log(parsedNote.cryptoNote.commitment);
-        console.log(proof);
         const p = packToSolidityProof(proof);
         const valid = await contract.verifyProof(
             [p[0], p[1]],

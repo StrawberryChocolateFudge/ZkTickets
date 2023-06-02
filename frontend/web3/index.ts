@@ -2,13 +2,13 @@ import MetaMaskOnboarding from "@metamask/onboarding";
 import { BigNumber, ethers } from "ethers";
 import { CryptoNote, toNoteHex } from "../../lib/crypto";
 
-export const BTTTOKENCONTRACTADDRESS = "0x305c9d8599d4e6d85ad0C1b4d2De294b6eFB82a2";
-export const BTTPROSTAKINGADDRESS = "0xddD5455619eEe9A6AD5A8cbBD668Db15A4ab3710";
-export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0xA186deff34278c32d2176f6b90e1B2A3FBD824f9"; // Updated address
+export const BTTTOKENCONTRACTADDRESS = "0xe48179BaB24c62E48eec1C73f8FB25CBb2B8E635";
+export const BTTPROSTAKINGADDRESS = "0x26B7E178CE20bf43ce8fa3aB945B2B65088dC963";
+export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0x3E6F7e33F99d76803365184a0a83B473A75e425d"; // Updated address
 export const BTTTESTNETID = "0x405";
 export const BTTTESTNETRPCURL = "https://pre-rpc.bt.io/";
 
-export const BTTTESTNETEVENTWARNINGS = "0xA48bbf691169767F535490663aD8a5583367f701";
+export const BTTTESTNETEVENTWARNINGS = "0x44930bCdA63307ce111804D858fAE487b36A599a";
 
 export const TRONZKEVMTESTNET = {
     name: "TRON zkEVM Testnet",
@@ -67,7 +67,7 @@ export function getNetworkFromSubdomain() {
             return zktron;
         default:
             // Fall back on ZkTron for this branch of development
-            return zktron;
+            return bttRes;
     }
 }
 
@@ -82,7 +82,7 @@ export function getStakingContractsFromSubdomain() {
             return [TRONZKEVMTESTNET.PROSTAKINGADDRESS, TRONZKEVMTESTNET.TOKENADDRESS]
         default:
             // Fallback to btt
-            return [TRONZKEVMTESTNET.PROSTAKINGADDRESS, TRONZKEVMTESTNET.TOKENADDRESS];
+            return [BTTPROSTAKINGADDRESS, BTTTOKENCONTRACTADDRESS]//[TRONZKEVMTESTNET.PROSTAKINGADDRESS, TRONZKEVMTESTNET.TOKENADDRESS];
     }
 }
 
@@ -96,7 +96,7 @@ export function getEventWarningsFromSubdomain() {
         case "zktron":
             return TRONZKEVMTESTNET.EVENTWARNING
         default:
-            return TRONZKEVMTESTNET.EVENTWARNING
+            return BTTTESTNETEVENTWARNINGS
     }
 }
 

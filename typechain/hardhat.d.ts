@@ -57,6 +57,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Verifier__factory>;
     getContractFactory(
+      name: "TokenClaimEvent",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TokenClaimEvent__factory>;
+    getContractFactory(
       name: "IVerifier",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IVerifier__factory>;
@@ -120,6 +124,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Verifier>;
+    getContractAt(
+      name: "TokenClaimEvent",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TokenClaimEvent>;
     getContractAt(
       name: "IVerifier",
       address: string,

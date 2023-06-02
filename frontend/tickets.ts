@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers";
 import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
@@ -47,6 +48,8 @@ const eventCreator = document.getElementById("eventCreator") as HTMLElement;
 
 const priceInfoRow = document.getElementById("priceInfoRow") as HTMLElement;
 const priceInfo = document.getElementById("priceInfo") as HTMLSpanElement;
+
+const buyButtonLabel = document.getElementById("buyButtonLabel") as HTMLSpanElement;
 
 const warnings = document.getElementById("warnings") as HTMLSpanElement;
 const goToWarnings = document.getElementById("goToWarnings") as HTMLButtonElement;
@@ -101,7 +104,6 @@ purchaseTicketsSelectorButton.onclick = async function () {
         if (errorOccured) {
             return;
         }
-        console.log(zktickets);
         const ticketedEvent = await getTicketedEvents(zktickets, index).catch(err => {
             handleError("Unable to find the event!");
             errorOccured = true;
@@ -123,11 +125,22 @@ purchaseTicketsSelectorButton.onclick = async function () {
         const eventPriceWithFee = await calculatePurchaseFee(zktickets, ticketedEvent.price);
 
         eventCreator.textContent = ticketedEvent.creator;
-        eventName.textContent = ticketedEvent.eventName;
-        eventPrice.textContent = formatEther(eventPriceWithFee.total);
+        eventName.textContent = ticketedEvent.eventName.toUpperCase();
+
+        let total = eventPriceWithFee.total as BigNumber;
+
+        if (total.eq(0)) {
+            eventPrice.textContent = "FREE";
+            buyButtonLabel.classList.add("hide")
+        } else {
+            eventPrice.textContent = formatEther(eventPriceWithFee.total);
+            priceInfo.textContent = `${formatEther(ticketedEvent.price)} ${currency} plus 1% Fee!`;
+        }
+
+
         ticketsLeft.textContent = ticketedEvent.availableTickets;
 
-        priceInfo.textContent = `${formatEther(ticketedEvent.price)} ${currency} plus 1% Fee!`;
+
 
         const warningCount = await getWarningCount(eventWarnings, ticketedEvent.creator);
         // warnings.innerText = warningCount.toNumber() + " Warnings";
