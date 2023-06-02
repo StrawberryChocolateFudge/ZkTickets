@@ -1,3 +1,5 @@
+# THIS IS USED FOR DEVELOPMENT! THE CIRCUITS ARE NOT FINALIZED
+
  # Compiling the circuits
  # First we remove the extra files from the directory
 
