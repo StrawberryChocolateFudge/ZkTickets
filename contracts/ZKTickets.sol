@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./ProStaking.sol";
 import "./ExternalTicketHandler.sol";
 
+
 struct TicketedEvents {
     address payable creator;
     uint256 price;
@@ -301,6 +302,10 @@ contract ZKTickets {
     ) external {
         require(!nullifierHashes[_nullifierHash], "Ticket was already used!");
         require(ticketCommitments[_commitment].used, "Ticket does not exist!");
+        require(
+            ticketCommitments[_commitment].ticketedEventIndex == eventIndex,
+            "Invalid Event "
+        );
         require(
             !ticketCommitments[_commitment].transferInitiated,
             "Ticket is being transferred"
