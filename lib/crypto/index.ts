@@ -140,7 +140,7 @@ export async function generateTicketProof({ cryptoNote, snarkArtifacts }: { cryp
     if (!snarkArtifacts) {
         snarkArtifacts = {
             wasmFilePath: `circuits/Ticket/ticket_js/ticket.wasm`,
-            zkeyFilePath: `circuits/Ticket/ticket_0001.zkey`
+            zkeyFilePath: `circuits/Ticket/ticket_final.zkey`
         }
     }
 

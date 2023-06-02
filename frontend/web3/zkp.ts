@@ -22,7 +22,7 @@ export async function parseCryptoNote(note: string): Promise<ParsedNote> {
 export async function generateProof(cryptoNote: CryptoNote) {
     const snarkArtifacts: SnarkArtifacts = {
         wasmFilePath: window.location.origin + "/ticket.wasm",
-        zkeyFilePath: window.location.origin + "/ticket_0001.zkey"
+        zkeyFilePath: window.location.origin + "/ticket_final.zkey"
     }
     const { proof, publicSignals } = await generateTicketProof({ cryptoNote, snarkArtifacts });
 
