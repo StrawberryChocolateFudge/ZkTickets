@@ -22,23 +22,11 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ZKTicketsInterface extends ethers.utils.Interface {
   functions: {
-    "acceptRefundRequest(uint256,uint256)": FunctionFragment;
-    "acceptResaleRequest(uint256,uint256,bytes32)": FunctionFragment;
-    "acceptTransfer(uint256,uint256,bytes32)": FunctionFragment;
     "calculatePurchaseFee(uint256)": FunctionFragment;
-    "calculateResaleFee(uint256)": FunctionFragment;
-    "cancelTransferRequest(bytes32,bytes32,uint256[8],uint256,uint256)": FunctionFragment;
-    "createNewTicketedEvent(uint256,string,uint256,address,bool)": FunctionFragment;
-    "createTransferRequest(bytes32,bytes32,uint256[8],uint256,uint8,address,uint256)": FunctionFragment;
-    "getRequestsByMe(uint256,address)": FunctionFragment;
-    "getRequestsToMe(uint256,address)": FunctionFragment;
-    "getTransferRequestsByEventIndex(uint256)": FunctionFragment;
-    "getTransferRequestsForPagination(uint256,uint256[5])": FunctionFragment;
-    "handleTicket(uint256[8],bytes32,bytes32)": FunctionFragment;
+    "createNewTicketedEvent(uint256,string,uint256)": FunctionFragment;
+    "invalidateTicket(uint256[8],bytes32,bytes32)": FunctionFragment;
     "nullifierHashes(bytes32)": FunctionFragment;
-    "proStaking()": FunctionFragment;
     "purchaseTicket(uint256,bytes32)": FunctionFragment;
-    "speculativeSaleCounter(uint256,address)": FunctionFragment;
     "ticketCommitments(bytes32)": FunctionFragment;
     "ticketedEventIndex()": FunctionFragment;
     "ticketedEvents(uint256)": FunctionFragment;
@@ -47,90 +35,15 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(
-    functionFragment: "acceptRefundRequest",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "acceptResaleRequest",
-    values: [BigNumberish, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "acceptTransfer",
-    values: [BigNumberish, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "calculatePurchaseFee",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "calculateResaleFee",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "cancelTransferRequest",
-    values: [
-      BytesLike,
-      BytesLike,
-      [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      BigNumberish,
-      BigNumberish
-    ]
-  ): string;
-  encodeFunctionData(
     functionFragment: "createNewTicketedEvent",
-    values: [BigNumberish, string, BigNumberish, string, boolean]
+    values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "createTransferRequest",
-    values: [
-      BytesLike,
-      BytesLike,
-      [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      BigNumberish,
-      BigNumberish,
-      string,
-      BigNumberish
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRequestsByMe",
-    values: [BigNumberish, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRequestsToMe",
-    values: [BigNumberish, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTransferRequestsByEventIndex",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTransferRequestsForPagination",
-    values: [
-      BigNumberish,
-      [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish]
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "handleTicket",
+    functionFragment: "invalidateTicket",
     values: [
       [
         BigNumberish,
@@ -151,16 +64,8 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "proStaking",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "purchaseTicket",
     values: [BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "speculativeSaleCounter",
-    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "ticketCommitments",
@@ -181,27 +86,7 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "acceptRefundRequest",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "acceptResaleRequest",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "acceptTransfer",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "calculatePurchaseFee",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "calculateResaleFee",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "cancelTransferRequest",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -209,40 +94,15 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createTransferRequest",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRequestsByMe",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRequestsToMe",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTransferRequestsByEventIndex",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTransferRequestsForPagination",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "handleTicket",
+    functionFragment: "invalidateTicket",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "nullifierHashes",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "proStaking", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "purchaseTicket",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "speculativeSaleCounter",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -267,25 +127,11 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
     "NewTicketedEventCreated(uint256)": EventFragment;
     "TicketInvalidated(bytes32)": EventFragment;
     "TicketPurchased(uint256)": EventFragment;
-    "TicketRefundComplete(uint256,uint256)": EventFragment;
-    "TicketResaleComplete(uint256,uint256)": EventFragment;
-    "TicketTransferComplete(uint256,uint256)": EventFragment;
-    "TicketTransferRequestCancelled(uint256,uint256)": EventFragment;
-    "TicketTransferRequestCreated(uint256,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "NewTicketedEventCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TicketInvalidated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TicketPurchased"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TicketRefundComplete"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TicketResaleComplete"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TicketTransferComplete"): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "TicketTransferRequestCancelled"
-  ): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "TicketTransferRequestCreated"
-  ): EventFragment;
 }
 
 export type NewTicketedEventCreatedEvent = TypedEvent<
@@ -298,26 +144,6 @@ export type TicketInvalidatedEvent = TypedEvent<
 
 export type TicketPurchasedEvent = TypedEvent<
   [BigNumber] & { eventIndex: BigNumber }
->;
-
-export type TicketRefundCompleteEvent = TypedEvent<
-  [BigNumber, BigNumber] & { eventIndex: BigNumber; requestIndex: BigNumber }
->;
-
-export type TicketResaleCompleteEvent = TypedEvent<
-  [BigNumber, BigNumber] & { eventIndex: BigNumber; requestIndex: BigNumber }
->;
-
-export type TicketTransferCompleteEvent = TypedEvent<
-  [BigNumber, BigNumber] & { eventIndex: BigNumber; requestIndex: BigNumber }
->;
-
-export type TicketTransferRequestCancelledEvent = TypedEvent<
-  [BigNumber, BigNumber] & { eventIndex: BigNumber; requestIndex: BigNumber }
->;
-
-export type TicketTransferRequestCreatedEvent = TypedEvent<
-  [BigNumber, BigNumber] & { eventIndex: BigNumber; requestIndex: BigNumber }
 >;
 
 export class ZKTickets extends BaseContract {
@@ -364,181 +190,19 @@ export class ZKTickets extends BaseContract {
   interface: ZKTicketsInterface;
 
   functions: {
-    acceptRefundRequest(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    acceptResaleRequest(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      _newCommitment: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    acceptTransfer(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      _newCommitment: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     calculatePurchaseFee(
       purchasePrice: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber] & { fee: BigNumber; total: BigNumber }>;
 
-    calculateResaleFee(
-      resalePrice: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        singleFee: BigNumber;
-        doubleFee: BigNumber;
-        total: BigNumber;
-      }
-    >;
-
-    cancelTransferRequest(
-      _commitment: BytesLike,
-      _nullifierHash: BytesLike,
-      _proof: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     createNewTicketedEvent(
       price: BigNumberish,
       eventName: string,
       availableTickets: BigNumberish,
-      externalHandler: string,
-      allowSpeculation: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    createTransferRequest(
-      _commitment: BytesLike,
-      _nullifierHash: BytesLike,
-      _proof: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      eventIndex: BigNumberish,
-      transferType: BigNumberish,
-      transferTo: string,
-      transferPrice: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    getRequestsByMe(
-      eventIndex: BigNumberish,
-      myAddress: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber[]]>;
-
-    getRequestsToMe(
-      eventIndex: BigNumberish,
-      myAddress: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber[]]>;
-
-    getTransferRequestsByEventIndex(
-      eventIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        ([boolean, number, string, string, string, number, BigNumber] & {
-          exists: boolean;
-          status: number;
-          ticketCommitment: string;
-          ticketNullifierHash: string;
-          transferTo: string;
-          transferType: number;
-          price: BigNumber;
-        })[]
-      ]
-    >;
-
-    getTransferRequestsForPagination(
-      eventIndex: BigNumberish,
-      indexes: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [
-          [boolean, number, string, string, string, number, BigNumber] & {
-            exists: boolean;
-            status: number;
-            ticketCommitment: string;
-            ticketNullifierHash: string;
-            transferTo: string;
-            transferType: number;
-            price: BigNumber;
-          },
-          [boolean, number, string, string, string, number, BigNumber] & {
-            exists: boolean;
-            status: number;
-            ticketCommitment: string;
-            ticketNullifierHash: string;
-            transferTo: string;
-            transferType: number;
-            price: BigNumber;
-          },
-          [boolean, number, string, string, string, number, BigNumber] & {
-            exists: boolean;
-            status: number;
-            ticketCommitment: string;
-            ticketNullifierHash: string;
-            transferTo: string;
-            transferType: number;
-            price: BigNumber;
-          },
-          [boolean, number, string, string, string, number, BigNumber] & {
-            exists: boolean;
-            status: number;
-            ticketCommitment: string;
-            ticketNullifierHash: string;
-            transferTo: string;
-            transferType: number;
-            price: BigNumber;
-          },
-          [boolean, number, string, string, string, number, BigNumber] & {
-            exists: boolean;
-            status: number;
-            ticketCommitment: string;
-            ticketNullifierHash: string;
-            transferTo: string;
-            transferType: number;
-            price: BigNumber;
-          }
-        ]
-      ]
-    >;
-
-    handleTicket(
+    invalidateTicket(
       _proof: [
         BigNumberish,
         BigNumberish,
@@ -559,29 +223,20 @@ export class ZKTickets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    proStaking(overrides?: CallOverrides): Promise<[string]>;
-
     purchaseTicket(
       _ticketedEventIndex: BigNumberish,
       commitment: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    speculativeSaleCounter(
-      arg0: BigNumberish,
-      arg1: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     ticketCommitments(
       arg0: BytesLike,
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, boolean, boolean] & {
+      [string, BigNumber, boolean] & {
         buyer: string;
         ticketedEventIndex: BigNumber;
         used: boolean;
-        transferInitiated: boolean;
       }
     >;
 
@@ -591,13 +246,11 @@ export class ZKTickets extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, string, BigNumber, string, boolean] & {
+      [string, BigNumber, string, BigNumber] & {
         creator: string;
         price: BigNumber;
         eventName: string;
         availableTickets: BigNumber;
-        externalHandler: string;
-        allowSpeculation: boolean;
       }
     >;
 
@@ -610,177 +263,19 @@ export class ZKTickets extends BaseContract {
     ): Promise<[boolean]>;
   };
 
-  acceptRefundRequest(
-    eventIndex: BigNumberish,
-    transferRequestIndex: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  acceptResaleRequest(
-    eventIndex: BigNumberish,
-    transferRequestIndex: BigNumberish,
-    _newCommitment: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  acceptTransfer(
-    eventIndex: BigNumberish,
-    transferRequestIndex: BigNumberish,
-    _newCommitment: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   calculatePurchaseFee(
     purchasePrice: BigNumberish,
     overrides?: CallOverrides
   ): Promise<[BigNumber, BigNumber] & { fee: BigNumber; total: BigNumber }>;
 
-  calculateResaleFee(
-    resalePrice: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [BigNumber, BigNumber, BigNumber] & {
-      singleFee: BigNumber;
-      doubleFee: BigNumber;
-      total: BigNumber;
-    }
-  >;
-
-  cancelTransferRequest(
-    _commitment: BytesLike,
-    _nullifierHash: BytesLike,
-    _proof: [
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish
-    ],
-    eventIndex: BigNumberish,
-    transferRequestIndex: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   createNewTicketedEvent(
     price: BigNumberish,
     eventName: string,
     availableTickets: BigNumberish,
-    externalHandler: string,
-    allowSpeculation: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  createTransferRequest(
-    _commitment: BytesLike,
-    _nullifierHash: BytesLike,
-    _proof: [
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish
-    ],
-    eventIndex: BigNumberish,
-    transferType: BigNumberish,
-    transferTo: string,
-    transferPrice: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  getRequestsByMe(
-    eventIndex: BigNumberish,
-    myAddress: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber[]>;
-
-  getRequestsToMe(
-    eventIndex: BigNumberish,
-    myAddress: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber[]>;
-
-  getTransferRequestsByEventIndex(
-    eventIndex: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    ([boolean, number, string, string, string, number, BigNumber] & {
-      exists: boolean;
-      status: number;
-      ticketCommitment: string;
-      ticketNullifierHash: string;
-      transferTo: string;
-      transferType: number;
-      price: BigNumber;
-    })[]
-  >;
-
-  getTransferRequestsForPagination(
-    eventIndex: BigNumberish,
-    indexes: [
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish
-    ],
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      [boolean, number, string, string, string, number, BigNumber] & {
-        exists: boolean;
-        status: number;
-        ticketCommitment: string;
-        ticketNullifierHash: string;
-        transferTo: string;
-        transferType: number;
-        price: BigNumber;
-      },
-      [boolean, number, string, string, string, number, BigNumber] & {
-        exists: boolean;
-        status: number;
-        ticketCommitment: string;
-        ticketNullifierHash: string;
-        transferTo: string;
-        transferType: number;
-        price: BigNumber;
-      },
-      [boolean, number, string, string, string, number, BigNumber] & {
-        exists: boolean;
-        status: number;
-        ticketCommitment: string;
-        ticketNullifierHash: string;
-        transferTo: string;
-        transferType: number;
-        price: BigNumber;
-      },
-      [boolean, number, string, string, string, number, BigNumber] & {
-        exists: boolean;
-        status: number;
-        ticketCommitment: string;
-        ticketNullifierHash: string;
-        transferTo: string;
-        transferType: number;
-        price: BigNumber;
-      },
-      [boolean, number, string, string, string, number, BigNumber] & {
-        exists: boolean;
-        status: number;
-        ticketCommitment: string;
-        ticketNullifierHash: string;
-        transferTo: string;
-        transferType: number;
-        price: BigNumber;
-      }
-    ]
-  >;
-
-  handleTicket(
+  invalidateTicket(
     _proof: [
       BigNumberish,
       BigNumberish,
@@ -798,29 +293,20 @@ export class ZKTickets extends BaseContract {
 
   nullifierHashes(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
-  proStaking(overrides?: CallOverrides): Promise<string>;
-
   purchaseTicket(
     _ticketedEventIndex: BigNumberish,
     commitment: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  speculativeSaleCounter(
-    arg0: BigNumberish,
-    arg1: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   ticketCommitments(
     arg0: BytesLike,
     overrides?: CallOverrides
   ): Promise<
-    [string, BigNumber, boolean, boolean] & {
+    [string, BigNumber, boolean] & {
       buyer: string;
       ticketedEventIndex: BigNumber;
       used: boolean;
-      transferInitiated: boolean;
     }
   >;
 
@@ -830,13 +316,11 @@ export class ZKTickets extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [string, BigNumber, string, BigNumber, string, boolean] & {
+    [string, BigNumber, string, BigNumber] & {
       creator: string;
       price: BigNumber;
       eventName: string;
       availableTickets: BigNumber;
-      externalHandler: string;
-      allowSpeculation: boolean;
     }
   >;
 
@@ -849,177 +333,19 @@ export class ZKTickets extends BaseContract {
   ): Promise<boolean>;
 
   callStatic: {
-    acceptRefundRequest(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    acceptResaleRequest(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      _newCommitment: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    acceptTransfer(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      _newCommitment: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     calculatePurchaseFee(
       purchasePrice: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber] & { fee: BigNumber; total: BigNumber }>;
 
-    calculateResaleFee(
-      resalePrice: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        singleFee: BigNumber;
-        doubleFee: BigNumber;
-        total: BigNumber;
-      }
-    >;
-
-    cancelTransferRequest(
-      _commitment: BytesLike,
-      _nullifierHash: BytesLike,
-      _proof: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     createNewTicketedEvent(
       price: BigNumberish,
       eventName: string,
       availableTickets: BigNumberish,
-      externalHandler: string,
-      allowSpeculation: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    createTransferRequest(
-      _commitment: BytesLike,
-      _nullifierHash: BytesLike,
-      _proof: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      eventIndex: BigNumberish,
-      transferType: BigNumberish,
-      transferTo: string,
-      transferPrice: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    getRequestsByMe(
-      eventIndex: BigNumberish,
-      myAddress: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
-
-    getRequestsToMe(
-      eventIndex: BigNumberish,
-      myAddress: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
-
-    getTransferRequestsByEventIndex(
-      eventIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      ([boolean, number, string, string, string, number, BigNumber] & {
-        exists: boolean;
-        status: number;
-        ticketCommitment: string;
-        ticketNullifierHash: string;
-        transferTo: string;
-        transferType: number;
-        price: BigNumber;
-      })[]
-    >;
-
-    getTransferRequestsForPagination(
-      eventIndex: BigNumberish,
-      indexes: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [boolean, number, string, string, string, number, BigNumber] & {
-          exists: boolean;
-          status: number;
-          ticketCommitment: string;
-          ticketNullifierHash: string;
-          transferTo: string;
-          transferType: number;
-          price: BigNumber;
-        },
-        [boolean, number, string, string, string, number, BigNumber] & {
-          exists: boolean;
-          status: number;
-          ticketCommitment: string;
-          ticketNullifierHash: string;
-          transferTo: string;
-          transferType: number;
-          price: BigNumber;
-        },
-        [boolean, number, string, string, string, number, BigNumber] & {
-          exists: boolean;
-          status: number;
-          ticketCommitment: string;
-          ticketNullifierHash: string;
-          transferTo: string;
-          transferType: number;
-          price: BigNumber;
-        },
-        [boolean, number, string, string, string, number, BigNumber] & {
-          exists: boolean;
-          status: number;
-          ticketCommitment: string;
-          ticketNullifierHash: string;
-          transferTo: string;
-          transferType: number;
-          price: BigNumber;
-        },
-        [boolean, number, string, string, string, number, BigNumber] & {
-          exists: boolean;
-          status: number;
-          ticketCommitment: string;
-          ticketNullifierHash: string;
-          transferTo: string;
-          transferType: number;
-          price: BigNumber;
-        }
-      ]
-    >;
-
-    handleTicket(
+    invalidateTicket(
       _proof: [
         BigNumberish,
         BigNumberish,
@@ -1040,29 +366,20 @@ export class ZKTickets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    proStaking(overrides?: CallOverrides): Promise<string>;
-
     purchaseTicket(
       _ticketedEventIndex: BigNumberish,
       commitment: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    speculativeSaleCounter(
-      arg0: BigNumberish,
-      arg1: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     ticketCommitments(
       arg0: BytesLike,
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, boolean, boolean] & {
+      [string, BigNumber, boolean] & {
         buyer: string;
         ticketedEventIndex: BigNumber;
         used: boolean;
-        transferInitiated: boolean;
       }
     >;
 
@@ -1072,13 +389,11 @@ export class ZKTickets extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, string, BigNumber, string, boolean] & {
+      [string, BigNumber, string, BigNumber] & {
         creator: string;
         price: BigNumber;
         eventName: string;
         availableTickets: BigNumber;
-        externalHandler: string;
-        allowSpeculation: boolean;
       }
     >;
 
@@ -1115,196 +430,22 @@ export class ZKTickets extends BaseContract {
     TicketPurchased(
       eventIndex?: null
     ): TypedEventFilter<[BigNumber], { eventIndex: BigNumber }>;
-
-    "TicketRefundComplete(uint256,uint256)"(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    TicketRefundComplete(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    "TicketResaleComplete(uint256,uint256)"(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    TicketResaleComplete(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    "TicketTransferComplete(uint256,uint256)"(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    TicketTransferComplete(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    "TicketTransferRequestCancelled(uint256,uint256)"(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    TicketTransferRequestCancelled(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    "TicketTransferRequestCreated(uint256,uint256)"(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
-
-    TicketTransferRequestCreated(
-      eventIndex?: null,
-      requestIndex?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { eventIndex: BigNumber; requestIndex: BigNumber }
-    >;
   };
 
   estimateGas: {
-    acceptRefundRequest(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    acceptResaleRequest(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      _newCommitment: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    acceptTransfer(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      _newCommitment: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     calculatePurchaseFee(
       purchasePrice: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    calculateResaleFee(
-      resalePrice: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    cancelTransferRequest(
-      _commitment: BytesLike,
-      _nullifierHash: BytesLike,
-      _proof: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     createNewTicketedEvent(
       price: BigNumberish,
       eventName: string,
       availableTickets: BigNumberish,
-      externalHandler: string,
-      allowSpeculation: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    createTransferRequest(
-      _commitment: BytesLike,
-      _nullifierHash: BytesLike,
-      _proof: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      eventIndex: BigNumberish,
-      transferType: BigNumberish,
-      transferTo: string,
-      transferPrice: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    getRequestsByMe(
-      eventIndex: BigNumberish,
-      myAddress: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getRequestsToMe(
-      eventIndex: BigNumberish,
-      myAddress: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTransferRequestsByEventIndex(
-      eventIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTransferRequestsForPagination(
-      eventIndex: BigNumberish,
-      indexes: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    handleTicket(
+    invalidateTicket(
       _proof: [
         BigNumberish,
         BigNumberish,
@@ -1325,18 +466,10 @@ export class ZKTickets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    proStaking(overrides?: CallOverrides): Promise<BigNumber>;
-
     purchaseTicket(
       _ticketedEventIndex: BigNumberish,
       commitment: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    speculativeSaleCounter(
-      arg0: BigNumberish,
-      arg1: string,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     ticketCommitments(
@@ -1361,113 +494,19 @@ export class ZKTickets extends BaseContract {
   };
 
   populateTransaction: {
-    acceptRefundRequest(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    acceptResaleRequest(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      _newCommitment: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    acceptTransfer(
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      _newCommitment: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     calculatePurchaseFee(
       purchasePrice: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    calculateResaleFee(
-      resalePrice: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    cancelTransferRequest(
-      _commitment: BytesLike,
-      _nullifierHash: BytesLike,
-      _proof: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      eventIndex: BigNumberish,
-      transferRequestIndex: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     createNewTicketedEvent(
       price: BigNumberish,
       eventName: string,
       availableTickets: BigNumberish,
-      externalHandler: string,
-      allowSpeculation: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    createTransferRequest(
-      _commitment: BytesLike,
-      _nullifierHash: BytesLike,
-      _proof: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      eventIndex: BigNumberish,
-      transferType: BigNumberish,
-      transferTo: string,
-      transferPrice: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    getRequestsByMe(
-      eventIndex: BigNumberish,
-      myAddress: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getRequestsToMe(
-      eventIndex: BigNumberish,
-      myAddress: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getTransferRequestsByEventIndex(
-      eventIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getTransferRequestsForPagination(
-      eventIndex: BigNumberish,
-      indexes: [
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish,
-        BigNumberish
-      ],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    handleTicket(
+    invalidateTicket(
       _proof: [
         BigNumberish,
         BigNumberish,
@@ -1488,18 +527,10 @@ export class ZKTickets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    proStaking(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     purchaseTicket(
       _ticketedEventIndex: BigNumberish,
       commitment: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    speculativeSaleCounter(
-      arg0: BigNumberish,
-      arg1: string,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     ticketCommitments(

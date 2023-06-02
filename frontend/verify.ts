@@ -9,8 +9,7 @@ const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
 const eventContainer = document.getElementById("createEventFormContainer") as HTMLElement;
 const ticketCodeInput = document.getElementById("ticketCodeInput") as HTMLInputElement;
 const validateTicketButton = document.getElementById("validateTicketButton") as HTMLButtonElement;
-const invalidateTicketContainer = document.getElementById("invalidateTicketContainer") as HTMLElement;
-const invalidateTicketButton = document.getElementById("invalidateTicketButton") as HTMLButtonElement;
+const ticketValidContainer = document.getElementById("ticketValidContainer") as HTMLElement;
 
 const enterTheTicketCodeInfoRow = document.getElementById("enterTheTicketCodeInfoRow") as HTMLElement;
 const ticketCodeInputTable = document.getElementById("ticketCodeInputTable") as HTMLElement;
@@ -21,7 +20,7 @@ const stopScanningButton = document.getElementById("stopScanningButton") as HTML
 
 const readerContainer = document.getElementById("readerContainer") as HTMLElement;
 
-const invalidateBackButton = document.getElementById("invalidateBackButton") as HTMLButtonElement;
+const validateBackButton = document.getElementById("validateBackButton") as HTMLButtonElement;
 
 
 const renderScanner = () => {
@@ -42,12 +41,12 @@ const renderStopScan = () => {
 
 const renderTicketValid = () => {
     eventContainer.classList.add("hide");
-    invalidateTicketContainer.classList.remove("hide");
+    ticketValidContainer.classList.remove("hide");
 }
 
 const renderTicketValidBack = () => {
     eventContainer.classList.remove("hide");
-    invalidateTicketContainer.classList.add("hide");
+    ticketValidContainer.classList.add("hide");
 }
 
 (async () => {
@@ -85,8 +84,8 @@ validateTicketButton.onclick = async function () {
         // If the ticket is valid I display TICKET VALID!
         // Then a button to invalidate it!
         eventContainer.classList.add("hide");
-        invalidateTicketContainer.classList.remove("hide");
-        invalidateBackButton.onclick = async function () {
+        ticketValidContainer.classList.remove("hide");
+        validateBackButton.onclick = async function () {
             // If the back button is pressed, I empty the input field
             // Then I navigate back
             ticketCodeInput.value = "";
@@ -117,7 +116,7 @@ validateTicketButton.onclick = async function () {
             ticketCodeInput.value = scannedNote;
             renderTicketValid();
 
-            invalidateBackButton.onclick = async function () {
+            validateBackButton.onclick = async function () {
                 // If the back button is pressed, I empty the input field
                 // Then I navigate back
                 ticketCodeInput.value = "";
@@ -134,42 +133,6 @@ validateTicketButton.onclick = async function () {
         stopScanningButton.onclick = async function () {
             await stopScanning(qrScanner).then(() => {
                 renderStopScan();
-            })
-        }
-    }
-}
-
-invalidateTicketButton.onclick = async function () {
-    const enteredValue = ticketCodeInput.value;
-    const note = await parseNote(enteredValue).catch(err => {
-        handleError("Invalid Ticket");
-    });
-    if (!note) {
-        return;
-    }
-    const proof = await generateProof(note.cryptoNote);
-    // Invalidate the Ticket
-    const switched = await onboardOrSwitchNetwork(handleError);
-    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
-
-    if (switched) {
-        const provider = getWeb3Provider();
-        const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
-            handleError("Unable to connect to the network")
-        })
-
-        const tx = await handleTicket(contract, proof, toNoteHex(note.cryptoNote.nullifierHash), toNoteHex(note.cryptoNote.commitment)).catch(err => {
-            console.log(err);
-            handleError("Unable to dispatch transaction")
-        });
-
-        if (tx) {
-            await tx.wait().then(async (receipt) => {
-                if (receipt.status === 1) {
-                    window.location.reload();
-                } else {
-                    handleError("Transaction Failed")
-                }
             })
         }
     }
