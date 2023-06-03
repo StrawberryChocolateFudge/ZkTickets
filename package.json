@@ -4,8 +4,8 @@
   "description": "This is a ZKP based ticketing platform built with Circom, SnarkJS and Solidity and deployed on Bittorrent Chain",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "dev": "parcel frontend/index.html frontend/tickets.html frontend/handleTicket.html frontend/manageTickets.html",
-    "build": "parcel build frontend/index.html frontend/tickets.html frontend/handleTicket.html frontend/manageTickets.html && npm run copy",
+    "dev": "parcel frontend/index.html frontend/verify.html",
+    "build": "parcel build frontend/index.html frontend/verify.html  && npm run copy",
     "copy": "sh copyToDist.sh"
   },
   "devDependencies": {
@@ -64,6 +64,7 @@
     "ethers": "^5.7.2",
     "ffjavascript": "^0.2.57",
     "hardhat-circom": "^3.3.1",
+    "inline-source-cli": "^2.0.0",
     "jspdf": "^2.5.1",
     "qr-scanner": "^1.4.2",
     "snarkjs": "^0.6.1"
