@@ -22,7 +22,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 
 import "./tasks/deploy";
 import "./tasks/zkpVerifierTestnet";
-
+import "./tasks/fetchevents";
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
