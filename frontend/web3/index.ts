@@ -2,13 +2,10 @@ import MetaMaskOnboarding from "@metamask/onboarding";
 import { BigNumber, ethers } from "ethers";
 import { CryptoNote, toNoteHex } from "../../lib/crypto";
 
-export const BTTTOKENCONTRACTADDRESS = "0xe48179BaB24c62E48eec1C73f8FB25CBb2B8E635";
-export const BTTPROSTAKINGADDRESS = "0x26B7E178CE20bf43ce8fa3aB945B2B65088dC963";
-export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0x3E6F7e33F99d76803365184a0a83B473A75e425d"; // Updated address
+export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0x04ce7D262c474A2d55589dCE8DCe23A9678c35E3"; // Updated address
 export const BTTTESTNETID = "0x405";
 export const BTTTESTNETRPCURL = "https://pre-rpc.bt.io/";
 
-export const BTTTESTNETEVENTWARNINGS = "0x44930bCdA63307ce111804D858fAE487b36A599a";
 
 export const TRONZKEVMTESTNET = {
     name: "TRON zkEVM Testnet",
@@ -68,35 +65,6 @@ export function getNetworkFromSubdomain() {
         default:
             // Fall back on ZkTron for this branch of development
             return bttRes;
-    }
-}
-
-export function getStakingContractsFromSubdomain() {
-    const host = window.location.host;
-    const subdomain = host.split(".")[0];
-
-    switch (subdomain) {
-        case "btt":
-            return [BTTPROSTAKINGADDRESS, BTTTOKENCONTRACTADDRESS];
-        case "zktron":
-            return [TRONZKEVMTESTNET.PROSTAKINGADDRESS, TRONZKEVMTESTNET.TOKENADDRESS]
-        default:
-            // Fallback to btt
-            return [BTTPROSTAKINGADDRESS, BTTTOKENCONTRACTADDRESS]//[TRONZKEVMTESTNET.PROSTAKINGADDRESS, TRONZKEVMTESTNET.TOKENADDRESS];
-    }
-}
-
-export function getEventWarningsFromSubdomain() {
-    const host = window.location.host;
-    const subdomain = host.split(".")[0];
-
-    switch (subdomain) {
-        case "btt":
-            return BTTTESTNETEVENTWARNINGS;
-        case "zktron":
-            return TRONZKEVMTESTNET.EVENTWARNING
-        default:
-            return BTTTESTNETEVENTWARNINGS
     }
 }
 
@@ -270,8 +238,8 @@ export async function getContract(provider: any, at: string, abiPath: string): P
     return new ethers.Contract(at, artifact.abi, signer);
 }
 
-export async function createNewTicketedEvent(zktickets: any, price: string, eventName: string, availableTickets: string, externalHandler: string, allowSpeculation: boolean) {
-    return await zktickets.createNewTicketedEvent(ethers.utils.parseEther(price), eventName, availableTickets, externalHandler, allowSpeculation);
+export async function createNewTicketedEvent(zktickets: any, price: string, eventName: string, availableTickets: string) {
+    return await zktickets.createNewTicketedEvent(ethers.utils.parseEther(price), eventName, availableTickets);
 }
 
 export async function getTicketedEventIndex(zktickets: any) {
@@ -287,7 +255,7 @@ export async function purchaseTicket(zktickets: any, value: string, _ticketedEve
 }
 
 export async function handleTicket(zktickets: any, proof: any, _nullifierHash: string, _commitment: string) {
-    return await zktickets.handleTicket(proof, _nullifierHash, _commitment);
+    return await zktickets.invalidateTicket(proof, _nullifierHash, _commitment);
 }
 
 export async function verifyTicket(zktickets: any, _commitment: string, _nullifierHash: string) {
@@ -302,160 +270,11 @@ export async function calculateResaleFee(zktickets: any, resalePrice: BigNumber)
     return await zktickets.calculateResaleFee(resalePrice);
 }
 
-export async function getTransferRequestsByEventIndex(zktickets: any, eventIndex: string) {
-    return await zktickets.getTransferRequestsByEventIndex(eventIndex);
-}
-export async function speculativeSaleCounter(zktickets: any, eventIndex: string, address: string) {
-    return await zktickets.speculativeSaleCounter(eventIndex, address);
-}
 export async function ticketCommitments(zktickets: any, _commitment: string) {
     return await zktickets.ticketCommitments(_commitment);
 }
 
-export async function getRequestsByMe(zktickets: any, eventIndex: string, myAddress: string) {
-    return await zktickets.getRequestsByMe(eventIndex, myAddress);
-}
 
-export async function getRequestsToMe(zktickets: any, eventIndex: string, myAddress: string) {
-    return await zktickets.getRequestsToMe(eventIndex, myAddress);
-}
-
-export async function getTransferRequestsForPagination(zktickets: any, eventIndex: string, indexes: Array<number>) {
-    return await zktickets.getTransferRequestsForPagination(eventIndex, indexes);
-}
-
-async function prepareAndFetchRequests(zktickets: any, eventIndex: string, indexes: Array<number>) {
-    if (indexes.length === 0) {
-        return [];
-    }
-    // So the paging function expects 5 indexes and will return me 5 indexes 
-    // however many times I don't have 5 so I pad it and keep track of the padding
-    let addedPadding = 0;
-    let indexesToFetch: Array<number> = [];
-    for (let i = 0; i < 5; i++) {
-        if (indexes.length < i + 1) {
-            addedPadding++;
-            indexesToFetch.push(0);
-        } else {
-            indexesToFetch.push(indexes[i]);
-        }
-    }
-    const requests = await getTransferRequestsForPagination(zktickets, eventIndex, indexesToFetch);
-    let returnedRequests: Array<any> = [];
-    //Now I remove the padded values from the list
-    for (let i = 0; i < requests.length - addedPadding; i++) {
-        returnedRequests.push(requests[i]);
-    }
-    return returnedRequests;
-}
-
-
-export async function requestFetcher(zktickets: any, eventindex: string, indexes: Array<number>) {
-    // I need to separate all the indexes an create chunks of 5 and single requests
-    // And these will be fed to the prepareAndFetchRequests 
-
-    // So I want to create a list of arrays with the requests in them
-    let fiveIndexArrayList: Array<Array<number>> = []
-    let arrayBuilder: Array<number> = [];
-
-    for (let i = 0; i < indexes.length; i++) {
-        // I push the index into the array builder
-        arrayBuilder.push(indexes[i]);
-
-        // then if the indexes are over or arraybuilder length is 5 I push it into fixeIndexArrayList
-        // and empty the array builder
-        if (arrayBuilder.length === 5 || i + 1 === indexes.length) {
-            fiveIndexArrayList.push(arrayBuilder);
-            arrayBuilder = [];
-        }
-    }
-    let requests: Array<any> = [];
-
-    // Now I can loop over the fiveIndexArrayList to prepare and fetch requests!
-    for (let i = 0; i < fiveIndexArrayList.length; i++) {
-        let sortedIndexes = fiveIndexArrayList[i];
-        const returnedRequests = await prepareAndFetchRequests(zktickets, eventindex, sortedIndexes);
-        requests = requests.concat(returnedRequests);
-    }
-    return requests;
-}
-
-export async function createTransferRequest(
-    zktickets: any,
-    _commitment: string,
-    _nullifierHash: string,
-    _proof: any,
-    eventIndex: string,
-    transferType: number,
-    transferTo: string,
-    transferPrice: BigNumber) {
-    return await zktickets.createTransferRequest(
-        _commitment,
-        _nullifierHash,
-        _proof,
-        eventIndex,
-        transferType,
-        transferTo,
-        transferPrice
-    )
-}
-
-export async function cancelTransferRequest(
-    zktickets: any,
-    _commitment: string,
-    _nullifierHash: string,
-    _proof: any,
-    eventIndex: string,
-    transferRequestIndex: string
-) {
-    return await zktickets.cancelTransferRequest(
-        _commitment,
-        _nullifierHash,
-        _proof,
-        eventIndex,
-        transferRequestIndex
-    );
-}
-
-export async function acceptTransfer(
-    zktickets: any,
-    eventIndex: string,
-    transferRequestIndex: string,
-    _newCommitment: string
-) {
-    return await zktickets.acceptTransfer(
-        eventIndex,
-        transferRequestIndex,
-        _newCommitment);
-}
-
-export async function acceptRefundRequest(
-    zktickets: any,
-    eventIndex: string,
-    transferRequestIndex: string,
-    value: BigNumber
-) {
-    return await zktickets.acceptRefundRequest(
-        eventIndex,
-        transferRequestIndex,
-        { value }
-    );
-}
-
-export async function acceptResaleRequest(
-    zktickets: any,
-    eventIndex: string,
-    transferRequestIndex: string,
-    newCommitment: string,
-    value: BigNumber
-) {
-    return await zktickets.acceptResaleRequest(
-        eventIndex,
-        transferRequestIndex,
-        newCommitment,
-        { value }
-    );
-}
 
 
 
@@ -532,77 +351,4 @@ export async function walletRPCProviderVerifyTicket(index: string, note: CryptoN
         });
         return ticketValid;
     }
-}
-
-
-export async function balanceOf(ticketPro: any, address: string) {
-    return await ticketPro.balanceOf(address);
-}
-
-export async function approveSpend(ticketPro: any, spender: string, amount: BigNumber) {
-    return await ticketPro.approve(spender, amount);
-}
-
-export async function stake(proStaking: any, amount: BigNumber) {
-    return await proStaking.stake(amount);
-}
-
-export async function unstake(proStaking: any, amount: BigNumber) {
-    return await proStaking.unstake(amount);
-}
-
-export async function stakers(proStaking: any, address: string) {
-    return await proStaking.stakers(address);
-}
-
-export async function totalStaked(proStaking: any) {
-    return await proStaking.totalStaked();
-}
-
-export async function stakingBlocks(proStaking: any) {
-    return await proStaking.stakingBlocks();
-}
-
-export async function stakeUnit(proStaking: any) {
-    return await proStaking.stakeUnit();
-}
-
-// Some helper functions to filter transaction requests
-
-export function hashData(data: string) {
-    return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(data));
-}
-
-export function requestHashIdentifier(
-    contractAddress: string,
-    userAddress: string,
-    eventIndex: string,
-    requestIndex: string) {
-    const data = `${contractAddress}${userAddress}${eventIndex}${requestIndex}`;
-    return hashData(data);
-}
-
-// Event warnings functions
-
-export enum WarningLevel {
-    NONE = 0,
-    LOW = 1,
-    MEDIUM = 2,
-    HIGH = 3
-}
-
-export async function createWarning(eventWarnings: any, level: WarningLevel, message: string, about: string) {
-    return await eventWarnings.createWarning(level, message, about);
-}
-
-export async function editWarning(eventWarnings: any, level: WarningLevel, message: string, about: string, arrayIndex: number) {
-    return await eventWarnings.editWarning(level, message, about, arrayIndex);
-}
-
-export async function getWarnings(eventWarnings: any, about: string) {
-    return await eventWarnings.getWarnings(about);
-}
-
-export async function getWarningCount(eventWarnings: any, about: string) {
-    return await eventWarnings.warningCount(about);
 }

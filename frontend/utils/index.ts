@@ -1,6 +1,6 @@
 import Decimal from "decimal.js";
 import { BigNumber } from "ethers";
-import { formatEther, getCurrencyFromNetId, getNetworkFromSubdomain, requestHashIdentifier, TransferStatus, TransferType, ZEROADDRESS } from "../web3";
+import { formatEther, ZEROADDRESS } from "../web3";
 
 export const appURL = window.location.origin;
 
@@ -68,92 +68,6 @@ export function appendOptionsElementsTo(selectEl: HTMLElement, elements: Array<s
     }
 }
 
-export function renderRequestRows(requestIndexes, requestResults, appendTo: HTMLElement, renderCallback, eventName) {
-    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
-
-    const currency = getCurrencyFromNetId(NETID);
-    appendTo.innerHTML = "";
-    if (requestIndexes.length === 0) {
-        appendTo.appendChild(renderNothingToShow())
-    } else {
-        for (let i = 0; i < requestIndexes.length; i++) {
-            const tr = renderCallback(requestResults[i], requestIndexes[i], currency, eventName) as HTMLElement;
-            tr.classList.add("shadowedTr");
-            if (tr.children.length === 0) {
-                // This is an edgec-case that occurs sometimes...
-                return appendTo.appendChild(renderNothingToShow())
-            } else {
-                appendTo.appendChild(tr);
-            }
-        }
-    }
-}
-
-export function createRequestsByMeTR(transferRequest, requestIndex, currency, eventName) {
-    const el = document.createElement("tr");
-    const cancelEl = document.createElement("td");
-
-    let price = formatEther(transferRequest.price);
-
-    const cancelButton = `<button class="button-53 cancelButton" data-eventname="${eventName}" data-requestindex="${requestIndex}"> Cancel ${price} ${currency} ${getTransferType(transferRequest.transferType)} </button>`;
-
-    if (transferRequest.status === TransferStatus.INITIATED) {
-        cancelEl.innerHTML = cancelButton;
-        el.appendChild(cancelEl);
-    }
-
-
-    return el;
-}
-function renderNothingToShow() {
-    const el = document.createElement("tr");
-    el.classList.add("shadowedTr");
-    const td = document.createElement("td");
-    td.innerHTML = `<div class="centered-row"><h2>NOTHING TO SHOW :) </h2></div>`
-    el.appendChild(td);
-    return el;
-}
-
-export function createRequestsToMeTR(transferRequest, requestIndex, currency, eventName) {
-
-    const el = document.createElement("tr");
-    const acceptEl = document.createElement("td");
-
-    let originalPrice = formatEther(transferRequest.price);
-    let price = originalPrice
-    if (transferRequest.transferType === TransferType.RESALE) {
-        price = calculatePriceFee(transferRequest.price);
-    }
-
-    const acceptButton = `<button class="button-53 acceptButton" data-eventname="${eventName}" data-type="${transferRequest.transferType}" data-price="${originalPrice}" data-requestindex="${requestIndex}">Accept ${price} ${currency} ${getTransferType(transferRequest.transferType)}</button>`;
-
-    if (transferRequest.status === TransferStatus.INITIATED) {
-        acceptEl.innerHTML = acceptButton;
-        el.appendChild(acceptEl);
-
-    }
-
-
-    return el;
-}
-
-export function createOpenRequestsTR(transferRequest, requestIndex, currency, eventName) {
-
-    const el = document.createElement("tr");
-    const acceptEl = document.createElement("td");
-
-    let originalPrice = formatEther(transferRequest.price);
-    let price = calculatePriceFee(transferRequest.price);
-
-    if (transferRequest.status === TransferStatus.INITIATED) {
-        acceptEl.innerHTML = `<button class="button-53 buyButton" data-eventname="${eventName}" data-price="${originalPrice}" data-requestindex="${requestIndex}">Buy for ${price} ${currency}</button>`
-        el.appendChild(acceptEl);
-
-    }
-
-    return el;
-
-}
 
 function calculatePriceFee(price) {
     const resalePrice = new Decimal(formatEther(price));
@@ -166,31 +80,6 @@ function getPriceWithoutFee(price, currency) {
     return `<span class="initialFont">${formatEther(price)} ${currency}</span>`
 }
 
-function getTransferRequestStatus(status) {
-    switch (status) {
-        case TransferStatus.INITIATED:
-            return "Initiated";
-        case TransferStatus.CANCELLED:
-            return "Cancelled";
-        case TransferStatus.FINISHED:
-            return "Finished";
-        default:
-            return ""
-    }
-}
-
-function getTransferType(transferType) {
-    switch (transferType) {
-        case TransferType.TRANSFER:
-            return `Transfer`;
-        case TransferType.RESALE:
-            return `Resale`;
-        case TransferType.REFUND:
-            return `Refund`;
-        default:
-            return "";
-    }
-}
 
 function getTransferTo(address) {
     if (address === ZEROADDRESS) {
@@ -267,60 +156,4 @@ export function getCurrentPageRequestIndexes(currentPage: number, list: Array<Bi
         }
     }
     return elements;
-}
-
-
-export function getPageRequestIndexesToFetch(
-    list: Array<number>,
-    userAddress: string,
-    contractAddress: string,
-    eventIndex: string) {
-
-    // I need to hash the userAddress with the contract address and the id of the request and use it as key to save a boolean in local storage
-    // to filter out page request transactions that are used already
-
-    let filteredIndexes: Array<number> = [];
-
-    for (let i = 0; i < list.length; i++) {
-        const requestHashId = requestHashIdentifier(
-            contractAddress,
-            userAddress,
-            eventIndex,
-            list[i].toString())
-        const dontfetch = checkRequestHashIdShouldFetchInLocalStorage(requestHashId);
-        if (!dontfetch) {
-            filteredIndexes.push(list[i]);
-        }
-    }
-    return filteredIndexes;
-}
-
-export function setPageRequestIndexesToNotFetch(
-    indexes: Array<number>,
-    requests: Array<any>,
-    contractAddress: string,
-    userAddress: string,
-    eventIndex: string) {
-    for (let i = 0; i < indexes.length; i++) {
-        if (requests[i].status !== 0) {
-            const requestHashId = requestHashIdentifier(
-                contractAddress,
-                userAddress,
-                eventIndex,
-                indexes[i].toString())
-            setRequestHashIdInLocalStorage(requestHashId);
-        }
-    }
-}
-
-export function checkRequestHashIdShouldFetchInLocalStorage(requestHashId: string): boolean {
-    const shouldFetch = localStorage.getItem(requestHashId);
-    if (shouldFetch === "dontfetch") {
-        return true;
-    }
-    return false;
-}
-
-export function setRequestHashIdInLocalStorage(requestHashId: string) {
-    localStorage.setItem(requestHashId, "dontfetch");
 }
