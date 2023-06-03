@@ -40,8 +40,17 @@ contract ZKTickets {
         contractCreator = payable(msg.sender);
     }
 
-    event NewTicketedEventCreated(uint256 index);
-    event TicketPurchased(uint256 eventIndex);
+    event NewTicketedEventCreated(
+        address indexed creator,
+        uint256 indexed index,
+        string name,
+        uint256 availableTickets
+    );
+    event TicketPurchased(
+        uint256 indexed eventIndex,
+        address buyer,
+        bytes32 commitment
+    );
     event TicketInvalidated(bytes32 commitment);
 
     mapping(uint256 => TicketedEvents) public ticketedEvents; // The events that are ticketed
@@ -75,7 +84,12 @@ contract ZKTickets {
         ticketedEvents[ticketedEventIndex].price = price;
         ticketedEvents[ticketedEventIndex].eventName = eventName;
         ticketedEvents[ticketedEventIndex].availableTickets = availableTickets;
-        emit NewTicketedEventCreated(ticketedEventIndex);
+        emit NewTicketedEventCreated(
+            msg.sender,
+            ticketedEventIndex,
+            eventName,
+            availableTickets
+        );
     }
 
     function purchaseTicket(
@@ -110,7 +124,7 @@ contract ZKTickets {
         // Forward the fee to the creator of the contract
         Address.sendValue(contractCreator, fee);
 
-        emit TicketPurchased(_ticketedEventIndex);
+        emit TicketPurchased(_ticketedEventIndex, msg.sender, commitment);
     }
 
     // Handle the ticket This will invalidate it.

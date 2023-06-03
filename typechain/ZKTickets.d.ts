@@ -124,9 +124,9 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "NewTicketedEventCreated(uint256)": EventFragment;
+    "NewTicketedEventCreated(address,uint256,string,uint256)": EventFragment;
     "TicketInvalidated(bytes32)": EventFragment;
-    "TicketPurchased(uint256)": EventFragment;
+    "TicketPurchased(uint256,address,bytes32)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "NewTicketedEventCreated"): EventFragment;
@@ -135,7 +135,12 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
 }
 
 export type NewTicketedEventCreatedEvent = TypedEvent<
-  [BigNumber] & { index: BigNumber }
+  [string, BigNumber, string, BigNumber] & {
+    creator: string;
+    index: BigNumber;
+    name: string;
+    availableTickets: BigNumber;
+  }
 >;
 
 export type TicketInvalidatedEvent = TypedEvent<
@@ -143,7 +148,11 @@ export type TicketInvalidatedEvent = TypedEvent<
 >;
 
 export type TicketPurchasedEvent = TypedEvent<
-  [BigNumber] & { eventIndex: BigNumber }
+  [BigNumber, string, string] & {
+    eventIndex: BigNumber;
+    buyer: string;
+    commitment: string;
+  }
 >;
 
 export class ZKTickets extends BaseContract {
@@ -407,13 +416,35 @@ export class ZKTickets extends BaseContract {
   };
 
   filters: {
-    "NewTicketedEventCreated(uint256)"(
-      index?: null
-    ): TypedEventFilter<[BigNumber], { index: BigNumber }>;
+    "NewTicketedEventCreated(address,uint256,string,uint256)"(
+      creator?: string | null,
+      index?: BigNumberish | null,
+      name?: null,
+      availableTickets?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, BigNumber],
+      {
+        creator: string;
+        index: BigNumber;
+        name: string;
+        availableTickets: BigNumber;
+      }
+    >;
 
     NewTicketedEventCreated(
-      index?: null
-    ): TypedEventFilter<[BigNumber], { index: BigNumber }>;
+      creator?: string | null,
+      index?: BigNumberish | null,
+      name?: null,
+      availableTickets?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, BigNumber],
+      {
+        creator: string;
+        index: BigNumber;
+        name: string;
+        availableTickets: BigNumber;
+      }
+    >;
 
     "TicketInvalidated(bytes32)"(
       commitment?: null
@@ -423,13 +454,23 @@ export class ZKTickets extends BaseContract {
       commitment?: null
     ): TypedEventFilter<[string], { commitment: string }>;
 
-    "TicketPurchased(uint256)"(
-      eventIndex?: null
-    ): TypedEventFilter<[BigNumber], { eventIndex: BigNumber }>;
+    "TicketPurchased(uint256,address,bytes32)"(
+      eventIndex?: BigNumberish | null,
+      buyer?: null,
+      commitment?: null
+    ): TypedEventFilter<
+      [BigNumber, string, string],
+      { eventIndex: BigNumber; buyer: string; commitment: string }
+    >;
 
     TicketPurchased(
-      eventIndex?: null
-    ): TypedEventFilter<[BigNumber], { eventIndex: BigNumber }>;
+      eventIndex?: BigNumberish | null,
+      buyer?: null,
+      commitment?: null
+    ): TypedEventFilter<
+      [BigNumber, string, string],
+      { eventIndex: BigNumber; buyer: string; commitment: string }
+    >;
   };
 
   estimateGas: {
