@@ -814,3 +814,8 @@ h2, h6 {
         transform: rotateY(3600deg);
     }
 }
+
+
+.scan-region-highlight-svg {
+    stroke: white !important;
+}
