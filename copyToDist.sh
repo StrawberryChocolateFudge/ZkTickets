@@ -3,7 +3,7 @@ cp abis/ProStaking.json dist/ProStaking.json
 cp abis/TicketPro.json dist/TicketPro.json
 cp abis/EventWarnings.json dist/EventWarnings.json
 
-cp circuits/Ticket/ticket_0001.zkey dist/ticket_0001.zkey
+cp circuits/Ticket/ticket_0001.zkey dist/ticket_final.zkey
 cp circuits/Ticket/ticket_js/ticket.wasm dist/ticket.wasm
 
 cp frontend/images/bttLogo.svg dist/bttLogo.svg
