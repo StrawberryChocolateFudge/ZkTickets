@@ -43,7 +43,6 @@ export const nQueryString = () => {
             return searchParams.get("n") as string;
         }
     }
-    handleError("Missing network");
     return false;
 }
 
