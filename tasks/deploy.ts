@@ -28,5 +28,5 @@ task("deploy", "Deploy the contracts").setAction(main);
 // npx hardhat deploy --network <network>
 
 // /?BTT DONAU LATEST!
-// Verifier: 0x0c3E7E628EE651480Efb599dA7D067f684Bd1C12
-// zktickets: 0x04ce7D262c474A2d55589dCE8DCe23A9678c35E3
+// Verifier: 0xdCA920E77742a4CEa85D3fB1aAe9E148eA41Fe7F
+// zktickets: 0x026E01a71C9F0d40a67BbC898e7715424c0cf405
