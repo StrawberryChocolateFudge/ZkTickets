@@ -3,7 +3,7 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex, createNewImgElement, appendTooltip } from "./utils";
-import { BTTTESTNETID, calculatePurchaseFee, formatEther, getContract, getCurrencyFromNetId, getNetworkFromQueryString, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
+import { BTTTESTNETID, calculatePurchaseFee, calculatePurchaseFeeLocal, formatEther, getContract, getCurrencyFromNetId, getJsonProviderEventEmitted, getNetworkFromQueryString, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 
 const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromQueryString();
@@ -12,7 +12,6 @@ const index = getEventIndex();
 const currency = getCurrencyFromNetId(NETID);
 
 const currencyPriceRow = document.getElementById("currencyPriceRow") as HTMLDivElement;
-const accessEventButton = document.getElementById("accessEventButton") as HTMLDivElement;
 
 (
     async () => {
@@ -23,15 +22,12 @@ const accessEventButton = document.getElementById("accessEventButton") as HTMLDi
             const imgEl = createNewImgElement("./tron-trx-logo.svg");
             appendTooltip(currencyPriceRow, imgEl, null);
         }
-        if (!index) {
-            accessEventButton.innerHTML = `Contact An Event Organizer`
-            return;
-        }
-        accessEventButton.innerHTML = `CONNECT`
 
+        setTimeout(async () => {
+            await openEvent();
+        }, 2000);
     })();
 
-const purchaseTicketsSelectorButton = document.getElementById("purchaseTicketsSelectorButton") as HTMLElement;
 const verifyTickets = document.getElementById("verifyTickets") as HTMLElement;
 
 const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
@@ -62,83 +58,46 @@ verifyTickets.onclick = function () {
 }
 
 
-purchaseTicketsSelectorButton.onclick = async function () {
+async function openEvent() {
     if (!index) {
         return;
     }
 
-    const switched = await onboardOrSwitchNetwork(handleError);
+    const event = await getJsonProviderEventEmitted(index, handleError);
 
-    if (switched) {
-
-        const index = getEventIndex();
-        if (!index) {
-            return;
-        }
-
-        welcomeMessage.classList.add("hide");
-        purchaseTicketsSelectorButton.classList.add("hide");
-
-        const provider = getWeb3Provider();
-        const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromQueryString();
-        let errorOccured = false;
-
-        const zktickets = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
-            handleError("Network error");
-            errorOccured = true;
-        })
-
-
-
-        if (errorOccured) {
-            return;
-        }
-        const ticketedEvent = await getTicketedEvents(zktickets, index).catch(err => {
-            handleError("Unable to find the event!");
-            errorOccured = true;
-        })
-
-        if (errorOccured) {
-            return;
-        }
-
-        if (!ticketedEvent) {
-            handleError("Unable to connect to wallet!")
-            errorOccured = true;
-        }
-
-        if (errorOccured) {
-            return;
-        }
-
-        const eventPriceWithFee = await calculatePurchaseFee(zktickets, ticketedEvent.price);
-
-        eventCreator.textContent = ticketedEvent.creator;
-        eventName.textContent = ticketedEvent.eventName.toUpperCase();
-
-        let total = eventPriceWithFee.total as BigNumber;
-
-        if (total.eq(0)) {
-            eventPrice.textContent = "FREE";
-            buyButtonLabel.classList.add("hide")
-        } else {
-            eventPrice.textContent = formatEther(eventPriceWithFee.total);
-            priceInfo.textContent = `${formatEther(ticketedEvent.price)} ${currency} plus 1% Fee!`;
-        }
-
-
-        ticketsLeft.textContent = ticketedEvent.availableTickets;
-
-
-        setTimeout(() => {
-            const eventContainer = document.getElementById("eventContainer") as HTMLElement;
-            eventContainer.classList.remove("hide");
-            welcomeMessage.classList.add("hide");
-            if (ticketedEvent.creator === ZEROADDRESS) {
-                purchaseTicketActionContainer.classList.add("hide")
-            }
-        }, 1000);
+    if (event.length == 0) {
+        handleError("Cant find event at that url!");
+        return;
     }
+    const args = event[0].args;
+
+    const creator = args.creator;
+    const createdEventName = args.name;
+    const price = args.price;
+    const availableTickets = args.availableTickets;
+    const [total, fee] = calculatePurchaseFeeLocal(price);
+
+    welcomeMessage.classList.add("hide");
+
+    eventCreator.textContent = creator;
+    eventName.textContent = createdEventName.toUpperCase();
+
+    if (total.eq(0)) {
+        eventPrice.textContent = "FREE";
+        buyButtonLabel.classList.add("hide")
+    } else {
+        eventPrice.textContent = formatEther(total);
+        priceInfo.textContent = `${formatEther(price)} ${currency} plus 1% Fee!`;
+    }
+
+    ticketsLeft.textContent = availableTickets.toString();
+
+    setTimeout(() => {
+        const eventContainer = document.getElementById("eventContainer") as HTMLElement;
+        eventContainer.classList.remove("hide");
+        welcomeMessage.classList.add("hide");
+    }, 1000);
+
 };
 
 purchaseTicketAction.onclick = async function () {
@@ -189,10 +148,9 @@ purchaseTicketAction.onclick = async function () {
         const noteString = noteDetails[1];
         // Now I Prompt the user to pay with metamask if there are available tickets!        
         const eventPriceWithFee = await calculatePurchaseFee(contract, ticketedEvent.price);
-
         const purchaseTx = await purchaseTicket(contract, eventPriceWithFee.total, index, toNoteHex(details.cryptoNote.commitment))
             .catch(err => {
-                handleError("An Error Occured!")
+                handleError("An Error Occured INSUFFICIENT FUNDS MAYBE")
             });
 
         if (purchaseTx !== undefined) {
