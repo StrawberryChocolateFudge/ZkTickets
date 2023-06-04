@@ -289,7 +289,7 @@
      /* Padding */
      position: fixed;
      /* Sit on top of the screen */
-     z-index: 1;
+     z-index: 200;
      /* Add a z-index if needed */
      /* left: 25%; */
      /* Center the snackbar */
