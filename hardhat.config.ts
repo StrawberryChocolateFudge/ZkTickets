@@ -42,6 +42,12 @@ const config: HardhatUserConfig = {
       accounts:
         process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
     },
+    bttmain: {
+      url: process.env.BTT_MAINNET_API || "",
+      accounts:
+        process.env.KEY_DONAU !== undefined ? [process.env.KEY_DONAU] : [],
+    },
+    
     // zktron: {
     //   url: process.env.ZKTRON || "",
     //   accounts:
