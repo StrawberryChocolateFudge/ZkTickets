@@ -44,7 +44,8 @@ contract ZKTickets {
         address indexed creator,
         uint256 indexed index,
         string name,
-        uint256 availableTickets
+        uint256 availableTickets,
+        uint256 price
     );
     event TicketPurchased(
         uint256 indexed eventIndex,
@@ -88,7 +89,8 @@ contract ZKTickets {
             msg.sender,
             ticketedEventIndex,
             eventName,
-            availableTickets
+            availableTickets,
+            price
         );
     }
 
