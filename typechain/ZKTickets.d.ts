@@ -124,7 +124,7 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "NewTicketedEventCreated(address,uint256,string,uint256)": EventFragment;
+    "NewTicketedEventCreated(address,uint256,string,uint256,uint256)": EventFragment;
     "TicketInvalidated(bytes32)": EventFragment;
     "TicketPurchased(uint256,address,bytes32)": EventFragment;
   };
@@ -135,11 +135,12 @@ interface ZKTicketsInterface extends ethers.utils.Interface {
 }
 
 export type NewTicketedEventCreatedEvent = TypedEvent<
-  [string, BigNumber, string, BigNumber] & {
+  [string, BigNumber, string, BigNumber, BigNumber] & {
     creator: string;
     index: BigNumber;
     name: string;
     availableTickets: BigNumber;
+    price: BigNumber;
   }
 >;
 
@@ -416,18 +417,20 @@ export class ZKTickets extends BaseContract {
   };
 
   filters: {
-    "NewTicketedEventCreated(address,uint256,string,uint256)"(
+    "NewTicketedEventCreated(address,uint256,string,uint256,uint256)"(
       creator?: string | null,
       index?: BigNumberish | null,
       name?: null,
-      availableTickets?: null
+      availableTickets?: null,
+      price?: null
     ): TypedEventFilter<
-      [string, BigNumber, string, BigNumber],
+      [string, BigNumber, string, BigNumber, BigNumber],
       {
         creator: string;
         index: BigNumber;
         name: string;
         availableTickets: BigNumber;
+        price: BigNumber;
       }
     >;
 
@@ -435,14 +438,16 @@ export class ZKTickets extends BaseContract {
       creator?: string | null,
       index?: BigNumberish | null,
       name?: null,
-      availableTickets?: null
+      availableTickets?: null,
+      price?: null
     ): TypedEventFilter<
-      [string, BigNumber, string, BigNumber],
+      [string, BigNumber, string, BigNumber, BigNumber],
       {
         creator: string;
         index: BigNumber;
         name: string;
         availableTickets: BigNumber;
+        price: BigNumber;
       }
     >;
 
