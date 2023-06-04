@@ -271,7 +271,11 @@ export async function ticketCommitments(zktickets: any, _commitment: string) {
     return await zktickets.ticketCommitments(_commitment);
 }
 
-
+export function calculatePurchaseFeeLocal(purchasePrice: BigNumber) {
+    const fee = purchasePrice.div(100);
+    const total = purchasePrice.add(fee);
+    return [total, fee];
+}
 
 
 
@@ -318,6 +322,18 @@ export async function getJsonProviderTicketedEvent(index: string, handleError: C
         handleError("Unable to connect to wallet!")
     }
     return ticketedEvent;
+}
+
+export async function getJsonProviderEventEmitted(index: string, handleError: CallableFunction) {
+    const provider = getJsonRpcProvider();
+    const [contractAddress, networkID, rpcurl] = getNetworkFromQueryString();
+    const contract = await getContract(provider, contractAddress, "ZKTickets.json").catch(err => {
+        handleError("Network error");
+    })
+    const filter = contract.filters.NewTicketedEventCreated(null, index);
+    const res = await contract.queryFilter(filter);
+
+    return res;
 }
 
 export async function JSONRPCProviderVerifyTicket(index: string, note: CryptoNote, handleError: CallableFunction) {
