@@ -3,7 +3,7 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex, createNewImgElement, appendTooltip } from "./utils";
-import { BTTTESTNETID, calculatePurchaseFee, formatEther, getContract, getCurrencyFromNetId, getJsonProviderEventEmitted, getNetworkFromQueryString, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
+import { BTTMAINNET, BTTTESTNETID, calculatePurchaseFee, formatEther, getContract, getCurrencyFromNetId, getJsonProviderEventEmitted, getNetworkFromQueryString, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 
 const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromQueryString();
@@ -21,6 +21,9 @@ const accessEventButton = document.getElementById("accessEventButton") as HTMLDi
             appendTooltip(currencyPriceRow, imgEl, null);
         } else if (NETID === TRONZKEVMTESTNET.chainId) {
             const imgEl = createNewImgElement("./tron-trx-logo.svg");
+            appendTooltip(currencyPriceRow, imgEl, null);
+        } else if (NETID === BTTMAINNET.chainId) {
+            const imgEl = createNewImgElement("./bttLogo.svg");
             appendTooltip(currencyPriceRow, imgEl, null);
         }
         if (!index) {

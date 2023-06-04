@@ -14,33 +14,17 @@ export const TRONZKEVMTESTNET = {
     chainId: "0x31641",
     currency: "TRX",
     ZKTICKETSCONTRACTADDRESS: "0xa578CEA7efd46D990040B67908A2C4213f186265",
-
 }
 
-export const TransferType = {
-    TRANSFER: 0,
-    REFUND: 1,
-    RESALE: 2
+export const BTTMAINNET = {
+    name: "Bittorrent Chain",
+    chainId: "0xc7",
+    rpc: "https://rpc.bittorrentchain.io",
+    currency: "BTT",
+    ZKTICKETSCONTRACTADDRESS: "0xf9C5B7737c0a46bC524F614025640dc375BBD392",
+    explorer: "https://bttcscan.com/"
 }
 
-export function getTransferType(from: string) {
-    switch (from) {
-        case "Transfer":
-            return TransferType.TRANSFER
-        case "Refund":
-            return TransferType.REFUND;
-        case 'Resale':
-            return TransferType.RESALE;
-        default:
-            return 0;
-    }
-}
-
-export const TransferStatus = {
-    INITIATED: 0,
-    CANCELLED: 1,
-    FINISHED: 2
-}
 
 export function getNetworkFromQueryString() {
     // The application is deployed on different networks
@@ -49,17 +33,21 @@ export function getNetworkFromQueryString() {
 
     const n = nQueryString();
 
-    const bttRes = [BTTTESTNETZKTICKETSCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
+    const bttTestnetRes = [BTTTESTNETZKTICKETSCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
 
     const zktron = [TRONZKEVMTESTNET.ZKTICKETSCONTRACTADDRESS, TRONZKEVMTESTNET.chainId, TRONZKEVMTESTNET.rpc[0]]
 
+    const btt = [BTTMAINNET.ZKTICKETSCONTRACTADDRESS, BTTMAINNET.chainId, BTTMAINNET.rpc[0]]
+
     switch (n) {
-        case "btt":
-            return bttRes;
+        case "btttestnet":
+            return bttTestnetRes;
         case "zktron":
             return zktron;
+        case "btt":
+            return btt;
         default:
-            return bttRes;
+            return bttTestnetRes;
     }
 }
 
@@ -71,6 +59,8 @@ export function getCurrencyFromNetId(netId) {
             return "BTT"
         case TRONZKEVMTESTNET.chainId:
             return "Tron";
+        case BTTMAINNET.chainId:
+            return "BTT";
         default:
             return "";
     }
@@ -129,6 +119,9 @@ async function handleNetworkSwitch() {
         case TRONZKEVMTESTNET.chainId:
             await switchToTronZKEVM();
             break;
+        case BTTMAINNET.chainId:
+            await switchToBTTMainnet();
+            break;
         default:
             break;
     }
@@ -159,6 +152,21 @@ export async function switchToTronZKEVM() {
             18,
             TRONZKEVMTESTNET.rpc,
             []
+        )
+    }
+}
+
+export async function switchToBTTMainnet() {
+    const switched = await switch_to_Chain(BTTMAINNET.chainId);
+    if (!switched) {
+        await ethereumRequestAddChain(
+            BTTMAINNET.chainId,
+            BTTMAINNET.name,
+            BTTMAINNET.currency,
+            BTTMAINNET.currency,
+            18,
+            [BTTMAINNET.rpc],
+            [BTTMAINNET.explorer]
         )
     }
 }
@@ -299,8 +307,6 @@ export async function getJsonRpcProviderTicketedEventIndex(handleError: Callable
     const eventIndex = await getTicketedEventIndex(contract).catch(err => {
         handleError("Unable to get events!")
     })
-
-    console.log(eventIndex);
 
     if (!eventIndex) {
         handleError("Unable to connect to network")
