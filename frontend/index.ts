@@ -191,7 +191,10 @@ purchaseTicketAction.onclick = async function () {
         const eventPriceWithFee = await calculatePurchaseFee(contract, ticketedEvent.price);
         const purchaseTx = await purchaseTicket(contract, eventPriceWithFee.total, index, toNoteHex(details.cryptoNote.commitment))
             .catch(err => {
-                handleError("An Error Occured INSUFFICIENT FUNDS MAYBE")
+                if (!err.message.includes("user rejected transaction")) {
+                    handleError("An error occured Check your wallet")
+                }
+
             });
 
         if (purchaseTx !== undefined) {
