@@ -1,9 +1,8 @@
 import QrScanner from "qr-scanner";
-import { parseNote, toNoteHex } from "../lib/crypto";
+import { parseNote } from "../lib/crypto";
 import { createQRCodeScanner, startScanning, stopScanning } from "./camera";
 import { getEventIndex, handleError } from "./utils";
-import { getContract, getNetworkFromSubdomain, getWeb3Provider, handleTicket, JSONRPCProviderVerifyTicket, onboardOrSwitchNetwork, walletRPCProviderVerifyTicket } from "./web3";
-import { generateProof } from "./web3/zkp";
+import {  walletRPCProviderVerifyTicket } from "./web3";
 
 const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
 const eventContainer = document.getElementById("createEventFormContainer") as HTMLElement;
