@@ -24,7 +24,7 @@ const accessEventButton = document.getElementById("accessEventButton") as HTMLDi
             appendTooltip(currencyPriceRow, imgEl, null);
         }
         if (!index) {
-            accessEventButton.innerHTML = `CONTACT AN EVENT ORGANIZER FOR A LINK`
+            accessEventButton.innerHTML = `CONTACT AN EVENT ORGANIZER`
             return;
         }
         accessEventButton.innerHTML = `CONNECT WALLET`
