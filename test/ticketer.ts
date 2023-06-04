@@ -5,18 +5,6 @@ import { cryptoNote, generateTicketProof, parseNote, toNoteHex, packToSolidityPr
 import { mineBlocks, setUpTicketer } from "./setup";
 export const ZEROADDRESS = "0x0000000000000000000000000000000000000000"
 
-export const TransferType = {
-    TRANSFER: 0,
-    REFUND: 1,
-    RESALE: 2
-}
-
-export const TransferStatus = {
-    INITIATED: 0,
-    CANCELLED: 1,
-    FINISHED: 2
-}
-
 describe("ZKTickets!!", function () {
     it("It should deploy a ticketer, then I create a ticket and handle it", async function () {
         const { owner, eventCreator, buyer1, buyer2, ticketer } = await setUpTicketer();
@@ -35,7 +23,7 @@ describe("ZKTickets!!", function () {
                 if (event) {
                     const args = event.args;
                     if (args) {
-                        const arg = args[0]
+                        const arg = args[1]
                         expect(arg.toString()).to.equal("1");
                     }
                     expect(event.event).to.equal("NewTicketedEventCreated");
