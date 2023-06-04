@@ -33,6 +33,20 @@ export const getEventIndex = () => {
     }
 }
 
+export const nQueryString = () => {
+    const search = window.location.search;
+    const searchParams = new URLSearchParams(search);
+    if (searchParams.has("n")) {
+        const net = searchParams.get("n") as string;
+        // log what net can be
+        if (net) {
+            return searchParams.get("n") as string;
+        }
+    }
+    handleError("Missing network");
+    return false;
+}
+
 export function createNewImgElement(src) {
     const imgEl = document.createElement("img");
     imgEl.classList.add("inputImage");

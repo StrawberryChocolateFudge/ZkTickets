@@ -1,8 +1,9 @@
 import MetaMaskOnboarding from "@metamask/onboarding";
 import { BigNumber, ethers } from "ethers";
 import { CryptoNote, toNoteHex } from "../../lib/crypto";
+import { nQueryString } from "../utils";
 
-export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0x04ce7D262c474A2d55589dCE8DCe23A9678c35E3"; // Updated address
+export const BTTTESTNETZKTICKETSCONTRACTADDRESS = "0x026E01a71C9F0d40a67BbC898e7715424c0cf405"; // Updated address
 export const BTTTESTNETID = "0x405";
 export const BTTTESTNETRPCURL = "https://pre-rpc.bt.io/";
 
@@ -12,10 +13,7 @@ export const TRONZKEVMTESTNET = {
     rpc: ["https://test-rpc-zkevm.bt.io/"],
     chainId: "0x31641",
     currency: "TRX",
-    TOKENADDRESS: "0xe96Fb5737D3ae08EF6Ebdb63A866944781EDebe1",
-    PROSTAKINGADDRESS: "0xF63B78bb8Cb7d9BB7E3287798685130f0d5bef58",
     ZKTICKETSCONTRACTADDRESS: "0xa578CEA7efd46D990040B67908A2C4213f186265",
-    EVENTWARNING: "0x03CD0226c9f830d65edC0E2E83eFa36aE66d5C2B"
 
 }
 
@@ -44,29 +42,28 @@ export const TransferStatus = {
     FINISHED: 2
 }
 
-export function getNetworkFromSubdomain() {
-    // The application is deployed on different networks with a different subdomain
-    // This function checks for the subdomain, evaluates what chain should be used and returns the network details
+export function getNetworkFromQueryString() {
+    // The application is deployed on different networks
+    // This function checks for the n query string, evaluates what chain should be used and returns the network details
     // for localhost it falls back to a default network
 
-    const host = window.location.host;
-    const subdomain = host.split(".")[0];
-
+    const n = nQueryString();
 
     const bttRes = [BTTTESTNETZKTICKETSCONTRACTADDRESS, BTTTESTNETID, BTTTESTNETRPCURL];
 
     const zktron = [TRONZKEVMTESTNET.ZKTICKETSCONTRACTADDRESS, TRONZKEVMTESTNET.chainId, TRONZKEVMTESTNET.rpc[0]]
 
-    switch (subdomain) {
+    switch (n) {
         case "btt":
             return bttRes;
         case "zktron":
             return zktron;
         default:
-            // Fall back on ZkTron for this branch of development
             return bttRes;
     }
 }
+
+
 
 export function getCurrencyFromNetId(netId) {
     switch (netId) {
@@ -84,7 +81,7 @@ export const ZEROADDRESS = "0x0000000000000000000000000000000000000000"
 export const formatEther = (bn: ethers.BigNumberish) => ethers.utils.formatEther(bn)
 
 export function getJsonRpcProvider() {
-    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    const [contractAddress, networkID, rpcurl] = getNetworkFromQueryString();
     return new ethers.providers.JsonRpcProvider(rpcurl);
 }
 
@@ -123,7 +120,7 @@ export async function onboardOrSwitchNetwork(handleError) {
 }
 
 async function handleNetworkSwitch() {
-    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    const [contractAddress, networkID, rpcurl] = getNetworkFromQueryString();
 
     switch (networkID) {
         case BTTTESTNETID:
@@ -291,7 +288,7 @@ export async function NewTicketedEventCreated(receipt, contract) {
 
 export async function getJsonRpcProviderTicketedEventIndex(handleError: CallableFunction) {
     const provider = getJsonRpcProvider();
-    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    const [contractAddress, networkID, rpcurl] = getNetworkFromQueryString();
     const contract = await getContract(provider, contractAddress, "ZKTickets.json").catch(err => {
         handleError("Network error");
     })
@@ -309,7 +306,7 @@ export async function getJsonRpcProviderTicketedEventIndex(handleError: Callable
 
 export async function getJsonProviderTicketedEvent(index: string, handleError: CallableFunction) {
     const provider = getJsonRpcProvider();
-    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    const [contractAddress, networkID, rpcurl] = getNetworkFromQueryString();
     const contract = await getContract(provider, contractAddress, "ZKTickets.json").catch(err => {
         handleError("Network error");
     })
@@ -325,7 +322,7 @@ export async function getJsonProviderTicketedEvent(index: string, handleError: C
 
 export async function JSONRPCProviderVerifyTicket(index: string, note: CryptoNote, handleError: CallableFunction) {
     const provider = getJsonRpcProvider();
-    const [contractAddress, networkID, rpcurl] = getNetworkFromSubdomain();
+    const [contractAddress, networkID, rpcurl] = getNetworkFromQueryString();
     const contract = await getContract(provider, contractAddress, "ZKTickets.json").catch(err => {
         handleError("Network error");
     })
@@ -336,7 +333,7 @@ export async function JSONRPCProviderVerifyTicket(index: string, note: CryptoNot
 }
 
 export async function walletRPCProviderVerifyTicket(index: string, note: CryptoNote, handleError: CallableFunction) {
-    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromQueryString();
 
     const switched = await onboardOrSwitchNetwork(handleError);
     if (switched) {

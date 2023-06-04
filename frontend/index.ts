@@ -3,10 +3,10 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex, createNewImgElement, appendTooltip } from "./utils";
-import { BTTTESTNETID, calculatePurchaseFee, formatEther, getContract, getCurrencyFromNetId, getNetworkFromSubdomain, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
+import { BTTTESTNETID, calculatePurchaseFee, formatEther, getContract, getCurrencyFromNetId, getNetworkFromQueryString, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 
-const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromQueryString();
 const index = getEventIndex();
 
 const currency = getCurrencyFromNetId(NETID);
@@ -27,7 +27,7 @@ const accessEventButton = document.getElementById("accessEventButton") as HTMLDi
             accessEventButton.innerHTML = `Contact An Event Organizer`
             return;
         }
-        accessEventButton.innerHTML = `Buy Tickets`
+        accessEventButton.innerHTML = `CONNECT`
 
     })();
 
@@ -50,7 +50,6 @@ const priceInfoRow = document.getElementById("priceInfoRow") as HTMLElement;
 const priceInfo = document.getElementById("priceInfo") as HTMLSpanElement;
 
 const buyButtonLabel = document.getElementById("buyButtonLabel") as HTMLSpanElement;
-const loadingBanner = document.getElementById("loadingBanner") as HTMLElement;
 
 
 const getHandleTicketURL = (index: string) => appURL + `/verify.html?i=${index}`
@@ -78,11 +77,10 @@ purchaseTicketsSelectorButton.onclick = async function () {
         }
 
         welcomeMessage.classList.add("hide");
-        loadingBanner.classList.remove("hide");
         purchaseTicketsSelectorButton.classList.add("hide");
 
         const provider = getWeb3Provider();
-        const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+        const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromQueryString();
         let errorOccured = false;
 
         const zktickets = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
@@ -136,7 +134,6 @@ purchaseTicketsSelectorButton.onclick = async function () {
             const eventContainer = document.getElementById("eventContainer") as HTMLElement;
             eventContainer.classList.remove("hide");
             welcomeMessage.classList.add("hide");
-            loadingBanner.classList.add("hide");
             if (ticketedEvent.creator === ZEROADDRESS) {
                 purchaseTicketActionContainer.classList.add("hide")
             }
@@ -151,7 +148,7 @@ purchaseTicketAction.onclick = async function () {
 
     const switched = await onboardOrSwitchNetwork(handleError);
 
-    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromSubdomain();
+    const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromQueryString();
 
     if (switched) {
         const provider = getWeb3Provider();
