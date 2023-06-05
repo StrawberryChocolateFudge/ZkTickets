@@ -192,17 +192,19 @@ purchaseTicketAction.onclick = async function () {
         const noteString = noteDetails[1];
         // Now I Prompt the user to pay with metamask if there are available tickets!        
         const eventPriceWithFee = await calculatePurchaseFee(contract, ticketedEvent.price);
+        // Download the ticket right away just in case.
+        const dataUrl = await createQR(noteString) as string;
+        await downloadPDF(ticketedEvent.eventName, formatEther(ticketedEvent.price), currency, dataUrl, noteString, window.location.href);
+
         const purchaseTx = await purchaseTicket(contract, eventPriceWithFee.total, index, toNoteHex(details.cryptoNote.commitment))
             .catch(err => {
                 if (!err.message.includes("user rejected transaction")) {
-                    handleError("An error occured Check your wallet")
+                    handleError("An error occured Ticket is invalid")
                 }
 
             });
 
         if (purchaseTx !== undefined) {
-            const dataUrl = await createQR(noteString) as string;
-            await downloadPDF(ticketedEvent.eventName, formatEther(ticketedEvent.price), currency, dataUrl, noteString, window.location.href);
 
             await purchaseTx.wait().then(async (receipt) => {
                 if (receipt.status === 1) {
