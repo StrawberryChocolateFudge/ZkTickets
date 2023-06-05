@@ -3,7 +3,7 @@ import { toNoteHex } from "../lib/crypto";
 import { downloadPDF } from "./pdf";
 import { createQR } from "./qrcode";
 import { handleError, appURL, getEventIndex, createNewImgElement, appendTooltip } from "./utils";
-import { BTTMAINNET, BTTTESTNETID, calculatePurchaseFee, formatEther, getContract, getCurrencyFromNetId, getJsonProviderEventEmitted, getNetworkFromQueryString, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
+import { BTTMAINNET, BTTTESTNETID, calculatePurchaseFee, formatEther, getContract, getCurrencyFromNetId, getNetworkFromQueryString, getTicketedEvents, getWeb3Provider, onboardOrSwitchNetwork, purchaseTicket, requestAccounts, TRONZKEVMTESTNET, ZEROADDRESS } from "./web3";
 import { getNote } from "./web3/zkp";
 
 const [CONTRACTADDRESS, NETID, RPCURL] = getNetworkFromQueryString();
@@ -155,6 +155,7 @@ purchaseTicketAction.onclick = async function () {
 
     if (switched) {
         const provider = getWeb3Provider();
+        await requestAccounts()
         let errorOccured = false;
         const contract = await getContract(provider, CONTRACTADDRESS, "ZKTickets.json").catch(err => {
             handleError("Unable to connect to the network");
@@ -199,7 +200,7 @@ purchaseTicketAction.onclick = async function () {
         const purchaseTx = await purchaseTicket(contract, eventPriceWithFee.total, index, toNoteHex(details.cryptoNote.commitment))
             .catch(err => {
                 if (!err.message.includes("user rejected transaction")) {
-                    handleError("An error occured Ticket is invalid")
+                    handleError("An error occured Sorry that ticket is not valid")
                 }
 
             });
