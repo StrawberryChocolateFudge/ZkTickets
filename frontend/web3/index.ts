@@ -19,7 +19,7 @@ export const TRONZKEVMTESTNET = {
 export const BTTMAINNET = {
     name: "Bittorrent Chain",
     chainId: "0xc7",
-    rpc: "https://rpc.bittorrentchain.io",
+    rpc: "https://rpc.ankr.com/bttc",
     currency: "BTT",
     ZKTICKETSCONTRACTADDRESS: "0xf9C5B7737c0a46bC524F614025640dc375BBD392",
     explorer: "https://bttcscan.com/"
