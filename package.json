@@ -4,8 +4,8 @@
   "description": "This is a ZKP based ticketing platform built with Circom, SnarkJS and Solidity and deployed on Bittorrent Chain",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "dev": "parcel frontend/index.html frontend/verify.html",
-    "build": "parcel build frontend/index.html frontend/verify.html  && npm run copy",
+    "dev": "parcel frontend/index.html frontend/verify.html frontend/PrivacyPolicy.html",
+    "build": "parcel build frontend/index.html frontend/verify.html frontend/PrivacyPolicy.html  && npm run copy",
     "copy": "sh copyToDist.sh"
   },
   "devDependencies": {
