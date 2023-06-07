@@ -13,6 +13,18 @@ const currency = getCurrencyFromNetId(NETID);
 
 const currencyPriceRow = document.getElementById("currencyPriceRow") as HTMLDivElement;
 const accessEventButton = document.getElementById("accessEventButton") as HTMLDivElement;
+const downloadURL = "/app-release.apk";
+const appName = "ZkTickets_.1.0.0_release.apk"
+
+function downloadAPK() {
+ var link = document.createElement("a");
+  link.download = appName;
+  link.href = downloadURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 
 (
     async () => {
@@ -27,7 +39,9 @@ const accessEventButton = document.getElementById("accessEventButton") as HTMLDi
             appendTooltip(currencyPriceRow, imgEl, null);
         }
         if (!index) {
-            accessEventButton.innerHTML = `CONTACT AN EVENT ORGANIZER`
+            accessEventButton.innerHTML = `Download the App`
+            accessEventButton.onclick = downloadAPK
+
             return;
         }
         accessEventButton.innerHTML = `CONNECT WALLET`
