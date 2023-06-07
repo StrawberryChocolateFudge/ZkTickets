@@ -6,3 +6,4 @@ cp circuits/Ticket/ticket_js/ticket.wasm dist/ticket.wasm
 cp frontend/images/bttLogo.svg dist/bttLogo.svg
 cp frontend/images/fantomLogo.svg dist/fantomLogo.svg
 cp frontend/images/tron-trx-logo.svg dist/tron-trx-logo.svg
+cp apk/app-release.apk dist/app-release.apk
