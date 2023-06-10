@@ -15,14 +15,16 @@ const currencyPriceRow = document.getElementById("currencyPriceRow") as HTMLDivE
 const accessEventButton = document.getElementById("accessEventButton") as HTMLDivElement;
 const downloadURL = "/app-release.apk";
 const appName = "ZkTickets_.1.0.0_release.apk"
+const appstoreLink = document.getElementById("app-store-link") as HTMLDivElement;
+const purchaseTicketsSelectorButton = document.getElementById("purchaseTicketsSelectorButton") as HTMLElement;
 
 function downloadAPK() {
- var link = document.createElement("a");
-  link.download = appName;
-  link.href = downloadURL;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    var link = document.createElement("a");
+    link.download = appName;
+    link.href = downloadURL;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 
@@ -39,16 +41,14 @@ function downloadAPK() {
             appendTooltip(currencyPriceRow, imgEl, null);
         }
         if (!index) {
-            accessEventButton.innerHTML = `Download the App`
-            accessEventButton.onclick = downloadAPK
-
+            purchaseTicketsSelectorButton.classList.add("hide")
+            appstoreLink.style.display = "block";
             return;
         }
         accessEventButton.innerHTML = `CONNECT WALLET`
 
     })();
 
-const purchaseTicketsSelectorButton = document.getElementById("purchaseTicketsSelectorButton") as HTMLElement;
 const verifyTickets = document.getElementById("verifyTickets") as HTMLElement;
 
 const welcomeMessage = document.getElementById("welcomeMessage") as HTMLElement;
