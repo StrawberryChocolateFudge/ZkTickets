@@ -828,3 +828,7 @@
  .scan-region-highlight-svg {
      stroke: white !important;
  }
+
+ #app-store-link{
+  display: none;
+ }
